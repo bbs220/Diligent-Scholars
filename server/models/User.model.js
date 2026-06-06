@@ -63,7 +63,7 @@ userSchema.pre("save", async function (next) {
 
     next();
   } catch (error) {
-    console.error(`Error in pre-save hook: ${error}`);
+    console.error(`😭 Error in pre-save hook: ${error}`);
 
     next(error);
   }

@@ -1,11 +1,25 @@
 export const signup = async (req, res) => {
-  res.status(200).json({ message: "signup route" });
+  const { fullName, email, password } = req.body;
+
+  try {
+    if (!fullName || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+  } catch (error) {
+    console.error(`😭 Error in user signin: ${error}`);
+  }
 };
 
 export const login = async (req, res) => {
-  res.status(200).json({ message: "login route" });
+  try {
+  } catch (error) {
+    console.error(`😭 Error in user login: ${error}`);
+  }
 };
 
 export const logout = (req, res) => {
-  res.status(200).json({ message: "logout route" });
+  try {
+  } catch (error) {
+    console.error(`😭 Error in user logout: ${error}`);
+  }
 };
