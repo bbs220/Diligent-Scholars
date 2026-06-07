@@ -9,7 +9,7 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    if (password < 6) {
+    if (password.length < 6) {
       return res
         .status(400)
         .json({ message: "Password must be atleast 6 characters" });
@@ -60,6 +60,7 @@ export const signup = async (req, res) => {
         id: newUser._id,
         fullName: newUser.fullName,
         email: newUser.email,
+        password: newUser.password,
         profileAvatar: newUser.profileAvatar,
       },
     });
