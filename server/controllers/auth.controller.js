@@ -55,14 +55,8 @@ export const signup = async (req, res) => {
 
     res.status(201).json({
       message: "User created successfully",
-      // remove this part later
-      user: {
-        id: newUser._id,
-        fullName: newUser.fullName,
-        email: newUser.email,
-        password: newUser.password,
-        profileAvatar: newUser.profileAvatar,
-      },
+      // remove this part later in prod
+      newUser,
     });
   } catch (error) {
     console.error(`😭 Error in user signin: ${error}`);
