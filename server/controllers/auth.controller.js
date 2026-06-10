@@ -135,3 +135,5 @@ export const logout = (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const onboarding = async (req, res) => {};
