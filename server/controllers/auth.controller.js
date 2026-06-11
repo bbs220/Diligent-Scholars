@@ -136,4 +136,46 @@ export const logout = (req, res) => {
   }
 };
 
-export const onboarding = async (req, res) => {};
+export const onboarding = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const { fullName, bio, skillToShare, skillToLearn, location } = req.body;
+
+    if (!fullName || !bio || !skillToShare || !skillToLearn || !location) {
+      return res.status(400).json({
+        message: "All fields are required",
+        missingFields: [
+          !fullName && "fullName",
+          !bio && "bio",
+          !skillToShare && "skillToShare",
+          !skillToLearn && "skillToLearn",
+          !location && "location",
+        ].filter(Boolean),
+      });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        ...req.body,
+        isOnboarded: true,
+      },
+      { new: true },
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      message: "User onboarded successfully",
+      // remove this part later in prod
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error(`😭 Error in user onboarding: ${error}`);
+
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
