@@ -168,6 +168,21 @@ export const onboarding = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    try {
+      await upsertStreamUser({
+        id: updatedUser._id.toString(),
+        name: updatedUser.fullName,
+        image: updatedUser.profileAvatar || "",
+      });
+      console.log(
+        `🤗 Successfully updated Stream user during onboarding: ${updatedUser.fullName}`,
+      );
+    } catch (error) {
+      console.error(
+        `😭 Error updating Stream user during onboarding: ${error}`,
+      );
+    }
+
     res.status(200).json({
       message: "User onboarded successfully",
       // remove this part later in prod
