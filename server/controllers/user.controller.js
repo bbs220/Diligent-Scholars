@@ -38,3 +38,12 @@ export const populateFriends = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const sendFriendReq = async (req, res) => {
+  try {
+  } catch (error) {
+    console.error(`😭 Error sending friend request: ${error}`);
+
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
