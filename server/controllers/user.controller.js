@@ -27,6 +27,11 @@ export const populateRecommendedUsers = async (req, res) => {
 
 export const populateFriends = async (req, res) => {
   try {
+    const user = await User.findById(req.user.id)
+      .select("friends")
+      .populate("friends", "fullName profileAvatar skillToLearn skillToShare");
+
+    res.status(200).json(user.friends);
   } catch (error) {
     console.error(`😭 Error populating current user's friends: ${error}`);
 
