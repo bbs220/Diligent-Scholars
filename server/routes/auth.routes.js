@@ -20,4 +20,5 @@ router.post("/onboarding", protectedRoute, onboarding);
 router.get("/me", protectedRoute, (req, res) => {
   res.json({ message: "yea youre authenticated", user: req.user });
 });
+
 export default router;
