@@ -153,6 +153,12 @@ export const incomingFriendReqs = async (req, res) => {
 
 export const outgoingFriendReqs = async (req, res) => {
   try {
+    const outgoingReqs = await FriendReq.find({
+      sender: req.user.id,
+      reqStatus: "pending",
+    }).populate("receiver", "fullName profileAvatar skillToLearn skillToShare");
+
+    res.status(200).json(outgoingReqs);
   } catch (error) {
     console.error(
       `😭 Error in observing all outgoing friend requests: ${error}`,
