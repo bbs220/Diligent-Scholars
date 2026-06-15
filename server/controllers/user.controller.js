@@ -49,7 +49,7 @@ export const sendFriendReq = async (req, res) => {
     if (myId === receiverId) {
       return res
         .status(400)
-        .json({ message: "Can't send friend requests to yourself!" });
+        .json({ message: "Can't send friend requests to yourself" });
     }
 
     const receiver = await User.findById(receiverId);
@@ -61,7 +61,7 @@ export const sendFriendReq = async (req, res) => {
     if (receiver.friends.includes(myId)) {
       return res
         .status(400)
-        .json({ message: "You are already friends with this user!" });
+        .json({ message: "You are already friends with this user" });
     }
 
     const existingFriendReq = await FriendReq.findOne({
@@ -95,6 +95,33 @@ export const sendFriendReq = async (req, res) => {
 
 export const acceptFriendReq = async (req, res) => {
   try {
+    const { id: requestId } = req.params;
+
+    const friendReq = await FriendReq.findById(requestId);
+
+    if (!friendReq) {
+      return res.status(404).json({ message: "Friend request not found" });
+    }
+
+    if (friendReq.receiver.toString() !== req.user.id) {
+      return res
+        .status(400)
+        .json({ message: "You are not authorized to send this request" });
+    }
+
+    friendReq.reqStatus = "accepted";
+
+    await friendReq.save();
+
+    await User.findByIdAndUpdate(friendReq.sender, {
+      $addToSet: { friends: friendReq.receiver },
+    });
+
+    await User.findByIdAndUpdate(friendReq.receiver, {
+      $addToSet: { friends: friendReq.sender },
+    });
+
+    res.status(200).json({ message: "Friend request accepted" });
   } catch (error) {
     console.error(`😭 Error accepting friend request: ${error}`);
 
