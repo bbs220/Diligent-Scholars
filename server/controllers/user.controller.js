@@ -92,3 +92,12 @@ export const sendFriendReq = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const acceptFriendReq = async (req, res) => {
+  try {
+  } catch (error) {
+    console.error(`😭 Error accepting friend request: ${error}`);
+
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
