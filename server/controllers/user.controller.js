@@ -129,10 +129,34 @@ export const acceptFriendReq = async (req, res) => {
   }
 };
 
-export const observeFriendReqs = async (req, res) => {
+export const incomingFriendReqs = async (req, res) => {
+  try {
+    const incomingReqs = await FriendReq.find({
+      receiver: req.user.id,
+      reqStatus: "pending",
+    }).populate("sender", "fullName profileAvatar skillToLearn skillToShare");
+
+    const acceptedReqs = await FriendReq.find({
+      sender: req.user.id,
+      reqStatus: "accepted",
+    }).populate("receiver", "fullName profileAvatar");
+
+    res.status(200).json({ incomingReqs, acceptedReqs });
+  } catch (error) {
+    console.error(
+      `😭 Error in observing all incoming friend requests: ${error}`,
+    );
+
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const outgoingFriendReqs = async (req, res) => {
   try {
   } catch (error) {
-    console.error(`😭 Error in observing all friend requests: ${error}`);
+    console.error(
+      `😭 Error in observing all outgoing friend requests: ${error}`,
+    );
 
     res.status(500).json({ message: "Internal server error" });
   }
