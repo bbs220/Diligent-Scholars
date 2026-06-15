@@ -128,3 +128,12 @@ export const acceptFriendReq = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const observeFriendReqs = async (req, res) => {
+  try {
+  } catch (error) {
+    console.error(`😭 Error in observing all friend requests: ${error}`);
+
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
