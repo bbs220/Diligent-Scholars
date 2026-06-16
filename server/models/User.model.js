@@ -79,6 +79,8 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   }
 };
 
-const User = mongoose.model("User", userSchema);
+// this is fucked somehow its creating two instances???
+// have to use OR here
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 export default User;
