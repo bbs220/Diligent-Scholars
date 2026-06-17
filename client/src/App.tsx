@@ -1,8 +1,11 @@
 function App() {
   return (
-    <>
-      <h1>hi mom</h1>
-    </>
+    <div
+      className="w-screen h-screen flex items-center justify-center"
+      data-theme="dark"
+    >
+      <button className="btn btn-accent">hi mom</button>
+    </div>
   );
 }
 
