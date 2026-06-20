@@ -3,7 +3,7 @@ import { Computer } from "lucide-react";
 import { Link } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signUpFn } from "../libs/mutateFns";
-import type { typeSignUpData } from "../types/typesSignUp";
+import type { typeSignUpData } from "../types/typesCollection";
 
 const SignUpPage = () => {
   const [signUpData, setSignUpData] = useState<typeSignUpData>({

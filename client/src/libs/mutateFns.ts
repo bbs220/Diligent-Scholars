@@ -1,4 +1,4 @@
-import type { typeSignUpData } from "../types/typesSignUp";
+import type { typeSignUpData } from "../types/typesCollection";
 import { axiosInstance } from "./axiosInstance";
 
 export const signUpFn = async (signUpData: typeSignUpData) => {
