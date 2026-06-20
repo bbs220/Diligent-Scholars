@@ -1,16 +1,32 @@
-import { useState } from "react";
-import { ShipWheelIcon } from "lucide-react";
+import React, { useState } from "react";
+import { Computer } from "lucide-react";
 import { Link } from "react-router";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { signUpFn } from "../libs/mutateFns";
+import type { typeSignUpData } from "../types/typesSignUp";
 
 const SignUpPage = () => {
-  const [signUpData, setSignUpData] = useState({
+  const [signUpData, setSignUpData] = useState<typeSignUpData>({
     fullName: "",
     email: "",
     password: "",
   });
 
-  const handleSignUp = (e) => {
+  const queryClient = useQueryClient();
+
+  const {
+    mutate: signUpMutation,
+    isPending,
+    error,
+  } = useMutation({
+    mutationFn: signUpFn,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
+  });
+
+  const handleSignUp = (e: React.SubmitEvent) => {
     e.preventDefault();
+
+    signUpMutation(signUpData);
   };
 
   return (
@@ -23,7 +39,7 @@ const SignUpPage = () => {
         <div className="w-full lg:w-1/2 p-4 sm:p-8 flex flex-col">
           {/* LOGO */}
           <div className="mb-4 flex items-center justify-start gap-2">
-            <ShipWheelIcon className="size-9 text-primary" />
+            <Computer className="size-9 text-primary" />
             <span className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary tracking-wider">
               Test Social App
             </span>
@@ -157,14 +173,14 @@ const SignUpPage = () => {
             <div className="relative aspect-square max-w-sm mx-auto">
               <img
                 src="/images/checked.png"
-                alt="Language connection illustration"
+                alt="Checkbox checked illustration"
                 className="w-full h-full"
               />
             </div>
 
             <div className="text-center space-y-3 mt-6">
               <h2 className="text-xl font-semibold">
-                Connect with skilled partners worldwide
+                Connect with skilled developers worldwide
               </h2>
               <p className="opacity-70">
                 Practice conversations, make friends, and improve your web
