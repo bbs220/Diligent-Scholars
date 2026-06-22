@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Computer } from "lucide-react";
 import { Link } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { signUpFn } from "../libs/mutateFns";
+import { signUpMutationFn } from "../libs/mutateFns";
 import type { typeSignUpData } from "../types/typesCollection";
 
 const SignUpPage = () => {
@@ -19,7 +19,7 @@ const SignUpPage = () => {
     isPending,
     error,
   } = useMutation({
-    mutationFn: signUpFn,
+    mutationFn: signUpMutationFn,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
   });
 
