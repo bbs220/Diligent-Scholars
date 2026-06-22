@@ -55,7 +55,7 @@ const OnBoardingPage = () => {
             {/* PROFILE PIC CONTAINER */}
             <div className="flex flex-col items-center justify-center space-y-4">
               {/* IMAGE PREVIEW */}
-              <div className="size-32 rounded-full bg-base-300 overflow-hidden">
+              <div className="size-24 rounded-2xl bg-base-300 overflow-hidden">
                 {onBoardingData.profileAvatar ? (
                   <img
                     src={onBoardingData.profileAvatar}
@@ -113,7 +113,7 @@ const OnBoardingPage = () => {
                 onChange={(e) =>
                   setOnBoardingData({ ...onBoardingData, bio: e.target.value })
                 }
-                className="textarea textarea-bordered h-24"
+                className="textarea textarea-bordered h-24 w-full"
                 placeholder="Small description of yourself"
               />
             </div>
@@ -124,7 +124,7 @@ const OnBoardingPage = () => {
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">
-                    Select your language you are proficient in
+                    Select your web skill / language you are proficient in
                   </span>
                 </label>
                 <select
@@ -151,7 +151,7 @@ const OnBoardingPage = () => {
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">
-                    Select the language you wish to learn
+                    Select the web skill / language you wish to learn
                   </span>
                 </label>
                 <select
