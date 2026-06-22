@@ -3,3 +3,12 @@ export type typeSignUpData = {
   email: string;
   password: string;
 };
+
+export type typeOnBoardingData = {
+  fullName: string;
+  bio: string;
+  skillToShare: string;
+  skillToLearn: string;
+  location: string;
+  profileAvatar: string;
+};
