@@ -5,6 +5,7 @@ import useAuthUser from "../hooks/useAuthUser";
 import { onBoardingMutationFn } from "../libs/mutateFns";
 import type { typeOnBoardingData } from "../types/typesCollection";
 import { CameraIcon, Computer, MapPinIcon, ShuffleIcon } from "lucide-react";
+import { SKILLS } from "../constants/constantsCollection";
 
 const OnBoardingPage = () => {
   const { authUser } = useAuthUser();
@@ -113,7 +114,7 @@ const OnBoardingPage = () => {
                   setOnBoardingData({ ...onBoardingData, bio: e.target.value })
                 }
                 className="textarea textarea-bordered h-24"
-                placeholder="Tell others about yourself and your language learning goals"
+                placeholder="Small description of yourself"
               />
             </div>
 
@@ -122,10 +123,12 @@ const OnBoardingPage = () => {
               {/* NATIVE LANGUAGE */}
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text">Native Language</span>
+                  <span className="label-text">
+                    Select your language you are proficient in
+                  </span>
                 </label>
                 <select
-                  name="nativeLanguage"
+                  name="skillToShare"
                   value={onBoardingData.skillToShare}
                   onChange={(e) =>
                     setOnBoardingData({
@@ -135,8 +138,8 @@ const OnBoardingPage = () => {
                   }
                   className="select select-bordered w-full"
                 >
-                  <option value="">Select your native language</option>
-                  {LANGUAGES.map((lang) => (
+                  <option value="">Proficient Skill</option>
+                  {SKILLS.map((lang) => (
                     <option key={`native-${lang}`} value={lang.toLowerCase()}>
                       {lang}
                     </option>
@@ -147,10 +150,12 @@ const OnBoardingPage = () => {
               {/* LEARNING LANGUAGE */}
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text">Learning Language</span>
+                  <span className="label-text">
+                    Select the language you wish to learn
+                  </span>
                 </label>
                 <select
-                  name="learningLanguage"
+                  name="skillToLearn"
                   value={onBoardingData.skillToLearn}
                   onChange={(e) =>
                     setOnBoardingData({
@@ -160,8 +165,8 @@ const OnBoardingPage = () => {
                   }
                   className="select select-bordered w-full"
                 >
-                  <option value="">Select language you're learning</option>
-                  {LANGUAGES.map((lang) => (
+                  <option value="">Learning Skill</option>
+                  {SKILLS.map((lang) => (
                     <option key={`learning-${lang}`} value={lang.toLowerCase()}>
                       {lang}
                     </option>
