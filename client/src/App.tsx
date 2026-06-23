@@ -49,7 +49,15 @@ function App() {
         <Route
           path="/onboarding"
           element={
-            isAuthenticated ? <OnBoardingPage /> : <Navigate to="/login" />
+            isAuthenticated ? (
+              !isOnBoarded ? (
+                <OnBoardingPage />
+              ) : (
+                <Navigate to="/" />
+              )
+            ) : (
+              <Navigate to="/login" />
+            )
           }
         />
         <Route

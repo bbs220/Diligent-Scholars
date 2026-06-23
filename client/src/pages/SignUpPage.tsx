@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signUpMutationFn } from "../libs/mutateFns";
 import type { typeSignUpData } from "../types/typesCollection";
+import toast from "react-hot-toast";
 
 const SignUpPage = () => {
   const [signUpData, setSignUpData] = useState<typeSignUpData>({
@@ -14,13 +15,13 @@ const SignUpPage = () => {
 
   const queryClient = useQueryClient();
 
-  const {
-    mutate: signUpMutation,
-    isPending,
-    error,
-  } = useMutation({
+  const { mutate: signUpMutation, isPending } = useMutation({
     mutationFn: signUpMutationFn,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
+
+    onError: (error) => {
+      toast.error(error.response.data.message);
+    },
   });
 
   const handleSignUp = (e: React.SubmitEvent) => {
@@ -35,23 +36,16 @@ const SignUpPage = () => {
       data-theme="forest"
     >
       <div className="border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-xl shadow-lg overflow-hidden">
-        {/* SIGNUP FORM - LEFT SIDE */}
+        {/* form section */}
         <div className="w-full lg:w-1/2 p-4 sm:p-8 flex flex-col">
-          {/* LOGO */}
+          {/* logo */}
           <div className="mb-4 flex items-center justify-start gap-2">
             <Computer className="size-9 text-primary" />
             <span className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary tracking-wider">
               Test Social App
             </span>
           </div>
-
-          {/* ERROR MESSAGE IF ANY */}
-          {error && (
-            <div className="alert alert-error mb-4">
-              <span>{error.response.data.message}</span>
-            </div>
-          )}
-
+          {/* form */}
           <div className="w-full">
             <form onSubmit={handleSignUp}>
               <div className="space-y-4">
@@ -63,7 +57,7 @@ const SignUpPage = () => {
                 </div>
 
                 <div className="space-y-3">
-                  {/* FULLNAME */}
+                  {/* fullname */}
                   <div className="form-control w-full">
                     <label className="label">
                       <span className="label-text">Full Name</span>
@@ -82,7 +76,7 @@ const SignUpPage = () => {
                       required
                     />
                   </div>
-                  {/* EMAIL */}
+                  {/* email */}
                   <div className="form-control w-full">
                     <label className="label">
                       <span className="label-text">Email</span>
@@ -98,7 +92,7 @@ const SignUpPage = () => {
                       required
                     />
                   </div>
-                  {/* PASSWORD */}
+                  {/* password */}
                   <div className="form-control w-full">
                     <label className="label">
                       <span className="label-text">Password</span>
@@ -166,10 +160,10 @@ const SignUpPage = () => {
           </div>
         </div>
 
-        {/* SIGNUP FORM - RIGHT SIDE */}
+        {/* splash image section */}
         <div className="hidden lg:flex w-full lg:w-1/2 bg-primary/10 items-center justify-center">
           <div className="max-w-md p-8">
-            {/* Illustration */}
+            {/* image */}
             <div className="relative aspect-square max-w-sm mx-auto">
               <img
                 src="/images/checked.png"

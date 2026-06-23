@@ -27,6 +27,10 @@ const OnBoardingPage = () => {
 
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
+
+    onError: (error) => {
+      toast.error(error.response.data.message);
+    },
   });
 
   const handleOnBoarding = (e: React.SubmitEvent) => {
@@ -52,9 +56,9 @@ const OnBoardingPage = () => {
           </h1>
 
           <form onSubmit={handleOnBoarding} className="space-y-6">
-            {/* PROFILE PIC CONTAINER */}
+            {/* profile avatar */}
             <div className="flex flex-col items-center justify-center space-y-4">
-              {/* IMAGE PREVIEW */}
+              {/* img preview */}
               <div className="size-24 rounded-2xl bg-base-300 overflow-hidden">
                 {onBoardingData.profileAvatar ? (
                   <img
@@ -69,7 +73,7 @@ const OnBoardingPage = () => {
                 )}
               </div>
 
-              {/* Generate Random Avatar BTN */}
+              {/* random avatar button */}
               <div className="flex items-center gap-2">
                 <button
                   type="button"
@@ -82,7 +86,7 @@ const OnBoardingPage = () => {
               </div>
             </div>
 
-            {/* FULL NAME */}
+            {/* fullname */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Full Name</span>
@@ -102,7 +106,7 @@ const OnBoardingPage = () => {
               />
             </div>
 
-            {/* BIO */}
+            {/* bio */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Bio</span>
@@ -118,9 +122,9 @@ const OnBoardingPage = () => {
               />
             </div>
 
-            {/* LANGUAGES */}
+            {/* skills */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* NATIVE LANGUAGE */}
+              {/* learned skill */}
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">
@@ -147,7 +151,7 @@ const OnBoardingPage = () => {
                 </select>
               </div>
 
-              {/* LEARNING LANGUAGE */}
+              {/* learn skill */}
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">
@@ -175,13 +179,13 @@ const OnBoardingPage = () => {
               </div>
             </div>
 
-            {/* LOCATION */}
+            {/* location */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Location</span>
               </label>
               <div className="relative">
-                <MapPinIcon className="absolute top-1/2 transform -translate-y-1/2 left-3 size-5 text-base-content opacity-70" />
+                <MapPinIcon className="absolute top-1/2 transform -translate-y-1/2 left-3 size-5 text-base-content opacity-70 z-10 pointer-events-none" />
                 <input
                   type="text"
                   name="location"
@@ -193,13 +197,12 @@ const OnBoardingPage = () => {
                     })
                   }
                   className="input input-bordered w-full pl-10"
-                  placeholder="City, Country"
+                  placeholder="Where you live"
                 />
               </div>
             </div>
 
-            {/* SUBMIT BUTTON */}
-
+            {/* submit button */}
             <button
               className="btn btn-primary w-full"
               disabled={isPending}
