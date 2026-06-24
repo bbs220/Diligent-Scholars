@@ -48,10 +48,13 @@ const OnBoardingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-base-100 flex items-center justify-center p-4">
+    <div
+      className="min-h-screen bg-base-100 flex items-center justify-center p-4"
+      data-theme="forest"
+    >
       <div className="card bg-base-200 w-full max-w-3xl shadow-xl">
         <div className="card-body p-6 sm:p-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-center mb-2">
             Complete Your Profile
           </h1>
 
@@ -87,7 +90,7 @@ const OnBoardingPage = () => {
             </div>
 
             {/* fullname */}
-            <div className="form-control">
+            <div className="form-control space-y-2">
               <label className="label">
                 <span className="label-text">Full Name</span>
               </label>
@@ -107,7 +110,7 @@ const OnBoardingPage = () => {
             </div>
 
             {/* bio */}
-            <div className="form-control">
+            <div className="form-control space-y-2">
               <label className="label">
                 <span className="label-text">Bio</span>
               </label>
@@ -125,7 +128,7 @@ const OnBoardingPage = () => {
             {/* skills */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* learned skill */}
-              <div className="form-control">
+              <div className="form-control space-y-2">
                 <label className="label">
                   <span className="label-text">
                     Select your web skill / language you are proficient in
@@ -152,7 +155,7 @@ const OnBoardingPage = () => {
               </div>
 
               {/* learn skill */}
-              <div className="form-control">
+              <div className="form-control space-y-2">
                 <label className="label">
                   <span className="label-text">
                     Select the web skill / language you wish to learn
@@ -180,7 +183,7 @@ const OnBoardingPage = () => {
             </div>
 
             {/* location */}
-            <div className="form-control">
+            <div className="form-control space-y-2">
               <label className="label">
                 <span className="label-text">Location</span>
               </label>

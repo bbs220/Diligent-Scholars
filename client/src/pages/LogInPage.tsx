@@ -51,7 +51,7 @@ const LogInPage = () => {
                 <div>
                   <h2 className="text-xl font-semibold">Welcome Back</h2>
                   <p className="text-sm opacity-70">
-                    Log-in to your account to continue your language journey
+                    Log In to your account to continue your language journey
                   </p>
                 </div>
 
