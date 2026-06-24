@@ -4,6 +4,11 @@ export type typeSignUpData = {
   password: string;
 };
 
+export type typeLogInData = {
+  email: string;
+  password: string;
+};
+
 export type typeOnBoardingData = {
   fullName: string;
   bio: string;
