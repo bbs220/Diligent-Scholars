@@ -40,11 +40,23 @@ function App() {
         />
         <Route
           path="/signup"
-          element={!isAuthenticated ? <SignUpPage /> : <Navigate to="/" />}
+          element={
+            !isAuthenticated ? (
+              <SignUpPage />
+            ) : (
+              <Navigate to={isOnBoarded ? "/" : "/onboarding"} />
+            )
+          }
         />
         <Route
           path="/login"
-          element={!isAuthenticated ? <LogInPage /> : <Navigate to="/" />}
+          element={
+            !isAuthenticated ? (
+              <LogInPage />
+            ) : (
+              <Navigate to={isOnBoarded ? "/" : "/onboarding"} />
+            )
+          }
         />
         <Route
           path="/onboarding"
