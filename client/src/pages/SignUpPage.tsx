@@ -83,7 +83,7 @@ const SignUpPage = () => {
                     </label>
                     <input
                       type="email"
-                      placeholder="you@mail.com"
+                      placeholder="Your Email"
                       className="input input-bordered w-full"
                       value={signUpData.email}
                       onChange={(e) =>
