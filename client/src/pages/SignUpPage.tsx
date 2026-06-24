@@ -56,9 +56,9 @@ const SignUpPage = () => {
                   </p>
                 </div>
 
-                <div className="space-y-3">
+                <div className="flex flex-col gap-2">
                   {/* fullname */}
-                  <div className="form-control w-full">
+                  <div className="form-control w-full space-y-2">
                     <label className="label">
                       <span className="label-text">Full Name</span>
                     </label>
@@ -77,7 +77,7 @@ const SignUpPage = () => {
                     />
                   </div>
                   {/* email */}
-                  <div className="form-control w-full">
+                  <div className="form-control w-full space-y-2">
                     <label className="label">
                       <span className="label-text">Email</span>
                     </label>
@@ -93,7 +93,7 @@ const SignUpPage = () => {
                     />
                   </div>
                   {/* password */}
-                  <div className="form-control w-full">
+                  <div className="form-control w-full space-y-2">
                     <label className="label">
                       <span className="label-text">Password</span>
                     </label>
@@ -143,7 +143,7 @@ const SignUpPage = () => {
                       Loading...
                     </>
                   ) : (
-                    "Create Account"
+                    <span>Sign Up</span>
                   )}
                 </button>
 

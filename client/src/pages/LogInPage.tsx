@@ -55,7 +55,7 @@ const LogInPage = () => {
                   </p>
                 </div>
 
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-2">
                   <div className="form-control w-full space-y-2">
                     <label className="label">
                       <span className="label-text">Email</span>
@@ -90,7 +90,7 @@ const LogInPage = () => {
 
                   <button
                     type="submit"
-                    className="btn btn-primary w-full"
+                    className="btn btn-primary w-full mt-4"
                     disabled={isPending}
                   >
                     {isPending ? (
@@ -110,7 +110,7 @@ const LogInPage = () => {
                         to="/signup"
                         className="text-primary hover:underline"
                       >
-                        Create one
+                        Sign Up
                       </Link>
                     </p>
                   </div>
