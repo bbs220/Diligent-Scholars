@@ -27,7 +27,7 @@ function App() {
   }
 
   return (
-    <>
+    <div className="h-screen" data-theme="forest">
       <Routes>
         <Route
           path="/"
@@ -91,7 +91,7 @@ function App() {
         />
       </Routes>
       <Toaster position="bottom-right" />
-    </>
+    </div>
   );
 }
 
