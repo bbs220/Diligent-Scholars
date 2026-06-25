@@ -11,9 +11,17 @@ export const signUpMutationFn = async (signUpData: typeSignUpData) => {
 
   return res.data;
 };
+
 // this is for mutate
 export const logInMutationFn = async (logInData: typeLogInData) => {
   const res = await axiosInstance.post("/auth/login", logInData);
+
+  return res.data;
+};
+
+// this is for mutate
+export const logOutMutationFn = async () => {
+  const res = await axiosInstance.post("/auth/logout");
 
   return res.data;
 };
