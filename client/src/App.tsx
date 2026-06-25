@@ -9,6 +9,7 @@ import CallPage from "./pages/CallPage";
 import ChatPage from "./pages/ChatPage";
 import PageLoader from "./components/PageLoader";
 import useAuthUser from "./hooks/useAuthUser";
+import Layout from "./components/Layout";
 
 function App() {
   const { isLoading, authUser } = useAuthUser();
@@ -20,7 +21,7 @@ function App() {
   if (isLoading) {
     return (
       <>
-        <PageLoader />;
+        <PageLoader />
       </>
     );
   }
@@ -32,7 +33,9 @@ function App() {
           path="/"
           element={
             isAuthenticated && isOnBoarded ? (
-              <HomePage />
+              <Layout showSideBar>
+                <HomePage />
+              </Layout>
             ) : (
               <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
             )

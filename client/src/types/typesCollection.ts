@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export type typeSignUpData = {
   fullName: string;
   email: string;
@@ -16,4 +18,9 @@ export type typeOnBoardingData = {
   skillToLearn: string;
   location: string;
   profileAvatar: string;
+};
+
+export type typeLayout = {
+  children: ReactNode;
+  showSideBar?: boolean;
 };
