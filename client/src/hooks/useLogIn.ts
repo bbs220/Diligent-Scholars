@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { logInMutationFn } from "../libs/mutateFns";
+import { logInMutationFn } from "../libs/apiCalls";
 import toast from "react-hot-toast";
 
 const useLogIn = () => {

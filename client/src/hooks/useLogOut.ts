@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { logOutMutationFn } from "../libs/mutateFns";
+import { logOutMutationFn } from "../libs/apiCalls";
 
 const useLogOut = () => {
   const queryClient = useQueryClient();
