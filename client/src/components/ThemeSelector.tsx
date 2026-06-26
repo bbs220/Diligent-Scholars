@@ -22,7 +22,7 @@ const ThemeSelector = () => {
             <button
               key={themeOption.name}
               className={`
-              w-full px-4 py-3 rounded-xl flex items-center gap-3 transition-colors
+              w-full px-4 py-3 rounded-xl flex items-center gap-3 transition-colors cursor-pointer
               ${
                 theme === themeOption.name
                   ? "bg-primary/10 text-primary"

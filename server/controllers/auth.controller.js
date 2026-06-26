@@ -32,7 +32,7 @@ export const signup = async (req, res) => {
 
     const idx = Math.floor(Math.random() * 100) + 1;
 
-    const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`;
+    const randomAvatar = `https://api.dicebear.com/10.x/thumbs/svg?borderRadius=6&backgroundColorFill=linear&seed=${idx}`;
 
     const newUser = await User.create({
       fullName,

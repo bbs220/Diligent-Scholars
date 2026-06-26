@@ -39,7 +39,7 @@ const NavBar = () => {
           <ThemeSelector />
 
           <div className="avatar">
-            <div className="w-9 rounded-2xl">
+            <div className="w-9 rounded-lg">
               <img
                 src={authUser?.profileAvatar}
                 alt="User Avatar"
