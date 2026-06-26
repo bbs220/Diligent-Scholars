@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { Computer } from "lucide-react";
 import { Link } from "react-router";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { signUpMutationFn } from "../libs/mutateFns";
+import useSignUp from "../hooks/useSignUp";
 import type { typeSignUpData } from "../types/typesCollection";
-import toast from "react-hot-toast";
 
 const SignUpPage = () => {
   const [signUpData, setSignUpData] = useState<typeSignUpData>({
@@ -13,16 +11,7 @@ const SignUpPage = () => {
     password: "",
   });
 
-  const queryClient = useQueryClient();
-
-  const { mutate: signUpMutation, isPending } = useMutation({
-    mutationFn: signUpMutationFn,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
-
-    onError: (error) => {
-      toast.error(error.response.data.message);
-    },
-  });
+  const { signUpMutation, isPending } = useSignUp();
 
   const handleSignUp = (e: React.SubmitEvent) => {
     e.preventDefault();

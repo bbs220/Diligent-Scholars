@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import type { typeLogInData } from "../types/typesCollection";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { logInMutationFn } from "../libs/mutateFns";
 import { Link } from "react-router";
 import { ComputerIcon } from "lucide-react";
-import toast from "react-hot-toast";
+import useLogIn from "../hooks/useLogIn";
+import type { typeLogInData } from "../types/typesCollection";
 
 const LogInPage = () => {
   const [logInData, setLogInData] = useState<typeLogInData>({
@@ -12,16 +10,7 @@ const LogInPage = () => {
     password: "",
   });
 
-  const queryClient = useQueryClient();
-
-  const { mutate: logInMutation, isPending } = useMutation({
-    mutationFn: logInMutationFn,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
-
-    onError: (error) => {
-      toast.error(error.response.data.message);
-    },
-  });
+  const { logInMutation, isPending } = useLogIn();
 
   const handleLogIn = (e: React.SubmitEvent) => {
     e.preventDefault();
