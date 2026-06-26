@@ -26,14 +26,6 @@ export const logOutMutationFn = async () => {
   return res.data;
 };
 
-// this is not a mutate fu
-// this is for query fn
-export const getAuthUserFn = async () => {
-  const res = await axiosInstance.get("/auth/me");
-
-  return res.data;
-};
-
 // another mutation fn
 export const onBoardingMutationFn = async (
   onBoardingData: typeOnBoardingData,
@@ -41,4 +33,16 @@ export const onBoardingMutationFn = async (
   const res = await axiosInstance.post("/auth/onboarding", onBoardingData);
 
   return res.data;
+};
+
+// this is not a mutate fu
+// this is for query fn
+export const getAuthUserFn = async () => {
+  try {
+    const res = await axiosInstance.get("/auth/me");
+    return res.data;
+  } catch (error) {
+    console.log(`😭 Error in getting auth user: ${error}`);
+    return null;
+  }
 };
