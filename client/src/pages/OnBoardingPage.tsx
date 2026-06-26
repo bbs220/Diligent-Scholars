@@ -1,15 +1,14 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import toast, { LoaderIcon } from "react-hot-toast";
 import useAuthUser from "../hooks/useAuthUser";
-import { onBoardingMutationFn } from "../libs/mutateFns";
 import type { typeOnBoardingData } from "../types/typesCollection";
 import { CameraIcon, Computer, MapPinIcon, ShuffleIcon } from "lucide-react";
 import { SKILLS } from "../constants/constantsCollection";
+import { useThemeStore } from "../stores/useThemeStore";
+import useOnBoarding from "../hooks/useOnBoarding";
 
 const OnBoardingPage = () => {
   const { authUser } = useAuthUser();
-  const queryClient = useQueryClient();
 
   const [onBoardingData, setOnBoardingData] = useState<typeOnBoardingData>({
     fullName: authUser?.fullName || "",
@@ -20,18 +19,9 @@ const OnBoardingPage = () => {
     profileAvatar: authUser?.profileAvatar || "",
   });
 
-  const { mutate: onBoardingMutation, isPending } = useMutation({
-    mutationFn: onBoardingMutationFn,
-    onSuccess: () => {
-      toast.success("Onboarding Completed");
+  const { onBoardingMutation, isPending } = useOnBoarding();
 
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-    },
-
-    onError: (error) => {
-      toast.error(error.response.data.message);
-    },
-  });
+  const { theme } = useThemeStore();
 
   const handleOnBoarding = (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -50,7 +40,7 @@ const OnBoardingPage = () => {
   return (
     <div
       className="min-h-screen bg-base-100 flex items-center justify-center p-4"
-      data-theme="forest"
+      data-theme={theme}
     >
       <div className="card bg-base-200 w-full max-w-3xl shadow-xl">
         <div className="card-body p-6 sm:p-8">
