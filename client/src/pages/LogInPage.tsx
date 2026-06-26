@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { ComputerIcon } from "lucide-react";
 import useLogIn from "../hooks/useLogIn";
 import type { typeLogInData } from "../types/typesCollection";
+import { useThemeStore } from "../stores/useThemeStore";
 
 const LogInPage = () => {
   const [logInData, setLogInData] = useState<typeLogInData>({
@@ -11,6 +12,8 @@ const LogInPage = () => {
   });
 
   const { logInMutation, isPending } = useLogIn();
+
+  const { theme } = useThemeStore();
 
   const handleLogIn = (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -21,7 +24,7 @@ const LogInPage = () => {
   return (
     <div
       className="h-screen flex items-center justify-center p-4 sm:p-6 md:p-8"
-      data-theme="forest"
+      data-theme={theme}
     >
       <div className="border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-xl shadow-lg overflow-hidden">
         {/* login sections */}
@@ -30,7 +33,7 @@ const LogInPage = () => {
           <div className="mb-4 flex items-center justify-start gap-2">
             <ComputerIcon className="size-9 text-primary" />
             <span className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary  tracking-wider">
-              Test Social App
+              Social App
             </span>
           </div>
 

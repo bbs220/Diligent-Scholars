@@ -10,9 +10,12 @@ import ChatPage from "./pages/ChatPage";
 import PageLoader from "./components/PageLoader";
 import useAuthUser from "./hooks/useAuthUser";
 import Layout from "./components/Layout";
+import { useThemeStore } from "./stores/useThemeStore";
 
 function App() {
   const { isLoading, authUser } = useAuthUser();
+
+  const { theme } = useThemeStore();
 
   const isAuthenticated = Boolean(authUser);
 
@@ -27,7 +30,7 @@ function App() {
   }
 
   return (
-    <div className="h-screen" data-theme="forest">
+    <div className="h-screen" data-theme={theme}>
       <Routes>
         <Route
           path="/"

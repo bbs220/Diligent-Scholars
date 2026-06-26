@@ -3,6 +3,7 @@ import { Computer } from "lucide-react";
 import { Link } from "react-router";
 import useSignUp from "../hooks/useSignUp";
 import type { typeSignUpData } from "../types/typesCollection";
+import { useThemeStore } from "../stores/useThemeStore";
 
 const SignUpPage = () => {
   const [signUpData, setSignUpData] = useState<typeSignUpData>({
@@ -13,6 +14,8 @@ const SignUpPage = () => {
 
   const { signUpMutation, isPending } = useSignUp();
 
+  const { theme } = useThemeStore();
+
   const handleSignUp = (e: React.SubmitEvent) => {
     e.preventDefault();
 
@@ -22,7 +25,7 @@ const SignUpPage = () => {
   return (
     <div
       className="h-screen flex items-center justify-center p-4 sm:p-6 md:p-8"
-      data-theme="forest"
+      data-theme={theme}
     >
       <div className="border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-xl shadow-lg overflow-hidden">
         {/* form section */}
@@ -31,7 +34,7 @@ const SignUpPage = () => {
           <div className="mb-4 flex items-center justify-start gap-2">
             <Computer className="size-9 text-primary" />
             <span className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary tracking-wider">
-              Test Social App
+              Social App
             </span>
           </div>
           {/* form */}
