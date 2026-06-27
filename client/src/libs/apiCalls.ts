@@ -46,3 +46,15 @@ export const getAuthUserFn = async () => {
     return null;
   }
 };
+
+// query fn
+export const populateUserFriends = async () => {
+  const res = await axiosInstance.get("/users/friends");
+  return res.data;
+};
+
+// query fn
+export const populateRecommendedUsers = async () => {
+  const res = await axiosInstance.get("/users");
+  return res.data;
+};
