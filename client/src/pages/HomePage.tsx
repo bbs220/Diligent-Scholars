@@ -1,8 +1,10 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import {
-  populateRecommendedUsers,
-  populateUserFriends,
+  populateOutgoingFriendReqsFn,
+  populateRecommendedUsersFn,
+  populateUserFriendsFn,
+  sendFriendReqFn,
 } from "../libs/apiCalls";
 
 const HomePage = () => {
@@ -12,7 +14,7 @@ const HomePage = () => {
 
   const { data: friendsData = [], isLoading: loadingUserFriends } = useQuery({
     queryKey: ["friends"],
-    queryFn: populateUserFriends,
+    queryFn: populateUserFriendsFn,
   });
 
   const {
@@ -20,8 +22,21 @@ const HomePage = () => {
     isLoading: loadingRecommendedUsers,
   } = useQuery({
     queryKey: ["recommendedUsers"],
-    queryFn: populateRecommendedUsers,
+    queryFn: populateRecommendedUsersFn,
   });
+
+  const { data: outgoingFriendReqs } = useQuery({
+    queryKey: ["outgoingFriendReqs"],
+    queryFn: populateOutgoingFriendReqsFn,
+  });
+
+  const { mutate: sendReqMutation, isPending } = useMutation({
+    mutationFn: sendFriendReqFn,
+
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["outgoingFriendReqs"] }),
+  });
+
   return <div>HomePage</div>;
 };
 

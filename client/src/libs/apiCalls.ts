@@ -35,7 +35,6 @@ export const onBoardingMutationFn = async (
   return res.data;
 };
 
-// this is not a mutate fu
 // this is for query fn
 export const getAuthUserFn = async () => {
   try {
@@ -48,13 +47,25 @@ export const getAuthUserFn = async () => {
 };
 
 // query fn
-export const populateUserFriends = async () => {
+export const populateUserFriendsFn = async () => {
   const res = await axiosInstance.get("/users/friends");
   return res.data;
 };
 
 // query fn
-export const populateRecommendedUsers = async () => {
+export const populateRecommendedUsersFn = async () => {
   const res = await axiosInstance.get("/users");
+  return res.data;
+};
+
+// query fn
+export const populateOutgoingFriendReqsFn = async () => {
+  const res = await axiosInstance.get("/users/outgoing-friend-requests");
+  return res.data;
+};
+
+// another mutation fn
+export const sendFriendReqFn = async (userId) => {
+  const res = await axiosInstance.post(`/users/friend-request/${userId}`);
   return res.data;
 };
