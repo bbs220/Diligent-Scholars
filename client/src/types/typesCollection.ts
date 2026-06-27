@@ -25,7 +25,7 @@ export type typeLayout = {
   showSideBar?: boolean;
 };
 
-export interface User {
+export type typeUser = {
   _id: string;
   fullName: string;
   email: string;
@@ -38,8 +38,8 @@ export interface User {
   friends: string[];
   createdAt: string;
   updatedAt: string;
-}
+};
 
-export interface AuthResponse {
-  user: User;
-}
+export type typeAuthResponse = {
+  user: typeUser;
+};

@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAuthUserFn } from "../libs/apiCalls";
-import type { AuthResponse } from "../types/typesCollection";
+import type { typeAuthResponse } from "../types/typesCollection";
 
 const useAuthUser = () => {
-  const authUser = useQuery<AuthResponse, Error>({
+  const authUser = useQuery<typeAuthResponse, Error>({
     queryKey: ["authUser"],
     queryFn: getAuthUserFn,
     retry: false,
