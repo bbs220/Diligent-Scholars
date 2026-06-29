@@ -7,7 +7,7 @@ const ThemeSelector = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="btn btn-ghost btn-square"
+      className="btn btn-accent btn-square"
       aria-label="Toggle theme"
       title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
     >

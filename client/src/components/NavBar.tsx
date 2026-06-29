@@ -31,7 +31,7 @@ const NavBar = () => {
           <div className="flex items-center gap-3 sm:gap-4 ml-auto">
             <Link to={"/notifications"}>
               <button
-                className="btn btn-ghost btn-square"
+                className="btn btn-info btn-square"
                 title={`Notifications`}
               >
                 <BellIcon className="size-6 text-base-content opacity-70" />
@@ -42,7 +42,7 @@ const NavBar = () => {
           <ThemeSelector />
 
           <div className="avatar">
-            <div className="w-9 rounded-lg">
+            <div className="w-10 rounded-lg">
               <img
                 src={authUser?.profileAvatar}
                 alt="User Avatar"
@@ -52,7 +52,7 @@ const NavBar = () => {
           </div>
 
           <button
-            className="btn btn-ghost btn-square"
+            className="btn btn-error btn-square"
             onClick={() => logOutMutation()}
             title={`Logout`}
           >
