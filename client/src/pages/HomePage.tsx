@@ -10,6 +10,7 @@ import { Link } from "react-router";
 import { UsersIcon } from "lucide-react";
 import FriendCard from "../components/FriendCard";
 import NoFriends from "../components/NoFriends";
+import type { typeUser } from "../types/typesCollection";
 
 const HomePage = () => {
   const queryClient = useQueryClient();
@@ -55,6 +56,7 @@ const HomePage = () => {
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       <div className="container mx-auto space-y-10">
+        {/* total friends */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
             Your Friends
@@ -64,20 +66,38 @@ const HomePage = () => {
             Friend Requests
           </Link>
         </div>
-
+        {/* if friends then load them */}
         {loadingUserFriends ? (
           <div className="flex justify-center py-12">
             <span className="loading loading-spinner loading-lg" />
           </div>
         ) : friendsData.length === 0 ? (
+          // if no friends then this
           <NoFriends />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {friendsData.map((friend) => {
+            {/* if friends then this */}
+            {friendsData.map((friend: typeUser) => {
               <FriendCard key={friend._id} friend={friend} />;
             })}
           </div>
         )}
+        {/* recommended friends part */}
+        <section>
+          <div className="mb-6 sm:mb-8">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              {/* hero */}
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
+                  Meet new developers
+                </h2>
+                <p className="opacity-70">
+                  Discover new devs and trade skills with them
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
