@@ -12,7 +12,7 @@ export const populateRecommendedUsers = async (req, res) => {
         // exclude the current user
         { _id: { $ne: currentUserId } },
         // exclude users who are already friends with the current user
-        { $id: { $nin: currentUser.friends } },
+        { _id: { $nin: currentUser.friends } },
         // only include users who are onboarded
         { isOnboarded: true },
       ],
