@@ -49,13 +49,13 @@ export const getAuthUserFn = async () => {
 // query fn
 export const populateUserFriendsFn = async () => {
   const res = await axiosInstance.get("/users/friends");
-  return res.data;
+  return res.data.friends || [];
 };
 
 // query fn
 export const populateRecommendedUsersFn = async () => {
   const res = await axiosInstance.get("/users");
-  return res.data;
+  return res.data.recommendedUsers || [];
 };
 
 // query fn
@@ -65,7 +65,7 @@ export const populateOutgoingFriendReqsFn = async () => {
 };
 
 // another mutation fn
-export const sendFriendReqFn = async (userId) => {
+export const sendFriendReqFn = async (userId: string) => {
   const res = await axiosInstance.post(`/users/friend-request/${userId}`);
   return res.data;
 };
