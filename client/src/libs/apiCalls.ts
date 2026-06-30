@@ -69,3 +69,9 @@ export const sendFriendReqFn = async (userId: string) => {
   const res = await axiosInstance.post(`/users/friend-request/${userId}`);
   return res.data;
 };
+
+// query fn
+export const populateFriendReqsFn = async () => {
+  const res = await axiosInstance.get("/users/incoming-friend-requests");
+  return res.data;
+};
