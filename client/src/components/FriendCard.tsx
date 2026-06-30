@@ -18,11 +18,11 @@ const FriendCard = ({ friend }: FriendCard) => {
         </div>
         {/* badges */}
         <div className="flex flex-wrap gap-1.5 mb-3">
-          <span className="badge badge-secondary text-xs">
-            Proficient in {friend.skillToShare}
+          <span className="badge badge-primary text-xs">
+            📘 {friend.skillToShare}
           </span>
-          <span className="badge badge-outline text-xs">
-            Learning {friend.skillToLearn}
+          <span className="badge badge-secondary text-xs">
+            📖 {friend.skillToLearn}
           </span>
         </div>
         {/* link to chat */}

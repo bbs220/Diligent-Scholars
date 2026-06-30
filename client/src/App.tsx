@@ -30,7 +30,7 @@ function App() {
   }
 
   return (
-    <div className="h-screen" data-theme={theme}>
+    <div className="h-screen font-inter" data-theme={theme}>
       <Routes>
         <Route
           path="/"

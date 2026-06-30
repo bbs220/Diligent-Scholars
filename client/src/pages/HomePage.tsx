@@ -53,8 +53,8 @@ const HomePage = () => {
     const outgoingIds = new Set();
 
     if (outgoingFriendReqs && outgoingFriendReqs.length > 0) {
-      outgoingFriendReqs.forEach((req: { id: string }) => {
-        outgoingIds.add(req.id);
+      outgoingFriendReqs.forEach((req: { receiver: { _id: string } }) => {
+        outgoingIds.add(req.receiver._id);
       });
       setOutgoingReqIDs(outgoingIds);
     }
@@ -143,11 +143,11 @@ const HomePage = () => {
                       </div>
                       {/* friends skills */}
                       <div className="flex flex-wrap gap-1.5">
-                        <span className="badge badge-secondary">
-                          {`Proficient in: ${capitalize(user.skillToShare)}`}
+                        <span className="badge badge-primary">
+                          {`📘 ${capitalize(user.skillToShare)}`}
                         </span>
                         <span className="badge badge-secondary">
-                          {`Learning for: ${capitalize(user.skillToLearn)}`}
+                          {`📖 ${capitalize(user.skillToLearn)}`}
                         </span>
                       </div>
                       {/* friends bio */}
