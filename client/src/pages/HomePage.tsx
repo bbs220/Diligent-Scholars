@@ -7,7 +7,12 @@ import {
   sendFriendReqFn,
 } from "../libs/apiCalls";
 import { Link } from "react-router";
-import { MapPinIcon, UsersIcon } from "lucide-react";
+import {
+  CheckCircleIcon,
+  MapPinIcon,
+  UserPlusIcon,
+  UsersIcon,
+} from "lucide-react";
 import FriendCard from "../components/FriendCard";
 import NoFriends from "../components/NoFriends";
 import type { typeUser } from "../types/typesCollection";
@@ -79,9 +84,9 @@ const HomePage = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {/* if friends then this */}
-            {friendsData.map((friend: typeUser) => {
-              <FriendCard key={friend._id} friend={friend} />;
-            })}
+            {friendsData.map((friend: typeUser) => (
+              <FriendCard key={friend._id} friend={friend} />
+            ))}
           </div>
         )}
         {/* recommended friends part */}
@@ -139,10 +144,10 @@ const HomePage = () => {
                       {/* friends skills */}
                       <div className="flex flex-wrap gap-1.5">
                         <span className="badge badge-secondary">
-                          {`Proficient in:${capitalize(user.skillToShare)}`}
+                          {`Proficient in: ${capitalize(user.skillToShare)}`}
                         </span>
                         <span className="badge badge-secondary">
-                          {`Learning for:${capitalize(user.skillToLearn)}`}
+                          {`Learning for: ${capitalize(user.skillToLearn)}`}
                         </span>
                       </div>
                       {/* friends bio */}
@@ -150,6 +155,23 @@ const HomePage = () => {
                         <p className="text-sm opacity-70">{user.bio}</p>
                       )}
                       {/* submit button */}
+                      <button
+                        className={`btn w-full mt-2 ${hasReqBeenSent ? "btn-disabled" : "btn-primary"}`}
+                        onClick={() => sendReqMutation(user._id)}
+                        disabled={hasReqBeenSent || isPending}
+                      >
+                        {hasReqBeenSent ? (
+                          <>
+                            <CheckCircleIcon className="size-4 mr-2" />
+                            Request Sent
+                          </>
+                        ) : (
+                          <>
+                            <UserPlusIcon className="size-4 mr-2" />
+                            Send Friend Request
+                          </>
+                        )}
+                      </button>
                     </div>
                   </div>
                 );
