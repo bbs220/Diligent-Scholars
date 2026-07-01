@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import type { typeUser } from "../types/typesCollection";
+import { capitalize } from "../libs/helper";
 
 interface FriendCard {
   friend: typeUser;
@@ -19,10 +20,10 @@ const FriendCard = ({ friend }: FriendCard) => {
         {/* badges */}
         <div className="flex flex-wrap gap-1.5 mb-3">
           <span className="badge badge-primary text-xs">
-            📘 {friend.skillToShare}
+            📘 {capitalize(friend.skillToShare)}
           </span>
           <span className="badge badge-secondary text-xs">
-            📖 {friend.skillToLearn}
+            📖 {capitalize(friend.skillToLearn)}
           </span>
         </div>
         {/* link to chat */}

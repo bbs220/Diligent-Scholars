@@ -49,13 +49,13 @@ export const getAuthUserFn = async () => {
 // query fn
 export const populateUserFriendsFn = async () => {
   const res = await axiosInstance.get("/users/friends");
-  return res.data.friends || [];
+  return res.data || [];
 };
 
 // query fn
 export const populateRecommendedUsersFn = async () => {
   const res = await axiosInstance.get("/users");
-  return res.data.recommendedUsers || [];
+  return res.data || [];
 };
 
 // query fn

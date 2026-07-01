@@ -18,7 +18,7 @@ export const populateRecommendedUsers = async (req, res) => {
       ],
     });
 
-    res.status(200).json({ message: "Recommended Users", recommendedUsers });
+    res.status(200).json(recommendedUsers);
   } catch (error) {
     console.error(`😭 Error populating recommended users: ${error}`);
 
