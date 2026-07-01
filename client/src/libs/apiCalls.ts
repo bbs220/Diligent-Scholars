@@ -76,7 +76,14 @@ export const populateFriendReqsFn = async () => {
   return res.data;
 };
 
+// mutation fn
 export const acceptFriendReqFn = async (userId: string) => {
   const res = await axiosInstance.put(`/users/friend-request/${userId}/accept`);
+  return res.data;
+};
+
+// just for getting the stream token for chat
+export const getStreamToken = async () => {
+  const res = await axiosInstance.get("/chat/token");
   return res.data;
 };
