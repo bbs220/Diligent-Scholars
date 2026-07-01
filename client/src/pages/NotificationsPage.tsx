@@ -101,7 +101,7 @@ const NotificationsPage = () => {
               <section className="spacey-y-4">
                 <h2 className="text-xl font-semibold flex items-center gap-2">
                   <BellIcon className="h-5 w-5 text-success" />
-                  New Connections
+                  New Friends
                 </h2>
 
                 <div className="space-y-3">
