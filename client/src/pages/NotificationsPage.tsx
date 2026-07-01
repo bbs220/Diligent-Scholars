@@ -1,7 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { acceptFriendReqFn, populateFriendReqsFn } from "../libs/apiCalls";
-import { BellIcon, UserCheckIcon } from "lucide-react";
+import {
+  BellIcon,
+  ClockIcon,
+  MessageSquareIcon,
+  UserCheckIcon,
+} from "lucide-react";
 import type { typeUser } from "../types/typesCollection";
+import NoNotificationFound from "../components/NoNotificationFound";
 
 const NotificationsPage = () => {
   const queryClient = useQueryClient();
@@ -97,7 +103,50 @@ const NotificationsPage = () => {
                   <BellIcon className="h-5 w-5 text-success" />
                   New Connections
                 </h2>
+
+                <div className="space-y-3">
+                  {acceptedReqs.map(
+                    (notif: { _id: string; receiver: typeUser }) => (
+                      <div
+                        key={notif._id}
+                        className="card bg-base-200 shadow-sm"
+                      >
+                        <div className="card-body p-4">
+                          <div className="flex items-start gap-3">
+                            <div className="avatar mt-1 size-10 rounded-full">
+                              <img
+                                src={notif.receiver.profileAvatar}
+                                alt={notif.receiver.fullName}
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="font-semibold">
+                                {notif.receiver.fullName}
+                              </h3>
+                              <p className="text-sm my-1">
+                                {notif.receiver.fullName} accepted your friend
+                                request
+                              </p>
+                              <p className="text-xs flex items-center opacity-70">
+                                <ClockIcon className="h-3 w-3 mr-1" />
+                                Recently
+                              </p>
+                            </div>
+                            <div className="badge badge-success">
+                              <MessageSquareIcon className="h-3 w-3 mr-1" />
+                              New Friend
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ),
+                  )}
+                </div>
               </section>
+            )}
+
+            {incomingReqs.length === 0 && acceptedReqs.length === 0 && (
+              <NoNotificationFound />
             )}
           </>
         )}
