@@ -4,3 +4,4 @@
 - jwt for auth
 - tailwind and daisyui for css
 - react router for routing
+- express and mongo for api and db
