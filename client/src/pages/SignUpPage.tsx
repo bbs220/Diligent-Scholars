@@ -53,10 +53,9 @@ const SignUpPage = () => {
                 <div>
                   <h2 className="text-xl font-semibold">Create an Account</h2>
                   <p className="text-sm opacity-70">
-                    Join us and start your web skills learning adventure!
+                    Join us and start your web skills learning journey!
                   </p>
                 </div>
-
                 <div className="flex flex-col gap-2">
                   {/* fullname */}
                   <div className="form-control w-full space-y-2">

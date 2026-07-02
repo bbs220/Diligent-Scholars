@@ -85,7 +85,7 @@ const CallPage = () => {
         ) : (
           <div className="flex items-center justify-center h-full">
             <p className="font-semibold">
-              Could not start the video call. Please try again later
+              Could not start the video call. Please try again later!
             </p>
           </div>
         )}

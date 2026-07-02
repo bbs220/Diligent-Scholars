@@ -64,7 +64,7 @@ const ChatPage = () => {
         setChatChannel(currentChannel);
       } catch (error) {
         console.log(`Error starting chat: ${error}`);
-        toast.error("Failed to start chat. Please try again later");
+        toast.error("Failed to start chat. Please try again later!");
       } finally {
         setLoading(false);
       }
