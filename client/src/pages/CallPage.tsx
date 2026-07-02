@@ -1,4 +1,5 @@
 import {
+  Call,
   StreamCall,
   StreamVideo,
   StreamVideoClient,
@@ -17,8 +18,8 @@ const STREAM_API_KEY = import.meta.env.VITE_STREAM_API_KEY as string;
 const CallPage = () => {
   const { id: callId } = useParams<{ id: string }>();
 
-  const [callClient, setCallClient] = useState(null);
-  const [call, setCall] = useState(null);
+  const [callClient, setCallClient] = useState<StreamVideoClient | null>(null);
+  const [call, setCall] = useState<Call | null>(null);
   const [isConnecting, setIsConnecting] = useState<boolean>(true);
 
   const { authUser, isLoading } = useAuthUser();
@@ -34,38 +35,36 @@ const CallPage = () => {
       if (!tokenData?.streamToken || !authUser || !callId) {
         return;
       }
+
+      try {
+        const currentUser = {
+          id: authUser._id,
+          name: authUser.fullName,
+          image: authUser.profileAvatar,
+        };
+
+        const videoCallClient = new StreamVideoClient({
+          apiKey: STREAM_API_KEY,
+          user: currentUser,
+          token: tokenData.streamToken,
+        });
+
+        const callInstance = videoCallClient.call("default", callId);
+
+        await callInstance.join({
+          create: true,
+        });
+
+        setCallClient(videoCallClient);
+        setCall(callInstance);
+      } catch (error) {
+        console.log(`Error in starting a call: ${error}`);
+
+        toast.error("Failed to start a video call. Please try again later");
+      } finally {
+        setIsConnecting(false);
+      }
     };
-
-    try {
-      if (!authUser) return;
-
-      const currentUser = {
-        id: authUser._id,
-        name: authUser.fullName,
-        image: authUser.profileAvatar,
-      };
-
-      const videoCallClient = new StreamVideoClient({
-        apiKey: STREAM_API_KEY,
-        user: currentUser,
-        token: tokenData.streamToken,
-      });
-
-      const callInstance = videoCallClient.call("default", callId);
-
-      await callInstance.join({
-        create: true,
-      });
-
-      setCallClient(videoCallClient);
-      setCall(callInstance);
-    } catch (error) {
-      console.log(`Error in starting a call: ${error}`);
-
-      toast.error("Failed to start a video call. Please try again later");
-    } finally {
-      setIsConnecting(false);
-    }
 
     startCall();
   }, [authUser, callId, tokenData?.streamToken]);
