@@ -113,10 +113,11 @@ const NotificationsPage = () => {
                       >
                         <div className="card-body p-4">
                           <div className="flex items-start gap-3">
-                            <div className="avatar mt-1 size-10 rounded-full">
+                            <div className="avatar">
                               <img
                                 src={notif.receiver.profileAvatar}
                                 alt={notif.receiver.fullName}
+                                className="mt-1 size-10 rounded-md"
                               />
                             </div>
                             <div className="flex-1">

@@ -13,7 +13,7 @@ const FriendCard = ({ friend }: FriendCard) => {
         {/* user info */}
         <div className="flex items-center gap-3 mb-3">
           <div className="avatar">
-            <div className="w-12 rounded-xl">
+            <div className="w-12 rounded-md">
               <img src={friend.profileAvatar} alt={friend.fullName} />
             </div>
           </div>

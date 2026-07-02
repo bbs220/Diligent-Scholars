@@ -113,7 +113,7 @@ const SignUpPage = () => {
                       />
                       <button
                         type="button"
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-base-content/50 hover:text-primary transition-colors"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-base-content/50 hover:text-primary transition-colors hover:cursor-pointer"
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? (
@@ -151,13 +151,13 @@ const SignUpPage = () => {
                 </div>
                 {/* submit button */}
                 <button
-                  className="btn btn-primary w-full mt-4"
+                  className="btn btn-primary w-full mt-2"
                   type="submit"
-                  disabled={isPending} // Removed !isAgreed from here
+                  disabled={isPending}
                 >
                   {isPending ? (
                     <>
-                      <span className="loading loading-spinner loading-xs"></span>
+                      <span className="loading loading-spinner loading-xs" />
                       Loading...
                     </>
                   ) : (
