@@ -1,28 +1,26 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import {
-  populateOutgoingFriendReqsFn,
-  populateRecommendedUsersFn,
-  populateUserFriendsFn,
-  sendFriendReqFn,
-} from "../libs/apiCalls";
-import { Link } from "react-router";
 import {
   CheckCircleIcon,
   MapPinIcon,
   UserPlusIcon,
   UsersIcon,
 } from "lucide-react";
+import { useMemo } from "react";
+import { Link } from "react-router";
 import FriendCard from "../components/FriendCard";
 import NoFriends from "../components/NoFriends";
-import type { typeUser } from "../types/typesCollection";
 import NoRecommendedUsers from "../components/NoRecommendedUsers";
+import {
+  populateOutgoingFriendReqsFn,
+  populateRecommendedUsersFn,
+  populateUserFriendsFn,
+  sendFriendReqFn,
+} from "../libs/apiCalls";
 import { capitalize } from "../libs/helper";
+import type { typeUser } from "../types/typesCollection";
 
 const HomePage = () => {
   const queryClient = useQueryClient();
-
-  const [outgoingReqIDs, setOutgoingReqIDs] = useState(new Set());
 
   const { data: friendsData = [], isLoading: loadingUserFriends } = useQuery({
     queryKey: ["friends"],
@@ -49,15 +47,14 @@ const HomePage = () => {
       queryClient.invalidateQueries({ queryKey: ["outgoingFriendReqs"] }),
   });
 
-  useEffect(() => {
-    const outgoingIds = new Set();
-
+  const outgoingReqIDs = useMemo(() => {
+    const ids = new Set();
     if (outgoingFriendReqs && outgoingFriendReqs.length > 0) {
       outgoingFriendReqs.forEach((req: { receiver: { _id: string } }) => {
-        outgoingIds.add(req.receiver._id);
+        ids.add(req.receiver._id);
       });
-      setOutgoingReqIDs(outgoingIds);
     }
+    return ids;
   }, [outgoingFriendReqs]);
 
   return (
@@ -91,7 +88,7 @@ const HomePage = () => {
         )}
         {/* recommended friends part */}
         <section>
-          <div className="mb-6 sm:mb-8">
+          <div className="mb-4 sm:mb-8">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               {/* hero */}
               <div>

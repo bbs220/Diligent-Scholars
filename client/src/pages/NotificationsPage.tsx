@@ -99,8 +99,8 @@ const NotificationsPage = () => {
             {/* accepted friend reqs */}
             {acceptedReqs.length > 0 && (
               <section className="spacey-y-4">
-                <h2 className="text-xl font-semibold flex items-center gap-2">
-                  <BellIcon className="h-5 w-5 text-success" />
+                <h2 className="text-xl font-semibold flex items-center gap-2 mb-4">
+                  <BellIcon className="size-5 text-success" />
                   New Friends
                 </h2>
 
