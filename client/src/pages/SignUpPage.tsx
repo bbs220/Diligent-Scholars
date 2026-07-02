@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Computer } from "lucide-react";
+import { Computer, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router";
 import useSignUp from "../hooks/useSignUp";
 import type { typeSignUpData } from "../types/typesCollection";
@@ -12,13 +12,15 @@ const SignUpPage = () => {
     password: "",
   });
 
-  const { signUpMutation, isPending } = useSignUp();
+  const [isAgreed, setIsAgreed] = useState(false);
 
+  const [showPassword, setShowPassword] = useState(false);
+
+  const { signUpMutation, isPending } = useSignUp();
   const { theme } = useThemeStore();
 
-  const handleSignUp = (e: React.SubmitEvent) => {
+  const handleSignUp: React.ComponentProps<"form">["onSubmit"] = (e) => {
     e.preventDefault();
-
     signUpMutation(signUpData);
   };
 
@@ -89,46 +91,65 @@ const SignUpPage = () => {
                     <label className="label">
                       <span className="label-text">Password</span>
                     </label>
-                    <input
-                      type="password"
-                      placeholder="Your Password"
-                      className="input input-bordered w-full"
-                      value={signUpData.password}
-                      onChange={(e) =>
-                        setSignUpData({
-                          ...signUpData,
-                          password: e.target.value,
-                        })
-                      }
-                      required
-                    />
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Your Password"
+                        className="input input-bordered w-full pr-10" // pr-10 prevents text from typing under the icon
+                        value={signUpData.password}
+                        onChange={(e) =>
+                          setSignUpData({
+                            ...signUpData,
+                            password: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-base-content/50 hover:text-primary transition-colors"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="size-5" />
+                        ) : (
+                          <Eye className="size-5" />
+                        )}
+                      </button>
+                    </div>
                     <p className="text-xs opacity-70 mt-1">
                       Password must be at least 6 characters long
                     </p>
                   </div>
-
-                  <div className="form-control">
-                    <label className="label cursor-pointer justify-start gap-2">
+                  {/* checkbox */}
+                  <div className="form-control mt-2">
+                    <div className="flex items-center justify-start gap-2">
                       <input
                         type="checkbox"
-                        className="checkbox checkbox-sm"
+                        className="checkbox checkbox-sm cursor-pointer"
+                        checked={isAgreed}
+                        onChange={(e) => setIsAgreed(e.target.checked)}
                         required
                       />
                       <span className="text-xs leading-tight">
                         I agree to the{" "}
-                        <span className="text-primary hover:underline">
+                        <span className="text-primary hover:underline cursor-pointer">
                           terms of service
                         </span>{" "}
                         and{" "}
-                        <span className="text-primary hover:underline">
+                        <span className="text-primary hover:underline cursor-pointer">
                           privacy policy
                         </span>
                       </span>
-                    </label>
+                    </div>
                   </div>
                 </div>
-
-                <button className="btn btn-primary w-full" type="submit">
+                {/* submit button */}
+                <button
+                  className="btn btn-primary w-full mt-4"
+                  type="submit"
+                  disabled={!isAgreed || isPending}
+                >
                   {isPending ? (
                     <>
                       <span className="loading loading-spinner loading-xs"></span>
@@ -138,7 +159,7 @@ const SignUpPage = () => {
                     <span>Sign Up</span>
                   )}
                 </button>
-
+                {/* link to login */}
                 <div className="text-center mt-4">
                   <p className="text-sm">
                     Already have an account?{" "}
@@ -151,7 +172,6 @@ const SignUpPage = () => {
             </form>
           </div>
         </div>
-
         {/* splash image section */}
         <div className="hidden lg:flex w-full lg:w-1/2 bg-primary/10 items-center justify-center">
           <div className="max-w-md p-8">
@@ -163,7 +183,7 @@ const SignUpPage = () => {
                 className="w-full h-full"
               />
             </div>
-
+            {/* splash description */}
             <div className="text-center space-y-3 mt-6">
               <h2 className="text-xl font-semibold">
                 Connect with skilled developers worldwide
