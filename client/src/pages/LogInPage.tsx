@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
-import { ComputerIcon } from "lucide-react";
+import { ComputerIcon, Eye, EyeOff } from "lucide-react";
 import useLogIn from "../hooks/useLogIn";
 import type { typeLogInData } from "../types/typesCollection";
 import { useThemeStore } from "../stores/useThemeStore";
@@ -11,13 +11,13 @@ const LogInPage = () => {
     password: "",
   });
 
-  const { logInMutation, isPending } = useLogIn();
+  const [showPassword, setShowPassword] = useState(false);
 
+  const { logInMutation, isPending } = useLogIn();
   const { theme } = useThemeStore();
 
-  const handleLogIn = (e: React.SubmitEvent) => {
+  const handleLogIn: React.ComponentProps<"form">["onSubmit"] = (e) => {
     e.preventDefault();
-
     logInMutation(logInData);
   };
 
@@ -32,21 +32,21 @@ const LogInPage = () => {
           {/* logo */}
           <div className="mb-4 flex items-center justify-start gap-2">
             <ComputerIcon className="size-9 text-primary" />
-            <span className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary  tracking-wider">
+            <span className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary tracking-wider">
               Social App
             </span>
           </div>
-
+          {/* form */}
           <div className="w-full">
             <form onSubmit={handleLogIn}>
               <div className="space-y-4">
                 <div>
                   <h2 className="text-xl font-semibold">Welcome Back</h2>
                   <p className="text-sm opacity-70">
-                    Log In to your account to continue your language journey
+                    Log In to your account to continue your learning journey!
                   </p>
                 </div>
-
+                {/* email */}
                 <div className="flex flex-col gap-2">
                   <div className="form-control w-full space-y-2">
                     <label className="label">
@@ -63,23 +63,39 @@ const LogInPage = () => {
                       required
                     />
                   </div>
-
+                  {/* password section updated */}
                   <div className="form-control w-full space-y-2">
                     <label className="label">
                       <span className="label-text">Password</span>
                     </label>
-                    <input
-                      type="password"
-                      placeholder="Your Password"
-                      className="input input-bordered w-full"
-                      value={logInData.password}
-                      onChange={(e) =>
-                        setLogInData({ ...logInData, password: e.target.value })
-                      }
-                      required
-                    />
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Your Password"
+                        className="input input-bordered w-full pr-10"
+                        value={logInData.password}
+                        onChange={(e) =>
+                          setLogInData({
+                            ...logInData,
+                            password: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                      <button
+                        type="button" // Important: prevents form submission
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-base-content/50 hover:text-primary transition-colors"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="size-5" />
+                        ) : (
+                          <Eye className="size-5" />
+                        )}
+                      </button>
+                    </div>
                   </div>
-
+                  {/* submit button */}
                   <button
                     type="submit"
                     className="btn btn-primary w-full mt-4"
@@ -88,13 +104,13 @@ const LogInPage = () => {
                     {isPending ? (
                       <>
                         <span className="loading loading-spinner loading-xs"></span>
-                        Loggin In...
+                        Logging In...
                       </>
                     ) : (
                       "Log In"
                     )}
                   </button>
-
+                  {/* link to signup */}
                   <div className="text-center mt-4">
                     <p className="text-sm">
                       Don't have an account?{" "}
@@ -111,7 +127,6 @@ const LogInPage = () => {
             </form>
           </div>
         </div>
-
         {/* img section */}
         <div className="hidden lg:flex w-full lg:w-1/2 bg-primary/10 items-center justify-center">
           <div className="max-w-md p-8">
@@ -123,7 +138,7 @@ const LogInPage = () => {
                 className="w-full h-full"
               />
             </div>
-
+            {/* splash description */}
             <div className="text-center space-y-3 mt-6">
               <h2 className="text-xl font-semibold">
                 Connect with skilled developers worldwide

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Computer, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router";
+import toast from "react-hot-toast";
 import useSignUp from "../hooks/useSignUp";
 import type { typeSignUpData } from "../types/typesCollection";
 import { useThemeStore } from "../stores/useThemeStore";
@@ -21,6 +22,12 @@ const SignUpPage = () => {
 
   const handleSignUp: React.ComponentProps<"form">["onSubmit"] = (e) => {
     e.preventDefault();
+
+    if (!isAgreed) {
+      toast.error("Please check the box to sign up");
+      return;
+    }
+
     signUpMutation(signUpData);
   };
 
@@ -46,7 +53,7 @@ const SignUpPage = () => {
                 <div>
                   <h2 className="text-xl font-semibold">Create an Account</h2>
                   <p className="text-sm opacity-70">
-                    Join us and start your various skills learning adventure!
+                    Join us and start your web skills learning adventure!
                   </p>
                 </div>
 
@@ -95,7 +102,7 @@ const SignUpPage = () => {
                       <input
                         type={showPassword ? "text" : "password"}
                         placeholder="Your Password"
-                        className="input input-bordered w-full pr-10" // pr-10 prevents text from typing under the icon
+                        className="input input-bordered w-full pr-10"
                         value={signUpData.password}
                         onChange={(e) =>
                           setSignUpData({
@@ -129,7 +136,6 @@ const SignUpPage = () => {
                         className="checkbox checkbox-sm cursor-pointer"
                         checked={isAgreed}
                         onChange={(e) => setIsAgreed(e.target.checked)}
-                        required
                       />
                       <span className="text-xs leading-tight">
                         I agree to the{" "}
@@ -148,7 +154,7 @@ const SignUpPage = () => {
                 <button
                   className="btn btn-primary w-full mt-4"
                   type="submit"
-                  disabled={!isAgreed || isPending}
+                  disabled={isPending} // Removed !isAgreed from here
                 >
                   {isPending ? (
                     <>
