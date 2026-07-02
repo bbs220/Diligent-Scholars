@@ -84,6 +84,6 @@ export const acceptFriendReqFn = async (userId: string) => {
 
 // just for getting the stream token for chat
 export const getStreamToken = async () => {
-  const res = await axiosInstance.get("/chat/token");
+  const res = await axiosInstance.get("/chat/streamToken");
   return res.data;
 };

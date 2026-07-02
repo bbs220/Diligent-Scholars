@@ -3,18 +3,26 @@ import { useParams } from "react-router";
 import useAuthUser from "../hooks/useAuthUser";
 import { useQuery } from "@tanstack/react-query";
 import { getStreamToken } from "../libs/apiCalls";
-import { StreamChat } from "stream-chat";
+import { StreamChat, Channel as StreamChannel } from "stream-chat";
+import {
+  Channel,
+  ChannelHeader,
+  Chat,
+  MessageList,
+  Window,
+  MessageComposer,
+} from "stream-chat-react";
 import toast from "react-hot-toast";
 import ChatLoader from "../components/ChatLoader";
 
-const STREAM_API_KEY = import.meta.env.STREAM_API_KEY;
+const STREAM_API_KEY = import.meta.env.VITE_STREAM_API_KEY as string;
 
 const ChatPage = () => {
-  const { id: targetUserId } = useParams();
+  const { id: targetUserId } = useParams<{ id: string }>();
 
-  const [chatClient, setChatClient] = useState(null);
-  const [chatChannel, setChatChannel] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [chatClient, setChatClient] = useState<StreamChat | null>(null);
+  const [chatChannel, setChatChannel] = useState<StreamChannel | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const { authUser } = useAuthUser();
 
@@ -26,11 +34,12 @@ const ChatPage = () => {
 
   useEffect(() => {
     const startChat = async () => {
-      if (!tokenData?.token || !authUser) {
+      if (!tokenData?.streamToken || !authUser || !targetUserId) {
         return;
       }
+
       try {
-        console.log(`Starting chat with token...`);
+        console.log(`Starting chat with token...${tokenData.streamToken}`);
         const client = StreamChat.getInstance(STREAM_API_KEY);
 
         await client.connectUser(
@@ -39,7 +48,7 @@ const ChatPage = () => {
             name: authUser.fullName,
             image: authUser.profileAvatar,
           },
-          tokenData.token,
+          tokenData.streamToken,
         );
 
         const channelId = [authUser._id, targetUserId].sort().join("-");
@@ -61,12 +70,27 @@ const ChatPage = () => {
     };
 
     startChat();
-  }, []);
+  }, [authUser, targetUserId, tokenData?.streamToken]);
 
   if (loading || !chatClient || !chatChannel) {
     return <ChatLoader />;
   }
-  return <div>ChatPage</div>;
+
+  return (
+    <div className="h-[93vh]">
+      <Chat client={chatClient}>
+        <Channel channel={chatChannel}>
+          <div className="w-full relative">
+            <Window>
+              <ChannelHeader />
+              <MessageList />
+              <MessageComposer focus />
+            </Window>
+          </div>
+        </Channel>
+      </Chat>
+    </div>
+  );
 };
 
 export default ChatPage;
