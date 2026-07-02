@@ -17,7 +17,7 @@
 }
 
 .str-chat__container {
-  @apply max-w-[1200px] w-full rounded-lg shadow-xl overflow-hidden bg-base-100 border border-base-300;
+  @apply max-w-300 w-full rounded-lg shadow-xl overflow-hidden bg-base-100 border border-base-300;
   height: 80% !important;
   margin: 0 auto !important;
 }

@@ -11,9 +11,11 @@ import {
   MessageList,
   Window,
   MessageComposer,
+  Thread,
 } from "stream-chat-react";
 import toast from "react-hot-toast";
 import ChatLoader from "../components/ChatLoader";
+import CallButton from "../components/CallButton";
 
 const STREAM_API_KEY = import.meta.env.VITE_STREAM_API_KEY as string;
 
@@ -71,6 +73,18 @@ const ChatPage = () => {
     startChat();
   }, [authUser, targetUserId, tokenData?.streamToken]);
 
+  const handleVideoCall = () => {
+    if (chatChannel) {
+      const callURL = `${window.location.origin}/call/${chatChannel.id}`;
+
+      chatChannel.sendMessage({
+        text: `Started a video call at ${callURL}`,
+      });
+
+      toast.success("Video call started! Share the link with your friend");
+    }
+  };
+
   if (loading || !chatClient || !chatChannel) {
     return <ChatLoader />;
   }
@@ -79,13 +93,15 @@ const ChatPage = () => {
     <div className="h-[93vh]">
       <Chat client={chatClient}>
         <Channel channel={chatChannel}>
-          <div className="w-full relative">
+          <div className="w-full h-full relative">
+            <CallButton handleVideoCall={handleVideoCall} />
             <Window>
               <ChannelHeader />
               <MessageList />
               <MessageComposer focus />
             </Window>
           </div>
+          <Thread />
         </Channel>
       </Chat>
     </div>
