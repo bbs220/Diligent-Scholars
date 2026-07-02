@@ -10,17 +10,16 @@ import userRoutes from "./routes/user.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
 import { connectDB } from "./lib/connectDB.js";
 
-// Recreate __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 const app = express();
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: "http://localhost:5173",
     credentials: true,
   }),
 );
@@ -33,11 +32,10 @@ app.use("/api/users", userRoutes);
 app.use("/api/chat", chatRoutes);
 
 if (process.env.NODE_ENV === "production") {
-  console.log(`We are in prod`);
   app.use(express.static(path.join(__dirname, "../client/dist")));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+  app.get(/(.*)/, (req, res) => {
+    res.sendFile(path.join(__dirname, "../client", "dist", "index.html"));
   });
 } else {
   app.get("/", (req, res) => {
@@ -46,6 +44,10 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server started on: http://localhost:${PORT}`);
+  if (process.env.NODE_ENV === "production") {
+    console.log(`🚀 Server and Client started on: http://localhost:${PORT}`);
+  } else {
+    console.log(`🚀 Server started on: http://localhost:${PORT}`);
+  }
   connectDB();
 });
