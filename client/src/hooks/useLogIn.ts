@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { logInMutationFn } from "../libs/apiCalls";
 import toast from "react-hot-toast";
+import { isAxiosError } from "axios";
 
 const useLogIn = () => {
   const queryClient = useQueryClient();
@@ -15,7 +16,11 @@ const useLogIn = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
 
     onError: (error) => {
-      toast.error(error.response.data.message);
+      if (isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Login failed");
+      } else {
+        toast.error(error.message);
+      }
     },
   });
 
