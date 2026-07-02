@@ -32,6 +32,7 @@ function App() {
   return (
     <div className="h-screen font-inter" data-theme={theme}>
       <Routes>
+        {/* home route */}
         <Route
           path="/"
           element={
@@ -44,6 +45,7 @@ function App() {
             )
           }
         />
+        {/* signup route */}
         <Route
           path="/signup"
           element={
@@ -54,6 +56,7 @@ function App() {
             )
           }
         />
+        {/* login route */}
         <Route
           path="/login"
           element={
@@ -64,6 +67,7 @@ function App() {
             )
           }
         />
+        {/* onboarding route */}
         <Route
           path="/onboarding"
           element={
@@ -78,6 +82,7 @@ function App() {
             )
           }
         />
+        {/* notifications route */}
         <Route
           path="/notifications"
           element={
@@ -90,18 +95,18 @@ function App() {
             )
           }
         />
+        {/* video call route */}
         <Route
-          path="/call"
+          path="/call/:id"
           element={
             isAuthenticated && isOnBoarded ? (
-              <Layout showSideBar={false}>
-                <CallPage />
-              </Layout>
+              <CallPage />
             ) : (
               <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
             )
           }
         />
+        {/* chat route */}
         <Route
           path="/chat/:id"
           element={
