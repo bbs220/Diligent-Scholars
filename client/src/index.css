@@ -1,36 +1,37 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import "stream-chat-react/dist/css/index.css";
 @import "tailwindcss";
 @plugin "daisyui";
 @theme {
   --font-inter: "Inter", sans-serif;
 }
 
+.str-chat {
+  --str-chat__text-color: var(--fallback-bc, oklch(var(--bc)/1));
+  --str-chat__surface-color: var(--fallback-b2, oklch(var(--b2)/1));
+  --str-chat__primary-color: var(--fallback-p, oklch(var(--p)/1));
+}
+
 .str-chat__channel {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+  @apply flex items-center justify-center h-full bg-base-200 font-inter text-base-content;
 }
 
 .str-chat__container {
-  max-width: 1200px;
-  width: 100%;
+  @apply max-w-300 w-full rounded-lg shadow-xl overflow-hidden bg-base-100 border border-base-300;
+
   height: 80% !important;
   margin: 0 auto !important;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
 }
 
 .str-chat__list {
-  background-color: #ffffff;
-  padding: 12px;
+  @apply bg-base-100 p-3;
 }
 
 .str-chat__list-notifications {
-  display: none;
+  @apply hidden;
 }
 
-.str-chat__message-input {
-  border-top: 1px solid #ddd;
+.str-chat__message-input,
+.str-chat__message-composer {
+  @apply border-t border-base-300 bg-base-100 p-2;
 }
