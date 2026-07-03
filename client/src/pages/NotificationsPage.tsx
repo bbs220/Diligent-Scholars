@@ -1,13 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { acceptFriendReqFn, populateFriendReqsFn } from "../libs/apiCalls";
-import {
-  BellIcon,
-  ClockIcon,
-  MessageSquareIcon,
-  UserCheckIcon,
-} from "lucide-react";
+import { BellIcon, ClockIcon, UserCheckIcon } from "lucide-react";
 import type { typeUser } from "../types/typesCollection";
 import NoNotificationFound from "../components/NoNotificationFound";
+import { capitalize } from "../libs/helper";
 
 const NotificationsPage = () => {
   const queryClient = useQueryClient();
@@ -71,11 +67,11 @@ const NotificationsPage = () => {
                                   {req.sender.fullName}
                                 </h3>
                                 <div className="flex flex-wrap gap-1.5 mt-1">
-                                  <span className="badge badge-primary badge-sm">
-                                    📘{req.sender.skillToShare}
+                                  <span className="badge badge-success badge-sm">
+                                    📘{capitalize(req.sender.skillToShare)}
                                   </span>
-                                  <span className="badge badge-secondary badge-sm">
-                                    📖{req.sender.skillToLearn}
+                                  <span className="badge badge-warning badge-sm">
+                                    📖{capitalize(req.sender.skillToLearn)}
                                   </span>
                                 </div>
                               </div>
@@ -126,16 +122,12 @@ const NotificationsPage = () => {
                               </h3>
                               <p className="text-sm my-1">
                                 {notif.receiver.fullName} accepted your friend
-                                request
+                                request!
                               </p>
                               <p className="text-xs flex items-center opacity-70">
                                 <ClockIcon className="h-3 w-3 mr-1" />
                                 Recently
                               </p>
-                            </div>
-                            <div className="badge badge-success">
-                              <MessageSquareIcon className="h-3 w-3 mr-1" />
-                              New Friend
                             </div>
                           </div>
                         </div>

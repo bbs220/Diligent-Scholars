@@ -140,10 +140,10 @@ const HomePage = () => {
                       </div>
                       {/* friends skills */}
                       <div className="flex flex-wrap gap-1.5">
-                        <span className="badge badge-primary">
+                        <span className="badge badge-success">
                           {`📘 ${capitalize(user.skillToShare)}`}
                         </span>
-                        <span className="badge badge-secondary">
+                        <span className="badge badge-warning">
                           {`📖 ${capitalize(user.skillToLearn)}`}
                         </span>
                       </div>
