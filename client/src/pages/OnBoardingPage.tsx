@@ -111,7 +111,7 @@ const OnBoardingPage = () => {
                   setOnBoardingData({ ...onBoardingData, bio: e.target.value })
                 }
                 className="textarea textarea-bordered h-24 w-full"
-                placeholder="Small description of yourself"
+                placeholder="Small description of yourself."
               />
             </div>
 
@@ -120,9 +120,7 @@ const OnBoardingPage = () => {
               {/* learned skill */}
               <div className="form-control space-y-2">
                 <label className="label">
-                  <span className="label-text">
-                    Select your web skill / language you are proficient in
-                  </span>
+                  <span className="label-text">Subject you are good at</span>
                 </label>
                 <select
                   name="skillToShare"
@@ -135,7 +133,7 @@ const OnBoardingPage = () => {
                   }
                   className="select select-bordered w-full"
                 >
-                  <option value="">Proficient Skill</option>
+                  <option>--Subject--</option>
                   {SKILLS.map((lang) => (
                     <option key={`native-${lang}`} value={lang.toLowerCase()}>
                       {lang}
@@ -147,9 +145,7 @@ const OnBoardingPage = () => {
               {/* learn skill */}
               <div className="form-control space-y-2">
                 <label className="label">
-                  <span className="label-text">
-                    Select the web skill / language you wish to learn
-                  </span>
+                  <span className="label-text">Subject you wish to learn</span>
                 </label>
                 <select
                   name="skillToLearn"
@@ -162,7 +158,7 @@ const OnBoardingPage = () => {
                   }
                   className="select select-bordered w-full"
                 >
-                  <option value="">Learning Skill</option>
+                  <option>--Subject--</option>
                   {SKILLS.map((lang) => (
                     <option key={`learning-${lang}`} value={lang.toLowerCase()}>
                       {lang}
@@ -190,7 +186,7 @@ const OnBoardingPage = () => {
                     })
                   }
                   className="input input-bordered w-full pl-10"
-                  placeholder="Where you live"
+                  placeholder="Where do you live?"
                 />
               </div>
             </div>

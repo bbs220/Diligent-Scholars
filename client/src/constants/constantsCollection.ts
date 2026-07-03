@@ -1,1 +1,12 @@
-export const SKILLS = ["JavaScript", "TypeScript", "Python", "Java"];
+export const SKILLS = [
+  "Algebra",
+  "Geometry",
+  "Physics",
+  "Chemistry",
+  "Geography",
+  "History",
+  "Biology",
+  "Art",
+  "Music",
+  "Literature",
+];
