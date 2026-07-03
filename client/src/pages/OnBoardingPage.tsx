@@ -39,20 +39,23 @@ const OnBoardingPage = () => {
 
   return (
     <div
-      className="min-h-screen bg-base-100 flex items-center justify-center p-4"
+      className="min-h-dvh bg-base-100 flex items-center justify-center p-4 sm:p-6 font-inter"
       data-theme={theme}
     >
-      <div className="card bg-base-200 w-full max-w-3xl shadow-xl">
-        <div className="card-body p-6 sm:p-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-center mb-2">
+      <div className="card bg-base-200 w-full max-w-4xl shadow-xl mx-auto">
+        <div className="card-body p-6 sm:p-8 lg:p-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-center mb-4 lg:mb-5">
             Complete Your Profile
           </h1>
 
-          <form onSubmit={handleOnBoarding} className="space-y-6">
-            {/* profile avatar */}
-            <div className="flex flex-col items-center justify-center space-y-4">
+          <form
+            onSubmit={handleOnBoarding}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-x-6 lg:gap-y-4"
+          >
+            {/* profile avatar: Spans 4 columns and 2 rows on desktop (left side) */}
+            <div className="lg:col-span-4 lg:row-span-2 flex flex-col items-center justify-start space-y-3 sm:space-y-4">
               {/* img preview */}
-              <div className="size-24 rounded-2xl bg-base-300 overflow-hidden">
+              <div className="size-24 sm:size-28 lg:size-36 rounded-2xl bg-base-300 overflow-hidden shrink-0 shadow-sm">
                 {onBoardingData.profileAvatar ? (
                   <img
                     src={onBoardingData.profileAvatar}
@@ -61,7 +64,7 @@ const OnBoardingPage = () => {
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full">
-                    <CameraIcon className="size-12 text-base-content opacity-40" />
+                    <CameraIcon className="size-10 sm:size-12 lg:size-14 text-base-content opacity-40" />
                   </div>
                 )}
               </div>
@@ -71,18 +74,20 @@ const OnBoardingPage = () => {
                 <button
                   type="button"
                   onClick={handleRandomAvatar}
-                  className="btn btn-accent"
+                  className="btn btn-accent btn-sm sm:btn-md"
                 >
-                  <ShuffleIcon className="size-4 mr-2" />
-                  Generate Random Avatar
+                  <ShuffleIcon className="size-4 mr-1 sm:mr-2" />
+                  Random Avatar
                 </button>
               </div>
             </div>
 
-            {/* fullname */}
-            <div className="form-control space-y-2">
-              <label className="label">
-                <span className="label-text">Full Name</span>
+            {/* fullname: Takes up remaining 8 columns on the right */}
+            <div className="lg:col-span-8 form-control space-y-1">
+              <label className="label py-1">
+                <span className="label-text text-sm sm:text-base">
+                  Full Name
+                </span>
               </label>
               <input
                 type="text"
@@ -99,10 +104,10 @@ const OnBoardingPage = () => {
               />
             </div>
 
-            {/* bio */}
-            <div className="form-control space-y-2">
-              <label className="label">
-                <span className="label-text">Bio</span>
+            {/* bio: Takes up remaining 8 columns on the right, under Full Name */}
+            <div className="lg:col-span-8 form-control space-y-1">
+              <label className="label py-1">
+                <span className="label-text text-sm sm:text-base">Bio</span>
               </label>
               <textarea
                 name="bio"
@@ -110,17 +115,19 @@ const OnBoardingPage = () => {
                 onChange={(e) =>
                   setOnBoardingData({ ...onBoardingData, bio: e.target.value })
                 }
-                className="textarea textarea-bordered h-24 w-full"
+                className="textarea textarea-bordered h-24 lg:h-28 w-full"
                 placeholder="Small description of yourself."
               />
             </div>
 
-            {/* skills */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* skills: Full width on bottom, split into 2 columns on medium+ screens */}
+            <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
               {/* learned skill */}
-              <div className="form-control space-y-2">
-                <label className="label">
-                  <span className="label-text">Subject you are good at</span>
+              <div className="form-control space-y-1">
+                <label className="label py-1">
+                  <span className="label-text text-sm sm:text-base">
+                    Subject you are good at
+                  </span>
                 </label>
                 <select
                   name="skillToShare"
@@ -143,9 +150,11 @@ const OnBoardingPage = () => {
               </div>
 
               {/* learn skill */}
-              <div className="form-control space-y-2">
-                <label className="label">
-                  <span className="label-text">Subject you wish to learn</span>
+              <div className="form-control space-y-1">
+                <label className="label py-1">
+                  <span className="label-text text-sm sm:text-base">
+                    Subject you wish to learn
+                  </span>
                 </label>
                 <select
                   name="skillToLearn"
@@ -168,10 +177,12 @@ const OnBoardingPage = () => {
               </div>
             </div>
 
-            {/* location */}
-            <div className="form-control space-y-2">
-              <label className="label">
-                <span className="label-text">Location</span>
+            {/* location: Full width at the bottom */}
+            <div className="lg:col-span-12 form-control space-y-1">
+              <label className="label py-1">
+                <span className="label-text text-sm sm:text-base">
+                  Location
+                </span>
               </label>
               <div className="relative">
                 <MapPinIcon className="absolute top-1/2 transform -translate-y-1/2 left-3 size-5 text-base-content opacity-70 z-10 pointer-events-none" />
@@ -193,18 +204,18 @@ const OnBoardingPage = () => {
 
             {/* submit button */}
             <button
-              className="btn btn-primary w-full"
+              className="lg:col-span-12 btn btn-primary w-full mt-2"
               disabled={isPending}
               type="submit"
             >
               {!isPending ? (
                 <>
-                  <CheckLine className="size-5 mr-2" />
+                  <CheckLine className="size-5 mr-1 sm:mr-2" />
                   Complete Onboarding
                 </>
               ) : (
                 <>
-                  <LoaderIcon className="animate-spin size-5 mr-2" />
+                  <LoaderIcon className="animate-spin size-5 mr-1 sm:mr-2" />
                   Onboarding...
                 </>
               )}

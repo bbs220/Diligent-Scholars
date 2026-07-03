@@ -34,7 +34,7 @@ const LogInPage = () => {
           {/* logo */}
           <div className="mb-6 flex items-center justify-start gap-2">
             <BookOpenText className="size-8 sm:size-9 text-primary shrink-0" />
-            <span className="text-2xl sm:text-3xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary tracking-wider">
+            <span className="text-xl sm:text-3xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary tracking-wider">
               Diligent Scholars
             </span>
           </div>
