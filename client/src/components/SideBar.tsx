@@ -9,17 +9,17 @@ const SideBar = () => {
   const currentPath = location.pathname;
 
   return (
-    <aside className="w-64 bg-base-200 border-r border-base-300 hidden lg:flex flex-col h-screen sticky top-0">
-      <div className="p-5 border-b border-base-300">
+    <aside className="w-64 bg-base-200 border-r border-base-300 hidden lg:flex flex-col h-full shrink-0 sticky top-0">
+      <div className="p-5 border-b border-base-300 h-16 flex items-center shrink-0">
         <Link to="/" className="flex items-center gap-2.5">
-          <BookOpenText className="size-9 text-primary" />
-          <span className="text-2xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary tracking-wider">
+          <BookOpenText className="size-8 text-primary" />
+          <span className="text-xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary tracking-wider">
             Diligent Scholars
           </span>
         </Link>
       </div>
 
-      <nav className="flex-1 p-4 space-y-1">
+      <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
         <Link
           to="/"
           className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case ${
@@ -52,17 +52,19 @@ const SideBar = () => {
       </nav>
 
       {/* user profile */}
-      <div className="p-4 border-t border-base-300 mt-auto">
+      <div className="p-4 border-t border-base-300 mt-auto shrink-0">
         <div className="flex items-center gap-3">
           <div className="avatar">
             <div className="w-10 rounded-lg">
               <img src={authUser?.profileAvatar} alt="User Avatar" />
             </div>
           </div>
-          <div className="flex-1">
-            <p className="font-semibold text-sm">{authUser?.fullName}</p>
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-sm truncate">
+              {authUser?.fullName}
+            </p>
             <p className="text-xs text-success flex items-center gap-1">
-              <span className="size-2 rounded-full bg-success inline-block" />
+              <span className="size-2 rounded-full bg-success inline-block shrink-0" />
               Online
             </p>
           </div>
