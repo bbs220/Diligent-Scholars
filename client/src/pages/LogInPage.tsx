@@ -24,16 +24,17 @@ const LogInPage = () => {
 
   return (
     <div
-      className="h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 font-inter"
+      className="min-h-dvh flex items-center justify-center p-4 sm:p-6 md:p-8 font-inter"
       data-theme={theme}
     >
-      <div className="border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-xl shadow-lg overflow-hidden">
+      {/* Added min-h-[600px] md:min-h-[650px] to match SignUpPage exactly */}
+      <div className="border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-xl shadow-lg overflow-hidden min-h-150 md:min-h-162.5">
         {/* login sections */}
         <div className="w-full lg:w-1/2 p-4 sm:p-8 flex flex-col">
           {/* logo */}
-          <div className="mb-4 flex items-center justify-start gap-2">
-            <BookOpenText className="size-9 text-primary" />
-            <span className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary tracking-wider">
+          <div className="mb-6 flex items-center justify-start gap-2">
+            <BookOpenText className="size-8 sm:size-9 text-primary shrink-0" />
+            <span className="text-2xl sm:text-3xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary tracking-wider">
               Diligent Scholars
             </span>
           </div>
@@ -42,16 +43,20 @@ const LogInPage = () => {
             <form onSubmit={handleLogIn}>
               <div className="space-y-4">
                 <div>
-                  <h2 className="text-xl font-semibold">Welcome Back</h2>
+                  <h2 className="text-xl sm:text-2xl font-semibold">
+                    Welcome Back
+                  </h2>
                   <p className="text-sm opacity-70">
                     Log In to your account to continue your learning journey!
                   </p>
                 </div>
                 {/* email */}
-                <div className="flex flex-col gap-2">
-                  <div className="form-control w-full space-y-2">
+                <div className="flex flex-col gap-3 sm:gap-2">
+                  <div className="form-control w-full space-y-1 sm:space-y-2">
                     <label className="label">
-                      <span className="label-text">Email</span>
+                      <span className="label-text text-sm sm:text-base">
+                        Email
+                      </span>
                     </label>
                     <input
                       type="email"
@@ -65,9 +70,11 @@ const LogInPage = () => {
                     />
                   </div>
                   {/* password section updated */}
-                  <div className="form-control w-full space-y-2">
+                  <div className="form-control w-full space-y-1 sm:space-y-2">
                     <label className="label">
-                      <span className="label-text">Password</span>
+                      <span className="label-text text-sm sm:text-base">
+                        Password
+                      </span>
                     </label>
                     <div className="relative">
                       <input
@@ -99,7 +106,7 @@ const LogInPage = () => {
                   {/* submit button */}
                   <button
                     type="submit"
-                    className="btn btn-primary w-full mt-4"
+                    className="btn btn-primary w-full mt-4 sm:mt-6"
                     disabled={isPending}
                   >
                     {isPending ? (
@@ -117,7 +124,7 @@ const LogInPage = () => {
                       Don't have an account?{" "}
                       <Link
                         to="/signup"
-                        className="text-primary hover:underline"
+                        className="text-primary hover:underline font-medium"
                       >
                         Sign Up
                       </Link>

@@ -14,11 +14,9 @@ import { useThemeStore } from "./stores/useThemeStore";
 
 function App() {
   const { isLoading, authUser } = useAuthUser();
-
   const { theme } = useThemeStore();
 
   const isAuthenticated = Boolean(authUser);
-
   const isOnBoarded = authUser?.isOnboarded;
 
   if (isLoading) {
@@ -30,7 +28,10 @@ function App() {
   }
 
   return (
-    <div className="h-screen font-inter" data-theme={theme}>
+    <div
+      className="h-dvh w-full overflow-x-hidden font-inter"
+      data-theme={theme}
+    >
       <Routes>
         {/* home route */}
         <Route

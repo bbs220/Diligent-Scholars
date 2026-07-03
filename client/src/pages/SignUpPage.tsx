@@ -34,16 +34,17 @@ const SignUpPage = () => {
 
   return (
     <div
-      className="h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 font-inter"
+      className="min-h-dvh flex items-center justify-center p-4 sm:p-6 md:p-8 font-inter"
       data-theme={theme}
     >
-      <div className="border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-xl shadow-lg overflow-hidden">
+      {/* Added min-h-[600px] md:min-h-[650px] to stabilize container height */}
+      <div className="border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-xl shadow-lg overflow-hidden min-h-150 md:min-h-162.5">
         {/* form section */}
         <div className="w-full lg:w-1/2 p-4 sm:p-8 flex flex-col">
           {/* logo */}
-          <div className="mb-4 flex items-center justify-start gap-2">
-            <BookOpenText className="size-9 text-primary" />
-            <span className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary tracking-wider">
+          <div className="mb-6 flex items-center justify-start gap-2">
+            <BookOpenText className="size-8 sm:size-9 text-primary shrink-0" />
+            <span className="text-2xl sm:text-3xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary tracking-wider">
               Diligent Scholars
             </span>
           </div>
@@ -52,16 +53,20 @@ const SignUpPage = () => {
             <form onSubmit={handleSignUp}>
               <div className="space-y-4">
                 <div>
-                  <h2 className="text-xl font-semibold">Create an Account</h2>
+                  <h2 className="text-xl sm:text-2xl font-semibold">
+                    Create an Account
+                  </h2>
                   <p className="text-sm opacity-70">
                     Join us and start your learning journey!
                   </p>
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-3 sm:gap-2">
                   {/* fullname */}
-                  <div className="form-control w-full space-y-2">
+                  <div className="form-control w-full space-y-1 sm:space-y-2">
                     <label className="label">
-                      <span className="label-text">Full Name</span>
+                      <span className="label-text text-sm sm:text-base">
+                        Full Name
+                      </span>
                     </label>
                     <input
                       type="text"
@@ -78,9 +83,11 @@ const SignUpPage = () => {
                     />
                   </div>
                   {/* email */}
-                  <div className="form-control w-full space-y-2">
+                  <div className="form-control w-full space-y-1 sm:space-y-2">
                     <label className="label">
-                      <span className="label-text">Email</span>
+                      <span className="label-text text-sm sm:text-base">
+                        Email
+                      </span>
                     </label>
                     <input
                       type="email"
@@ -94,9 +101,11 @@ const SignUpPage = () => {
                     />
                   </div>
                   {/* password */}
-                  <div className="form-control w-full space-y-2">
+                  <div className="form-control w-full space-y-1 sm:space-y-2">
                     <label className="label">
-                      <span className="label-text">Password</span>
+                      <span className="label-text text-sm sm:text-base">
+                        Password
+                      </span>
                     </label>
                     <div className="relative">
                       <input
@@ -129,15 +138,15 @@ const SignUpPage = () => {
                     </p>
                   </div>
                   {/* checkbox */}
-                  <div className="form-control mt-2">
-                    <div className="flex items-center justify-start gap-2">
+                  <div className="form-control mt-3 sm:mt-2">
+                    <div className="flex items-start sm:items-center justify-start gap-2 sm:gap-3">
                       <input
                         type="checkbox"
-                        className="checkbox checkbox-sm cursor-pointer"
+                        className="checkbox checkbox-sm cursor-pointer mt-0.5 sm:mt-0 shrink-0"
                         checked={isAgreed}
                         onChange={(e) => setIsAgreed(e.target.checked)}
                       />
-                      <span className="text-xs leading-tight">
+                      <span className="text-xs sm:text-sm leading-tight">
                         I agree to the{" "}
                         <span className="text-primary hover:underline cursor-pointer">
                           terms of service
@@ -152,7 +161,7 @@ const SignUpPage = () => {
                 </div>
                 {/* submit button */}
                 <button
-                  className="btn btn-primary w-full mt-2"
+                  className="btn btn-primary w-full mt-4 sm:mt-2"
                   type="submit"
                   disabled={isPending}
                 >
@@ -169,7 +178,10 @@ const SignUpPage = () => {
                 <div className="text-center mt-4">
                   <p className="text-sm">
                     Already have an account?{" "}
-                    <Link to="/login" className="text-primary hover:underline">
+                    <Link
+                      to="/login"
+                      className="text-primary hover:underline font-medium"
+                    >
                       Log In
                     </Link>
                   </p>
