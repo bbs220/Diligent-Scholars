@@ -13,13 +13,30 @@
 }
 
 .str-chat__channel {
-  @apply flex items-center justify-center h-full bg-base-200 font-inter text-base-content;
+  /* Added full width and removed padding on mobile */
+  @apply flex items-center justify-center h-full w-full bg-base-200 font-inter text-base-content p-0;
 }
 
 .str-chat__container {
-  @apply max-w-300 w-full rounded-lg shadow-xl overflow-hidden bg-base-100 border border-base-300;
-  height: 80% !important;
-  margin: 0 auto !important;
+  /* Mobile First: 100% height/width, no border, no shadow */
+  @apply w-full overflow-hidden bg-base-100 border-base-300 mx-auto flex flex-col;
+  height: 100% !important;
+  border-width: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Desktop styles: Floating window */
+@media (min-width: 768px) {
+  .str-chat__channel {
+    @apply p-6; /* Give it some breathing room from the edges */
+  }
+
+  .str-chat__container {
+    @apply max-w-5xl shadow-xl border;
+    height: 90% !important;
+    border-radius: 0.75rem !important; /* Tailwind's rounded-xl equivalent */
+    border-width: 1px !important;
+  }
 }
 
 .str-chat__channel-header {

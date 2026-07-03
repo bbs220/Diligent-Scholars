@@ -90,7 +90,7 @@ const ChatPage = () => {
   }
 
   return (
-    <div className="h-[93vh]">
+    <div className="h-full w-full flex flex-col">
       <Chat client={chatClient}>
         <Channel channel={chatChannel}>
           <div className="w-full h-full relative">
