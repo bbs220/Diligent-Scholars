@@ -5,10 +5,10 @@ const PageLoader = () => {
   const { theme } = useThemeStore();
   return (
     <div
-      className="min-h-screen flex items-center justify-center"
+      className="min-h-dvh flex items-center justify-center bg-base-100"
       data-theme={theme}
     >
-      <LoaderIcon className="animate-spin size-10 text-primary" />
+      <LoaderIcon className="animate-spin size-10 sm:size-12 md:size-16 text-primary" />
     </div>
   );
 };

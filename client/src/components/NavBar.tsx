@@ -78,10 +78,7 @@ const NavBar = () => {
         <div className="flex items-center gap-2 sm:gap-3 ml-auto">
           {/* Notifications Button */}
           <Link to={"/notifications"} className="hidden sm:inline-flex">
-            <button
-              className="btn btn-ghost btn-square"
-              title={`Notifications`}
-            >
+            <button className="btn btn-info btn-square" title={`Notifications`}>
               <BellIcon className="size-5 sm:size-6 text-base-content opacity-70" />
             </button>
           </Link>
