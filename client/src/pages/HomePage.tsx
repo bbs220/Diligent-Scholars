@@ -58,18 +58,22 @@ const HomePage = () => {
   }, [outgoingFriendReqs]);
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
-      <div className="container mx-auto space-y-10">
+    <div className="p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto">
+      <div className="space-y-10 sm:space-y-12">
         {/* total friends */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
             Your Friends
           </h2>
-          <Link to="/notifications" className="btn btn-outline btn-sm">
-            <UsersIcon className="mr-2 size-4" />
+          <Link
+            to="/notifications"
+            className="btn btn-outline btn-sm sm:btn-md"
+          >
+            <UsersIcon className="mr-1 sm:mr-2 size-4" />
             Friend Requests
           </Link>
         </div>
+
         {/* if friends then load them */}
         {loadingUserFriends ? (
           <div className="flex justify-center py-12">
@@ -79,28 +83,30 @@ const HomePage = () => {
           // if no friends then this
           <NoFriends />
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {/* if friends then this */}
             {friendsData.map((friend: typeUser) => (
               <FriendCard key={friend._id} friend={friend} />
             ))}
           </div>
         )}
+
         {/* recommended friends part */}
         <section>
-          <div className="mb-4 sm:mb-8">
+          <div className="mb-6 sm:mb-8">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               {/* hero */}
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
                   Meet new scholars
                 </h2>
-                <p className="opacity-70">
+                <p className="text-sm sm:text-base opacity-70 mt-1">
                   Discover new scholars and learn from them
                 </p>
               </div>
             </div>
           </div>
+
           {/* grid of recommended users */}
           {loadingRecommendedUsers ? (
             <div className="flex justify-center py-12">
@@ -110,61 +116,70 @@ const HomePage = () => {
             // if no recommended users found
             <NoRecommendedUsers />
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {/* if friends then */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+              {/* if recommended users then */}
               {recommendedUsersData.map((user: typeUser) => {
                 const hasReqBeenSent = outgoingReqIDs.has(user._id);
                 return (
                   <div
                     key={user._id}
-                    className="card bg-base-200 hover:shadow-lg transition-all duration-300"
+                    className="card bg-base-200 hover:shadow-lg transition-all duration-300 h-full flex flex-col"
                   >
-                    <div className="card-body p-5 space-y-4">
-                      <div className="flex items-center gap-4">
+                    <div className="card-body p-5 flex flex-col h-full space-y-4">
+                      <div className="flex items-center gap-3 sm:gap-4">
                         {/* friend avatar */}
-                        <div className="avatar size-16 rounded-xl">
-                          <img src={user.profileAvatar} alt={user.fullName} />
+                        <div className="avatar size-14 sm:size-16 rounded-xl shrink-0">
+                          <img
+                            src={user.profileAvatar}
+                            alt={user.fullName}
+                            className="object-cover"
+                          />
                         </div>
                         {/* friend name and location */}
-                        <div>
-                          <h3 className="font-semibold text-lg">
+                        <div className="min-w-0 flex-1">
+                          <h3 className="font-semibold text-base sm:text-lg truncate">
                             {user.fullName}
                           </h3>
                           {user.location && (
                             <div className="flex items-center text-xs opacity-70 mt-1">
-                              <MapPinIcon className="size-3 mr-1" />
-                              {user.location}
+                              <MapPinIcon className="size-3 mr-1 shrink-0" />
+                              <span className="truncate">{user.location}</span>
                             </div>
                           )}
                         </div>
                       </div>
+
                       {/* friends skills */}
-                      <div className="flex flex-wrap gap-1.5">
-                        <span className="badge badge-success">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="badge badge-success badge-sm sm:badge-md">
                           {`📘 ${capitalize(user.skillToShare)}`}
                         </span>
-                        <span className="badge badge-warning">
+                        <span className="badge badge-warning badge-sm sm:badge-md">
                           {`📖 ${capitalize(user.skillToLearn)}`}
                         </span>
                       </div>
+
                       {/* friends bio */}
                       {user.bio && (
-                        <p className="text-sm opacity-70">{user.bio}</p>
+                        <p className="text-sm opacity-70 line-clamp-2 sm:line-clamp-3">
+                          {user.bio}
+                        </p>
                       )}
+
                       {/* submit button */}
                       <button
-                        className={`btn w-full mt-2 ${hasReqBeenSent ? "btn-disabled" : "btn-primary"}`}
+                        className={`btn w-full mt-auto btn-sm sm:btn-md ${hasReqBeenSent ? "btn-disabled" : "btn-primary"}`}
                         onClick={() => sendReqMutation(user._id)}
                         disabled={hasReqBeenSent || isPending}
                       >
                         {hasReqBeenSent ? (
                           <>
-                            <CheckCircleIcon className="size-4 mr-2" />
+                            <CheckCircleIcon className="size-4 sm:size-5 mr-1 sm:mr-2 shrink-0" />
                             Request Sent
                           </>
                         ) : (
                           <>
-                            <UserPlusIcon className="size-4 mr-2" />
+                            <UserPlusIcon className="size-4 sm:size-5 mr-1 sm:mr-2 shrink-0" />
                             Send Friend Request
                           </>
                         )}
