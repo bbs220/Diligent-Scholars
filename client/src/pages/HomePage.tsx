@@ -93,10 +93,10 @@ const HomePage = () => {
               {/* hero */}
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
-                  Meet new developers
+                  Meet new scholars
                 </h2>
                 <p className="opacity-70">
-                  Discover new devs and trade skills with them
+                  Discover new scholars and learn from them
                 </p>
               </div>
             </div>
