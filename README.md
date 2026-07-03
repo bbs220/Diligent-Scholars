@@ -5,3 +5,4 @@
 - tailwind and daisyui for css
 - react router for routing
 - express and mongo for api and db
+- render for hosting

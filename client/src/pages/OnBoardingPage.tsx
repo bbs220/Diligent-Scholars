@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import toast, { LoaderIcon } from "react-hot-toast";
 import useAuthUser from "../hooks/useAuthUser";
 import type { typeOnBoardingData } from "../types/typesCollection";
-import { CameraIcon, Computer, MapPinIcon, ShuffleIcon } from "lucide-react";
+import { CameraIcon, CheckLine, MapPinIcon, ShuffleIcon } from "lucide-react";
 import { SKILLS } from "../constants/constantsCollection";
 import { useThemeStore } from "../stores/useThemeStore";
 import useOnBoarding from "../hooks/useOnBoarding";
@@ -199,7 +199,7 @@ const OnBoardingPage = () => {
             >
               {!isPending ? (
                 <>
-                  <Computer className="size-5 mr-2" />
+                  <CheckLine className="size-5 mr-2" />
                   Complete Onboarding
                 </>
               ) : (
