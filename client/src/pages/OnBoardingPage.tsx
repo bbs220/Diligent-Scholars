@@ -31,7 +31,7 @@ const OnBoardingPage = () => {
 
   const { theme } = useThemeStore();
 
-  const handleOnBoarding = (e: React.FormEvent) => {
+  const handleOnBoarding: React.ComponentProps<"form">["onSubmit"] = (e) => {
     e.preventDefault();
     onBoardingMutation(onBoardingData);
   };
