@@ -140,7 +140,9 @@ const OnBoardingPage = () => {
                   }
                   className="select select-bordered w-full"
                 >
-                  <option>--Subject--</option>
+                  <option value="" disabled>
+                    --Subject--
+                  </option>
                   {SKILLS.map((lang) => (
                     <option key={`native-${lang}`} value={lang.toLowerCase()}>
                       {lang}
@@ -167,7 +169,9 @@ const OnBoardingPage = () => {
                   }
                   className="select select-bordered w-full"
                 >
-                  <option>--Subject--</option>
+                  <option value="" disabled>
+                    --Subject--
+                  </option>
                   {SKILLS.map((lang) => (
                     <option key={`learning-${lang}`} value={lang.toLowerCase()}>
                       {lang}
