@@ -2,13 +2,21 @@ import React, { useState } from "react";
 import toast, { LoaderIcon } from "react-hot-toast";
 import useAuthUser from "../hooks/useAuthUser";
 import type { typeOnBoardingData } from "../types/typesCollection";
-import { CameraIcon, CheckLine, MapPinIcon, ShuffleIcon } from "lucide-react";
+import {
+  CameraIcon,
+  CheckLine,
+  MapPinIcon,
+  ShuffleIcon,
+  LogOutIcon,
+} from "lucide-react";
 import { SKILLS } from "../constants/constantsCollection";
 import { useThemeStore } from "../stores/useThemeStore";
 import useOnBoarding from "../hooks/useOnBoarding";
+import useLogOut from "../hooks/useLogOut";
 
 const OnBoardingPage = () => {
   const { authUser } = useAuthUser();
+  const { logOutMutation } = useLogOut();
 
   const [onBoardingData, setOnBoardingData] = useState<typeOnBoardingData>({
     fullName: authUser?.fullName || "",
@@ -23,9 +31,8 @@ const OnBoardingPage = () => {
 
   const { theme } = useThemeStore();
 
-  const handleOnBoarding = (e: React.SubmitEvent) => {
+  const handleOnBoarding = (e: React.FormEvent) => {
     e.preventDefault();
-
     onBoardingMutation(onBoardingData);
   };
 
@@ -223,6 +230,17 @@ const OnBoardingPage = () => {
                   Onboarding...
                 </>
               )}
+            </button>
+
+            {/* logout button */}
+            <button
+              className="lg:col-span-12 btn btn-ghost text-error w-full mt-1"
+              type="button"
+              onClick={() => logOutMutation()}
+              disabled={isPending}
+            >
+              <LogOutIcon className="size-5 mr-1 sm:mr-2" />
+              Logout Instead
             </button>
           </form>
         </div>
