@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router";
 import useAuthUser from "../hooks/useAuthUser";
-import { BellIcon, ComputerIcon, LogOutIcon } from "lucide-react";
+import { BellIcon, BookOpenText, LogOutIcon } from "lucide-react";
 import ThemeSelector from "./ThemeSelector";
 import useLogOut from "../hooks/useLogOut";
 
@@ -20,9 +20,9 @@ const NavBar = () => {
           {isChatPage && (
             <div className="pl-5">
               <Link to="/" className="flex items-center gap-2.5">
-                <ComputerIcon className="size-9 text-primary" />
+                <BookOpenText className="size-9 text-primary" />
                 <span className="text-2xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary  tracking-wider">
-                  Social App
+                  Diligent Scholars
                 </span>
               </Link>
             </div>

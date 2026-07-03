@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Computer, Eye, EyeOff } from "lucide-react";
+import { BookOpenText, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router";
 import toast from "react-hot-toast";
 import useSignUp from "../hooks/useSignUp";
 import type { typeSignUpData } from "../types/typesCollection";
 import { useThemeStore } from "../stores/useThemeStore";
+import SplashArt from "../components/SplashArt";
 
 const SignUpPage = () => {
   const [signUpData, setSignUpData] = useState<typeSignUpData>({
@@ -41,9 +42,9 @@ const SignUpPage = () => {
         <div className="w-full lg:w-1/2 p-4 sm:p-8 flex flex-col">
           {/* logo */}
           <div className="mb-4 flex items-center justify-start gap-2">
-            <Computer className="size-9 text-primary" />
+            <BookOpenText className="size-9 text-primary" />
             <span className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary tracking-wider">
-              Social App
+              Diligent Scholars
             </span>
           </div>
           {/* form */}
@@ -53,7 +54,7 @@ const SignUpPage = () => {
                 <div>
                   <h2 className="text-xl font-semibold">Create an Account</h2>
                   <p className="text-sm opacity-70">
-                    Join us and start your web skills learning journey!
+                    Join us and start your learning journey!
                   </p>
                 </div>
                 <div className="flex flex-col gap-2">
@@ -178,28 +179,7 @@ const SignUpPage = () => {
           </div>
         </div>
         {/* splash image section */}
-        <div className="hidden lg:flex w-full lg:w-1/2 bg-primary/10 items-center justify-center">
-          <div className="max-w-md p-8">
-            {/* image */}
-            <div className="relative aspect-square max-w-sm mx-auto">
-              <img
-                src="/images/checked.png"
-                alt="Checkbox checked illustration"
-                className="w-full h-full"
-              />
-            </div>
-            {/* splash description */}
-            <div className="text-center space-y-3 mt-6">
-              <h2 className="text-xl font-semibold">
-                Connect with skilled developers worldwide
-              </h2>
-              <p className="opacity-70">
-                Practice conversations, make friends, and improve your web
-                skills together
-              </p>
-            </div>
-          </div>
-        </div>
+        <SplashArt />
       </div>
     </div>
   );
