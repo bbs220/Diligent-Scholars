@@ -1,4 +1,6 @@
 @import "stream-chat-react/dist/css/index.css";
+@import "@stream-io/video-react-sdk/dist/css/styles.css";
+
 @import "tailwindcss";
 @plugin "daisyui";
 
@@ -13,28 +15,25 @@
 }
 
 .str-chat__channel {
-  /* Added full width and removed padding on mobile */
   @apply flex items-center justify-center h-full w-full bg-base-200 font-inter text-base-content p-0;
 }
 
 .str-chat__container {
-  /* Mobile First: 100% height/width, no border, no shadow */
   @apply w-full overflow-hidden bg-base-100 border-base-300 mx-auto flex flex-col;
   height: 100% !important;
   border-width: 0 !important;
   border-radius: 0 !important;
 }
 
-/* Desktop styles: Floating window */
 @media (min-width: 768px) {
   .str-chat__channel {
-    @apply p-6; /* Give it some breathing room from the edges */
+    @apply p-6;
   }
 
   .str-chat__container {
     @apply max-w-5xl shadow-xl border;
     height: 90% !important;
-    border-radius: 0.75rem !important; /* Tailwind's rounded-xl equivalent */
+    border-radius: 0.75rem !important;
     border-width: 1px !important;
   }
 }
@@ -46,4 +45,21 @@
 .str-chat__header-title,
 .str-chat__header-title-text {
   @apply text-base-content!;
+}
+
+.str-video {
+  --str-video__primary-color: var(--fallback-p, oklch(var(--p)/1));
+  --str-video__background-color: var(--fallback-b1, oklch(var(--b1)/1));
+  --str-video__surface-color: var(--fallback-b2, oklch(var(--b2)/1));
+  --str-video__text-color: var(--fallback-bc, oklch(var(--bc)/1));
+
+  font-family: var(--font-inter);
+}
+
+.str-video__call-container {
+  @apply w-full h-full;
+}
+
+.str-video__participant-details {
+  @apply bg-base-300/80 text-base-content rounded-md backdrop-blur-sm;
 }

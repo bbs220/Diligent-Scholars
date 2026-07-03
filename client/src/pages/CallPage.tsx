@@ -74,8 +74,8 @@ const CallPage = () => {
   }
 
   return (
-    <div className="h-screen flex flex-col items-center justify-center">
-      <div className="relative">
+    <div className="h-dvh w-full bg-base-200 flex flex-col items-center justify-center font-inter p-0 lg:p-6 xl:p-8">
+      <div className="relative w-full h-full bg-base-100 shadow-none lg:shadow-2xl lg:rounded-2xl overflow-hidden max-w-7xl mx-auto flex flex-col">
         {callClient && call ? (
           <StreamVideo client={callClient}>
             <StreamCall call={call}>
@@ -83,8 +83,8 @@ const CallPage = () => {
             </StreamCall>
           </StreamVideo>
         ) : (
-          <div className="flex items-center justify-center h-full">
-            <p className="font-semibold">
+          <div className="flex flex-col items-center justify-center h-full p-4 sm:p-6 text-center">
+            <p className="font-semibold text-base sm:text-lg opacity-80">
               Could not start the video call. Please try again later!
             </p>
           </div>
