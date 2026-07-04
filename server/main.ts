@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import "dotenv/config";
@@ -43,9 +43,21 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error(`🚨 Global Error: ${err.message || err}`);
+
+  const statusCode = err.status || 500;
+
+  res.status(statusCode).json({
+    message: err.message || "Internal Server Error",
+
+    stack: process.env.NODE_ENV === "production" ? null : err.stack,
+  });
+});
+
 app.listen(PORT, () => {
   if (process.env.NODE_ENV === "production") {
-    console.log(`🚀 Server and Client started on: http://localhost:${PORT}`);
+    console.log(`🚀 Server and Client started successfully`);
   } else {
     console.log(`🚀 Server started on: http://localhost:${PORT}`);
   }
