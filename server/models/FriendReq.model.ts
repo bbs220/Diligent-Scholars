@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType, HydratedDocument } from "mongoose";
 
 const friendReqSchema = new mongoose.Schema(
   {
@@ -20,6 +20,9 @@ const friendReqSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+export type FriendReqType = InferSchemaType<typeof friendReqSchema>;
+export type FriendReqDocument = HydratedDocument<FriendReqType>;
 
 const FriendReq =
   mongoose.models.FriendRequest ||

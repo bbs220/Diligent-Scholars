@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import "dotenv/config";
@@ -13,7 +13,7 @@ import { connectDB } from "./lib/connectDB.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT as string;
 
 const app = express();
 
@@ -34,11 +34,11 @@ app.use("/api/chat", chatRoutes);
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/dist")));
 
-  app.get(/(.*)/, (req, res) => {
+  app.get(/(.*)/, (req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, "../client", "dist", "index.html"));
   });
 } else {
-  app.get("/", (req, res) => {
+  app.get("/", (req: Request, res: Response) => {
     res.status(200).json({ message: "🌟 API is alive in dev" });
   });
 }

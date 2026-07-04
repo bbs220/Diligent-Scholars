@@ -1,8 +1,10 @@
+import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User.model.js";
 import { upsertStreamUser } from "../lib/streamStuff.js";
+import { AuthRequest } from "../middleware/auth.middleware.js";
 
-export const signup = async (req, res) => {
+export const signup = async (req: Request, res: Response): Promise<any> => {
   const { fullName, email, password } = req.body;
 
   try {
@@ -51,35 +53,39 @@ export const signup = async (req, res) => {
         `🤗 Successfully upserted Stream user during signup: ${newUser.fullName}`,
       );
     } catch (error) {
-      console.error(`😭 Error upserting Stream user during signup: ${error}`);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      console.error(
+        `😭 Error upserting Stream user during signup: ${errorMessage}`,
+      );
     }
 
-    const token = jwt.sign(
-      { userId: newUser._id },
-      process.env.JWT_SECRET_KEY,
-      { expiresIn: "7d" },
-    );
+    const secret = process.env.JWT_SECRET_KEY as string;
+
+    const token = jwt.sign({ userId: newUser._id }, secret, {
+      expiresIn: "7d",
+    });
 
     res.cookie("jwt", token, {
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
-      httpOnly: true, // stops XSS attacks by preventing client-side access to the cookie
-      sameSite: "strict", // stops CSRF attacks by only sending the cookie for same-site requests
-      secure: process.env.NODE_ENV === "production", // ensures the cookie is only sent over HTTPS in production
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
     });
 
     res.status(201).json({
       message: "User created successfully",
-      // remove this part later in prod
       newUser,
     });
   } catch (error) {
-    console.error(`😭 Error in user signin: ${error}`);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`😭 Error in user signin: ${errorMessage}`);
 
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const login = async (req, res) => {
+export const login = async (req: Request, res: Response): Promise<any> => {
   try {
     const { email, password } = req.body;
 
@@ -99,7 +105,9 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
+    const secret = process.env.JWT_SECRET_KEY as string;
+
+    const token = jwt.sign({ userId: user._id }, secret, {
       expiresIn: "7d",
     });
 
@@ -114,13 +122,14 @@ export const login = async (req, res) => {
       message: "User logged in successfully",
     });
   } catch (error) {
-    console.error(`😭 Error in user login: ${error}`);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`😭 Error in user login: ${errorMessage}`);
 
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const logout = (req, res) => {
+export const logout = (req: Request, res: Response): any => {
   try {
     res.clearCookie("jwt", {
       httpOnly: true,
@@ -130,16 +139,23 @@ export const logout = (req, res) => {
 
     res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
-    console.error(`😭 Error in user logout: ${error}`);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`😭 Error in user logout: ${errorMessage}`);
 
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const onboarding = async (req, res) => {
+export const onboarding = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<any> => {
   try {
-    const userId = req.user._id;
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
+    const userId = req.user._id;
     const { fullName, bio, skillToShare, skillToLearn, location } = req.body;
 
     if (!fullName || !bio || !skillToShare || !skillToLearn || !location) {
@@ -178,18 +194,20 @@ export const onboarding = async (req, res) => {
         `🤗 Successfully updated Stream user during onboarding: ${updatedUser.fullName}`,
       );
     } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       console.error(
-        `😭 Error updating Stream user during onboarding: ${error}`,
+        `😭 Error updating Stream user during onboarding: ${errorMessage}`,
       );
     }
 
     res.status(200).json({
       message: "User onboarded successfully",
-      // remove this part later in prod
       user: updatedUser,
     });
   } catch (error) {
-    console.error(`😭 Error in user onboarding: ${error}`);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`😭 Error in user onboarding: ${errorMessage}`);
 
     res.status(500).json({ message: "Internal server error" });
   }
