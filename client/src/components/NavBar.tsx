@@ -38,7 +38,7 @@ const NavBar = () => {
 
             {/* Controlled Dropdown Menu */}
             {isMobileMenuOpen && (
-              <ul className="menu bg-base-200 z-50 fixed top-16 left-0 w-full h-[75dvh] p-4 shadow-xl border-b border-base-300 rounded-none overflow-y-auto block">
+              <ul className="menu bg-base-200 z-100 fixed top-16 left-0 w-full h-[75dvh] p-4 shadow-xl border-b border-base-300 rounded-none overflow-y-auto block">
                 <li>
                   <Link
                     to="/"
