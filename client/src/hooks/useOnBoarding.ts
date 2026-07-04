@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { onBoardingMutationFn } from "../libs/apiCalls";
 import toast from "react-hot-toast";
-import { isAxiosError } from "axios";
+import { handleApiError } from "../libs/helper";
 
 const useOnBoarding = () => {
   const queryClient = useQueryClient();
@@ -11,23 +11,16 @@ const useOnBoarding = () => {
     error,
   } = useMutation({
     mutationFn: onBoardingMutationFn,
+
     onSuccess: () => {
       toast.success("Onboarding Completed");
-
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
 
-    onError: (error) => {
-      if (isAxiosError(error)) {
-        toast.error(
-          error.response?.data?.message || "Failed to complete onboarding",
-        );
-      } else {
-        toast.error(error.message);
-      }
-    },
+    onError: handleApiError,
   });
 
   return { onBoardingMutation, isPending, error };
 };
+
 export default useOnBoarding;

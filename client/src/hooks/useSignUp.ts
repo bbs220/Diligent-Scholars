@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signUpMutationFn } from "../libs/apiCalls";
 import toast from "react-hot-toast";
-import { isAxiosError } from "axios";
+import { handleApiError } from "../libs/helper";
 
 const useSignUp = () => {
   const queryClient = useQueryClient();
@@ -12,15 +12,13 @@ const useSignUp = () => {
     error,
   } = useMutation({
     mutationFn: signUpMutationFn,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
 
-    onError: (error) => {
-      if (isAxiosError(error)) {
-        toast.error(error.response?.data?.message || "Signup failed");
-      } else {
-        toast.error(error.message);
-      }
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      toast.success("Account created successfully!");
     },
+
+    onError: handleApiError,
   });
 
   return { signUpMutation, isPending, error };
