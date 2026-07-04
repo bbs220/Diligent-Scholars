@@ -6,3 +6,4 @@
 - react router for routing
 - express and mongo for api and db
 - render for hosting
+- zod for validation

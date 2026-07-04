@@ -39,13 +39,13 @@ export const onboardingSchema = z.object({
       .trim(),
 
     skillToShare: z
-      .string({ error: "Skill to share is required" })
-      .min(2, { error: "Please provide a valid skill to share" })
+      .string({ error: "Subject is required" })
+      .min(2, { error: "Please provide a valid subject" })
       .trim(),
 
     skillToLearn: z
-      .string({ error: "Skill to learn is required" })
-      .min(2, { error: "Please provide a valid skill to learn" })
+      .string({ error: "Subject is required" })
+      .min(2, { error: "Please provide a valid subject" })
       .trim(),
 
     location: z
