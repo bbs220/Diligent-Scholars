@@ -1,4 +1,5 @@
 import rateLimit from "express-rate-limit";
+import { envValidated } from "../lib/envValidated.js";
 
 export const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -9,5 +10,5 @@ export const authLimiter = rateLimit({
   },
   standardHeaders: true, // returns rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // disables the deprecated `X-RateLimit-*` headers
-  skip: () => process.env.NODE_ENV !== "production", // bypass the rate limiter in dev
+  skip: () => envValidated.NODE_ENV !== "production", // bypass the rate limiter in dev
 });

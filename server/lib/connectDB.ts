@@ -1,14 +1,9 @@
 import mongoose from "mongoose";
+import { envValidated } from "./envValidated.js";
 
 export const connectDB = async (): Promise<void> => {
   try {
-    const mongoUri = process.env.MONGO_URI as string;
-
-    if (!mongoUri) {
-      throw new Error("MONGO_URI is missing from environment variables!");
-    }
-
-    const connectionMongo = await mongoose.connect(mongoUri);
+    const connectionMongo = await mongoose.connect(envValidated.MONGO_URI);
 
     console.log(`🤗 MongoDB connected at: ${connectionMongo.connection.host}`);
   } catch (error) {

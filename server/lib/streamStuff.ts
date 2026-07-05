@@ -1,16 +1,10 @@
 import { StreamChat } from "stream-chat";
-import "dotenv/config";
+import { envValidated } from "./envValidated.js";
 
-const apiKey = process.env.STREAM_API_KEY as string;
-const apiSecret = process.env.STREAM_API_SECRET as string;
-
-if (!apiKey || !apiSecret) {
-  throw new Error(
-    "Stream API key and secret must be set in environment variables",
-  );
-}
-
-const streamClient = StreamChat.getInstance(apiKey, apiSecret);
+const streamClient = StreamChat.getInstance(
+  envValidated.STREAM_API_KEY,
+  envValidated.STREAM_API_SECRET,
+);
 
 export interface StreamUser {
   id: string;
