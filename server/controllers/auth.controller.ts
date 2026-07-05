@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User.model.js";
+import { envValidated } from "../lib/envValidated.js";
 import { upsertStreamUser } from "../lib/streamStuff.js";
 import { AuthRequest } from "../middleware/auth.middleware.js";
 
@@ -41,9 +42,7 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
     );
   }
 
-  const secret = process.env.JWT_SECRET_KEY as string;
-
-  const token = jwt.sign({ userId: newUser._id }, secret, {
+  const token = jwt.sign({ userId: newUser._id }, envValidated.JWT_SECRET_KEY, {
     expiresIn: "7d",
   });
 
@@ -51,7 +50,7 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     sameSite: "strict",
-    secure: process.env.NODE_ENV === "production",
+    secure: envValidated.NODE_ENV === "production",
   });
 
   res.status(201).json({
@@ -75,9 +74,8 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     return res.status(401).json({ message: "Invalid email or password" });
   }
 
-  const secret = process.env.JWT_SECRET_KEY as string;
-
-  const token = jwt.sign({ userId: user._id }, secret, {
+  // Uses envValidated directly
+  const token = jwt.sign({ userId: user._id }, envValidated.JWT_SECRET_KEY, {
     expiresIn: "7d",
   });
 
@@ -85,7 +83,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     sameSite: "strict",
-    secure: process.env.NODE_ENV === "production",
+    secure: envValidated.NODE_ENV === "production",
   });
 
   res.status(200).json({
@@ -97,7 +95,7 @@ export const logout = (req: Request, res: Response): any => {
   res.clearCookie("jwt", {
     httpOnly: true,
     sameSite: "strict",
-    secure: process.env.NODE_ENV === "production",
+    secure: envValidated.NODE_ENV === "production",
   });
 
   res.status(200).json({ message: "User logged out successfully" });
