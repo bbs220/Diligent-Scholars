@@ -1,5 +1,5 @@
-import pino from "pino";
 import { envValidated } from "./envValidated.js";
+import pino from "pino";
 
 export const logger = pino({
   // in production, only log "info", "warn", and "error" (hides debug logs to save money/space)

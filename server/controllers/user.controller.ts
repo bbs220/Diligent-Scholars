@@ -2,6 +2,7 @@ import { Response } from "express";
 import FriendReq from "../models/FriendReq.model.js";
 import User from "../models/User.model.js";
 import { AuthRequest } from "../middleware/auth.middleware.js";
+import { logger } from "../lib/logger.js";
 
 export const populateRecommendedUsers = async (
   req: AuthRequest,
@@ -29,7 +30,7 @@ export const populateRecommendedUsers = async (
     res.status(200).json(recommendedUsers);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(`😭 Error populating recommended users: ${errorMessage}`);
+    logger.error(`😭 Error populating recommended users: ${errorMessage}`);
 
     res.status(500).json({ message: "Internal server error" });
   }
@@ -55,9 +56,7 @@ export const populateFriends = async (
     res.status(200).json(user.friends);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(
-      `😭 Error populating current user's friends: ${errorMessage}`,
-    );
+    logger.error(`😭 Error populating current user's friends: ${errorMessage}`);
 
     res.status(500).json({ message: "Internal server error" });
   }
@@ -118,7 +117,7 @@ export const sendFriendReq = async (
     res.status(201).json(friendReq);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(`😭 Error sending friend request: ${errorMessage}`);
+    logger.error(`😭 Error sending friend request: ${errorMessage}`);
 
     res.status(500).json({ message: "Internal server error" });
   }
@@ -163,7 +162,7 @@ export const acceptFriendReq = async (
     res.status(200).json({ message: "Friend request accepted" });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(`😭 Error accepting friend request: ${errorMessage}`);
+    logger.error(`😭 Error accepting friend request: ${errorMessage}`);
 
     res.status(500).json({ message: "Internal server error" });
   }
@@ -191,7 +190,7 @@ export const incomingFriendReqs = async (
     res.status(200).json({ incomingReqs, acceptedReqs });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(
+    logger.error(
       `😭 Error in observing all incoming friend requests: ${errorMessage}`,
     );
 
@@ -216,7 +215,7 @@ export const outgoingFriendReqs = async (
     res.status(200).json(outgoingReqs);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(
+    logger.error(
       `😭 Error in observing all outgoing friend requests: ${errorMessage}`,
     );
 

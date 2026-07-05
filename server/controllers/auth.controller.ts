@@ -4,6 +4,7 @@ import User from "../models/User.model.js";
 import { envValidated } from "../lib/envValidated.js";
 import { upsertStreamUser } from "../lib/streamStuff.js";
 import { AuthRequest } from "../middleware/auth.middleware.js";
+import { logger } from "../lib/logger.js";
 
 export const signup = async (req: Request, res: Response): Promise<any> => {
   const { fullName, email, password } = req.body;
@@ -32,12 +33,12 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
       name: newUser.fullName,
       image: newUser.profileAvatar || "",
     });
-    console.log(
+    logger.info(
       `🤗 Successfully upserted Stream user during signup: ${newUser.fullName}`,
     );
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(
+    logger.error(
       `😭 Error upserting Stream user during signup: ${errorMessage}`,
     );
   }
@@ -130,12 +131,12 @@ export const onboarding = async (
       name: updatedUser.fullName,
       image: updatedUser.profileAvatar || "",
     });
-    console.log(
+    logger.info(
       `🤗 Successfully updated Stream user during onboarding: ${updatedUser.fullName}`,
     );
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(
+    logger.error(
       `😭 Error updating Stream user during onboarding: ${errorMessage}`,
     );
   }

@@ -1,5 +1,6 @@
 import mongoose, { InferSchemaType, HydratedDocument } from "mongoose";
 import bcrypt from "bcryptjs";
+import { logger } from "../lib/logger.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -29,7 +30,7 @@ const userSchema = new mongoose.Schema(
         } catch (error) {
           const errorMessage =
             error instanceof Error ? error.message : String(error);
-          console.error(`😭 Error in matchPassword method: ${errorMessage}`);
+          logger.error(`😭 Error in matchPassword method: ${errorMessage}`);
           return false;
         }
       },
@@ -47,7 +48,7 @@ userSchema.pre("save", async function () {
     this.password = await bcrypt.hash(this.password, salt);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(`😭 Error in pre-save hook: ${errorMessage}`);
+    logger.error(`😭 Error in pre-save hook: ${errorMessage}`);
     throw error;
   }
 });

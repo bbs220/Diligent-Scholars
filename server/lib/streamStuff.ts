@@ -1,5 +1,6 @@
 import { StreamChat } from "stream-chat";
 import { envValidated } from "./envValidated.js";
+import { logger } from "./logger.js";
 
 const streamClient = StreamChat.getInstance(
   envValidated.STREAM_API_KEY,
@@ -22,7 +23,7 @@ export const upsertStreamUser = async (
     return userdata;
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(`😭 Error upserting Stream user: ${errorMessage}`);
+    logger.error(`😭 Error upserting Stream user: ${errorMessage}`);
   }
 };
 
@@ -35,6 +36,6 @@ export const generateStreamToken = (
     return streamClient.createToken(userIdStr);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(`😭 Error in generating Stream user token: ${errorMessage}`);
+    logger.error(`😭 Error in generating Stream user token: ${errorMessage}`);
   }
 };

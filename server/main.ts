@@ -9,6 +9,7 @@ import { envValidated } from "./lib/envValidated.js";
 import authRoutes from "./routes/auth.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import { logger } from "./lib/logger.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -52,7 +53,7 @@ if (envValidated.NODE_ENV === "production") {
 }
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  console.error(`🚨 Global Error: ${err.message || err}`);
+  logger.error(`🚨 Global Error: ${err.message || err}`);
 
   const statusCode = err.status || 500;
 
@@ -65,9 +66,9 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
 app.listen(PORT, () => {
   if (envValidated.NODE_ENV === "production") {
-    console.log(`🚀 Server and Client started successfully`);
+    logger.info(`🚀 Server and Client started successfully`);
   } else {
-    console.log(`🚀 Server started on: http://localhost:${PORT}`);
+    logger.info(`🚀 Server started on: http://localhost:${PORT}`);
   }
   connectDB();
 });

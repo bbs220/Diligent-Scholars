@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import User, { UserDocument } from "../models/User.model.js";
 import { envValidated } from "../lib/envValidated.js";
+import { logger } from "../lib/logger.js";
 
 export interface AuthRequest extends Request {
   user?: UserDocument;
@@ -41,7 +42,7 @@ export const protectedRoute = async (
     next();
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(`😭 Error in protectedRoute middleware: ${errorMessage}`);
+    logger.error(`😭 Error in protectedRoute middleware: ${errorMessage}`);
 
     res.status(500).json({ message: "Internal server error" });
   }
