@@ -6,8 +6,9 @@ import {
   signup,
 } from "../controllers/auth.controller.js";
 import { protectedRoute } from "../middleware/auth.middleware.js";
-import { UserDocument } from "../models/User.model.js";
+import { authLimiter } from "../middleware/rateLimiter.middleware.js";
 import { validate } from "../middleware/validate.middleware.js";
+import { UserDocument } from "../models/User.model.js";
 import {
   loginSchema,
   onboardingSchema,
@@ -20,12 +21,13 @@ export interface AuthRequest extends Request {
 
 const router = express.Router();
 
-router.post("/signup", validate(signupSchema), signup);
+// validated and rate limited routes for auth
+router.post("/signup", authLimiter, validate(signupSchema), signup);
+router.post("/login", authLimiter, validate(loginSchema), login);
 
-router.post("/login", validate(loginSchema), login);
-
+// does not need anything
 router.post("/logout", logout);
-
+// same as above but with protected and validated route
 router.post(
   "/onboarding",
   validate(onboardingSchema),
