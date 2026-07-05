@@ -1,19 +1,19 @@
-import express, { Request, Response, NextFunction } from "express";
-import cors from "cors";
 import cookieParser from "cookie-parser";
-import "dotenv/config";
+import cors from "cors";
+import express, { NextFunction, Request, Response } from "express";
 import path from "path";
 import { fileURLToPath } from "url";
+import { connectDB } from "./lib/connectDB.js";
+import { envValidated } from "./lib/envValidated.js";
 
 import authRoutes from "./routes/auth.routes.js";
-import userRoutes from "./routes/user.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
-import { connectDB } from "./lib/connectDB.js";
+import userRoutes from "./routes/user.routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PORT = process.env.PORT as string;
+const PORT = envValidated.PORT;
 
 const app = express();
 
@@ -27,11 +27,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/chat", chatRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/chat", chatRoutes);
 
-if (process.env.NODE_ENV === "production") {
+if (envValidated.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/dist")));
 
   app.get(/(.*)/, (req: Request, res: Response) => {
@@ -51,12 +51,12 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(statusCode).json({
     message: err.message || "Internal Server Error",
 
-    stack: process.env.NODE_ENV === "production" ? null : err.stack,
+    stack: envValidated.NODE_ENV === "production" ? null : err.stack,
   });
 });
 
 app.listen(PORT, () => {
-  if (process.env.NODE_ENV === "production") {
+  if (envValidated.NODE_ENV === "production") {
     console.log(`🚀 Server and Client started successfully`);
   } else {
     console.log(`🚀 Server started on: http://localhost:${PORT}`);

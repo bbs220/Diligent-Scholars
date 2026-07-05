@@ -25,10 +25,9 @@ const parsedEnv = envSchema.safeParse(process.env);
 if (!parsedEnv.success) {
   console.error("❌ Invalid or missing environment variables:");
 
-  // The new Zod v4 way: pass the error into the standalone function
   console.error(z.treeifyError(parsedEnv.error));
 
   process.exit(1);
 }
 
-export const env = parsedEnv.data;
+export const envValidated = parsedEnv.data;
