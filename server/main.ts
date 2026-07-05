@@ -17,12 +17,20 @@ const PORT = envValidated.PORT;
 
 const app = express();
 
+// fuckin reverse proxies in prod
+// always forget this
+app.set("trust proxy", 1); // trust first proxy
+
+// NOTE: Since we serve the frontend via express.static in production, CORS isn't strictly
+// necessary there (Same-Origin). However, we configure it dynamically here so the API
+// is future-proofed in case we ever host the frontend on a separate domain (like Vercel).
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: envValidated.CLIENT_URL,
     credentials: true,
   }),
 );
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));

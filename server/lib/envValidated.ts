@@ -18,6 +18,8 @@ const envSchema = z.object({
   STREAM_API_SECRET: z
     .string()
     .min(1, { error: "STREAM_API_SECRET is required" }),
+
+  CLIENT_URL: z.url({ error: "CLIENT_URL must be a valid URL" }),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);

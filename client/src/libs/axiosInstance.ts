@@ -1,5 +1,4 @@
 import axios from "axios";
-import toast from "react-hot-toast";
 import { coreRouter } from "../coreRouter";
 
 const BASE_URL =
@@ -21,8 +20,6 @@ axiosInstance.interceptors.response.use(
         window.location.pathname === "/signup";
 
       if (!isAuthPage) {
-        toast.error("Session expired. Please log in again.");
-
         coreRouter.navigate("/login");
       }
     }
