@@ -21,6 +21,10 @@ const envSchema = z.object({
     .min(1, { error: "STREAM_API_SECRET is required" }),
 
   CLIENT_URL: z.url({ error: "CLIENT_URL must be a valid URL" }),
+
+  REFRESH_TOKEN_SECRET: z
+    .string()
+    .min(10, { error: "REFRESH_TOKEN_SECRET must be at least 10 characters" }),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
