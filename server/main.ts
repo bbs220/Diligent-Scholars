@@ -37,6 +37,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+// v1 is web version
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/chat", chatRoutes);
@@ -49,7 +50,9 @@ if (envValidated.NODE_ENV === "production") {
   });
 } else {
   app.get("/", (req: Request, res: Response) => {
-    res.status(200).json({ message: "🌟 API is alive in dev" });
+    res
+      .status(200)
+      .json({ success: true, message: "🌟 API is alive in dev", data: null });
   });
 }
 
@@ -59,9 +62,12 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   const statusCode = err.status || 500;
 
   res.status(statusCode).json({
+    success: false,
     message: err.message || "Internal Server Error",
-
-    stack: envValidated.NODE_ENV === "production" ? null : err.stack,
+    data: {
+      // stack trace inside 'data' (only in dev mode)
+      stack: envValidated.NODE_ENV === "production" ? null : err.stack,
+    },
   });
 });
 
