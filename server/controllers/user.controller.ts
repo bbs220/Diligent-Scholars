@@ -10,7 +10,9 @@ export const populateRecommendedUsers = async (
 ): Promise<any> => {
   try {
     if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Unauthorized", data: null });
     }
 
     const currentUserId = req.user._id;
@@ -27,12 +29,18 @@ export const populateRecommendedUsers = async (
       ],
     });
 
-    res.status(200).json(recommendedUsers);
+    res.status(200).json({
+      success: true,
+      message: "Recommended users fetched successfully",
+      data: { users: recommendedUsers },
+    });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error(`😭 Error populating recommended users: ${errorMessage}`);
 
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({ success: false, message: "Internal server error", data: null });
   }
 };
 
@@ -42,7 +50,9 @@ export const populateFriends = async (
 ): Promise<any> => {
   try {
     if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Unauthorized", data: null });
     }
 
     const user = await User.findById(req.user._id)
@@ -50,15 +60,23 @@ export const populateFriends = async (
       .populate("friends", "fullName profileAvatar skillToLearn skillToShare");
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found", data: null });
     }
 
-    res.status(200).json(user.friends);
+    res.status(200).json({
+      success: true,
+      message: "Friends fetched successfully",
+      data: { friends: user.friends },
+    });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error(`😭 Error populating current user's friends: ${errorMessage}`);
 
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({ success: false, message: "Internal server error", data: null });
   }
 };
 
@@ -68,7 +86,9 @@ export const sendFriendReq = async (
 ): Promise<any> => {
   try {
     if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Unauthorized", data: null });
     }
 
     const myId = req.user.id.toString();
@@ -77,13 +97,19 @@ export const sendFriendReq = async (
     if (myId === receiverId) {
       return res
         .status(400)
-        .json({ message: "Can't send friend requests to yourself" });
+        .json({
+          success: false,
+          message: "Can't send friend requests to yourself",
+          data: null,
+        });
     }
 
     const receiver = await User.findById(receiverId);
 
     if (!receiver) {
-      return res.status(404).json({ message: "Receiver not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Receiver not found", data: null });
     }
 
     const isAlreadyFriend = receiver.friends.some(
@@ -93,7 +119,11 @@ export const sendFriendReq = async (
     if (isAlreadyFriend) {
       return res
         .status(400)
-        .json({ message: "You are already friends with this user" });
+        .json({
+          success: false,
+          message: "You are already friends with this user",
+          data: null,
+        });
     }
 
     const existingFriendReq = await FriendReq.findOne({
@@ -105,7 +135,9 @@ export const sendFriendReq = async (
 
     if (existingFriendReq) {
       return res.status(400).json({
+        success: false,
         message: "A friend request already exists between you and this user",
+        data: null,
       });
     }
 
@@ -114,12 +146,18 @@ export const sendFriendReq = async (
       receiver: receiverId,
     });
 
-    res.status(201).json(friendReq);
+    res.status(201).json({
+      success: true,
+      message: "Friend request sent successfully",
+      data: { friendReq },
+    });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error(`😭 Error sending friend request: ${errorMessage}`);
 
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({ success: false, message: "Internal server error", data: null });
   }
 };
 
@@ -129,7 +167,9 @@ export const acceptFriendReq = async (
 ): Promise<any> => {
   try {
     if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Unauthorized", data: null });
     }
 
     const { id: requestId } = req.params;
@@ -137,14 +177,23 @@ export const acceptFriendReq = async (
     const friendReq = await FriendReq.findById(requestId);
 
     if (!friendReq) {
-      return res.status(404).json({ message: "Friend request not found" });
+      return res
+        .status(404)
+        .json({
+          success: false,
+          message: "Friend request not found",
+          data: null,
+        });
     }
 
-    // Convert both to strings to ensure a safe equality check
     if (friendReq.receiver.toString() !== req.user.id.toString()) {
       return res
         .status(400)
-        .json({ message: "You are not authorized to send this request" });
+        .json({
+          success: false,
+          message: "You are not authorized to accept this request",
+          data: null,
+        });
     }
 
     friendReq.reqStatus = "accepted";
@@ -159,12 +208,18 @@ export const acceptFriendReq = async (
       $addToSet: { friends: friendReq.sender },
     });
 
-    res.status(200).json({ message: "Friend request accepted" });
+    res.status(200).json({
+      success: true,
+      message: "Friend request accepted",
+      data: null,
+    });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error(`😭 Error accepting friend request: ${errorMessage}`);
 
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({ success: false, message: "Internal server error", data: null });
   }
 };
 
@@ -174,7 +229,9 @@ export const incomingFriendReqs = async (
 ): Promise<any> => {
   try {
     if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Unauthorized", data: null });
     }
 
     const incomingReqs = await FriendReq.find({
@@ -187,14 +244,20 @@ export const incomingFriendReqs = async (
       reqStatus: "accepted",
     }).populate("receiver", "fullName profileAvatar");
 
-    res.status(200).json({ incomingReqs, acceptedReqs });
+    res.status(200).json({
+      success: true,
+      message: "Incoming requests fetched successfully",
+      data: { incomingReqs, acceptedReqs },
+    });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error(
       `😭 Error in observing all incoming friend requests: ${errorMessage}`,
     );
 
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({ success: false, message: "Internal server error", data: null });
   }
 };
 
@@ -204,7 +267,9 @@ export const outgoingFriendReqs = async (
 ): Promise<any> => {
   try {
     if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Unauthorized", data: null });
     }
 
     const outgoingReqs = await FriendReq.find({
@@ -212,13 +277,19 @@ export const outgoingFriendReqs = async (
       reqStatus: "pending",
     }).populate("receiver", "fullName profileAvatar skillToLearn skillToShare");
 
-    res.status(200).json(outgoingReqs);
+    res.status(200).json({
+      success: true,
+      message: "Outgoing requests fetched successfully",
+      data: { outgoingReqs },
+    });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error(
       `😭 Error in observing all outgoing friend requests: ${errorMessage}`,
     );
 
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({ success: false, message: "Internal server error", data: null });
   }
 };

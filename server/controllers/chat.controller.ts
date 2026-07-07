@@ -9,16 +9,28 @@ export const getStreamToken = async (
 ): Promise<any> => {
   try {
     if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+        data: null,
+      });
     }
 
     const streamToken = generateStreamToken(req.user.id);
 
-    res.status(200).json({ streamToken });
+    res.status(200).json({
+      success: true,
+      message: "Stream token generated successfully",
+      data: { streamToken },
+    });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error(`😭 Error in getting the stream token: ${errorMessage}`);
 
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      data: null,
+    });
   }
 };
