@@ -6,6 +6,7 @@ import {
   UsersIcon,
 } from "lucide-react";
 import { useMemo } from "react";
+import toast from "react-hot-toast";
 import { Link } from "react-router";
 import FriendCard from "../components/FriendCard";
 import NoFriends from "../components/NoFriends";
@@ -16,7 +17,7 @@ import {
   populateUserFriendsFn,
   sendFriendReqFn,
 } from "../libs/apiCalls";
-import { capitalize } from "../libs/helper";
+import { capitalize, handleApiError } from "../libs/helper";
 import type { typeUser } from "../types/typesCollection";
 
 const HomePage = () => {
@@ -43,8 +44,13 @@ const HomePage = () => {
   const { mutate: sendReqMutation, isPending } = useMutation({
     mutationFn: sendFriendReqFn,
 
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["outgoingFriendReqs"] }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["outgoingFriendReqs"] });
+
+      toast.success(data?.message || "Friend request sent!");
+    },
+
+    onError: handleApiError,
   });
 
   const outgoingReqIDs = useMemo(() => {

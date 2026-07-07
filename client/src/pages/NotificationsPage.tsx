@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { acceptFriendReqFn, populateFriendReqsFn } from "../libs/apiCalls";
 import { BellIcon, ClockIcon, UserCheckIcon } from "lucide-react";
-import type { typeUser } from "../types/typesCollection";
+import toast from "react-hot-toast";
 import NoNotificationFound from "../components/NoNotificationFound";
-import { capitalize } from "../libs/helper";
+import { acceptFriendReqFn, populateFriendReqsFn } from "../libs/apiCalls";
+import { capitalize, handleApiError } from "../libs/helper";
+import type { typeUser } from "../types/typesCollection";
 
 const NotificationsPage = () => {
   const queryClient = useQueryClient();
@@ -15,10 +16,15 @@ const NotificationsPage = () => {
 
   const { mutate: acceptReqMutation, isPending } = useMutation({
     mutationFn: acceptFriendReqFn,
-    onSuccess: () => {
+
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["friendReqs"] });
+
       queryClient.invalidateQueries({ queryKey: ["friends"] });
+      toast.success(data?.message || "Friend request accepted!");
     },
+
+    onError: handleApiError,
   });
 
   const incomingReqs = friendReqsData?.incomingReqs || [];
