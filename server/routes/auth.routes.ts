@@ -1,9 +1,10 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import {
   login,
   logout,
   onboarding,
   signup,
+  getMe,
 } from "../controllers/auth.controller.js";
 import { protectedRoute } from "../middleware/auth.middleware.js";
 import { authLimiter } from "../middleware/rateLimiter.middleware.js";
@@ -27,6 +28,7 @@ router.post("/login", authLimiter, validate(loginSchema), login);
 
 // does not need anything
 router.post("/logout", logout);
+
 // same as above but with protected and validated route
 router.post(
   "/onboarding",
@@ -35,8 +37,6 @@ router.post(
   onboarding,
 );
 
-router.get("/me", protectedRoute, (req: AuthRequest, res: Response) => {
-  res.json({ message: "yea youre authenticated", user: req.user });
-});
+router.get("/me", protectedRoute, getMe);
 
 export default router;
