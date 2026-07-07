@@ -39,7 +39,3 @@ export type typeUser = {
   createdAt: string;
   updatedAt: string;
 };
-
-export type typeAuthResponse = {
-  user: typeUser;
-};

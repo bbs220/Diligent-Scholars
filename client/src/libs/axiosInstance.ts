@@ -79,8 +79,6 @@ axiosInstance.interceptors.response.use(
     }
 
     // standardize backend errors for the frontend UI (e.g. for React Hot Toast)
-    const errorMessage =
-      error.response?.data?.message || "An unexpected error occurred";
-    return Promise.reject(new Error(errorMessage));
+    return Promise.reject(error);
   },
 );

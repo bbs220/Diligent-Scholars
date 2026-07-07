@@ -12,9 +12,9 @@ const useOnBoarding = () => {
   } = useMutation({
     mutationFn: onBoardingMutationFn,
 
-    onSuccess: () => {
-      toast.success("Onboarding Completed");
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      toast.success(data?.message || "Onboarding Completed");
     },
 
     onError: handleApiError,
