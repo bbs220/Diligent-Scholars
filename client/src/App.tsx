@@ -39,8 +39,14 @@ export const RequireAuth = ({
   const isOnBoarded = authUser?.isOnboarded;
 
   if (!isAuthenticated) return <Navigate to="/login" replace />;
-  if (requireOnboard && !isOnBoarded)
+
+  if (requireOnboard && !isOnBoarded) {
     return <Navigate to="/onboarding" replace />;
+  }
+
+  if (!requireOnboard && isOnBoarded) {
+    return <Navigate to="/" replace />;
+  }
 
   return <>{children}</>;
 };
