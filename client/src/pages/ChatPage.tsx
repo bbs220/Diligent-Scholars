@@ -28,7 +28,7 @@ const ChatPage = () => {
 
   const { authUser } = useAuthUser();
 
-  const { data: tokenData } = useQuery({
+  const { data: streamToken } = useQuery({
     queryKey: ["streamToken"],
     queryFn: getStreamToken,
     enabled: !!authUser,
@@ -36,7 +36,7 @@ const ChatPage = () => {
 
   useEffect(() => {
     const startChat = async () => {
-      if (!tokenData?.streamToken || !authUser || !targetUserId) {
+      if (!streamToken || !authUser || !targetUserId) {
         return;
       }
 
@@ -49,7 +49,7 @@ const ChatPage = () => {
             name: authUser.fullName,
             image: authUser.profileAvatar,
           },
-          tokenData.streamToken,
+          streamToken,
         );
 
         const channelId = [authUser._id, targetUserId].sort().join("-");
@@ -71,7 +71,7 @@ const ChatPage = () => {
     };
 
     startChat();
-  }, [authUser, targetUserId, tokenData?.streamToken]);
+  }, [authUser, targetUserId, streamToken]);
 
   const handleVideoCall = () => {
     if (chatChannel) {
