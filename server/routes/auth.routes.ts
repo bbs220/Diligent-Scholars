@@ -5,6 +5,7 @@ import {
   onboarding,
   signup,
   getMe,
+  refresh,
 } from "../controllers/auth.controller.js";
 import { protectedRoute } from "../middleware/auth.middleware.js";
 import { authLimiter } from "../middleware/rateLimiter.middleware.js";
@@ -37,6 +38,10 @@ router.post(
   onboarding,
 );
 
+// get info about logged in user
 router.get("/me", protectedRoute, getMe);
+
+// refresh the 15min token
+router.get("/refresh", refresh);
 
 export default router;

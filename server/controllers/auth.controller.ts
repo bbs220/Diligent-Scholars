@@ -253,3 +253,65 @@ export const getMe = async (req: AuthRequest, res: Response): Promise<any> => {
     },
   });
 };
+
+export const refresh = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+      return res.status(401).json({
+        success: false,
+        message: "No refresh token provided",
+        data: null,
+      });
+    }
+
+    // verify the token cryptographically
+    const decoded = jwt.verify(
+      refreshToken,
+      envValidated.REFRESH_TOKEN_SECRET,
+    ) as { userId: string };
+
+    // check if the user exists AND if this exact token is still valid in the DB
+    const user = await User.findOne({ _id: decoded.userId, refreshToken });
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid or revoked refresh token",
+        data: null,
+      });
+    }
+
+    // generate a fresh 15-minute access token
+    const accessToken = jwt.sign(
+      { userId: user._id },
+      envValidated.JWT_SECRET_KEY,
+      {
+        expiresIn: "15m",
+      },
+    );
+
+    // attach it to the cookie
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      sameSite: "strict" as const,
+      secure: envValidated.NODE_ENV === "production",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Access token refreshed successfully",
+      data: null,
+    });
+  } catch (error) {
+    // if jwt.verify fails
+    logger.error(`😭 Error in refresh token: ${error}`);
+    res.status(401).json({
+      success: false,
+      message: "Refresh token expired or invalid",
+      data: null,
+    });
+  }
+};
