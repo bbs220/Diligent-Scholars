@@ -5,7 +5,9 @@ import toast from "react-hot-toast";
 export const handleApiError = (error: unknown): void => {
   if (isAxiosError(error)) {
     // catch Zod Validation Errors (Array)
-    const zodErrors = error.response?.data?.errors;
+    // checks both the root and the new 'data' wrapper just to be safe
+    const zodErrors =
+      error.response?.data?.errors || error.response?.data?.data?.errors;
 
     if (zodErrors && Array.isArray(zodErrors) && zodErrors.length > 0) {
       // toast the very first validation error
@@ -13,7 +15,8 @@ export const handleApiError = (error: unknown): void => {
       return;
     }
 
-    // catch Standard Backend Errors ("Email already exists", "Invalid credentials")
+    // catch standard Backend Errors ("Email already exists", "Invalid credentials")
+    // this perfectly catches our new { success, message, data } shape
     const serverMessage = error.response?.data?.message;
 
     if (serverMessage) {

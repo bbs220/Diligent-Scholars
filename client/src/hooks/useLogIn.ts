@@ -13,9 +13,9 @@ const useLogIn = () => {
   } = useMutation({
     mutationFn: logInMutationFn,
 
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
-      toast.success("Logged in successfully!");
+      toast.success(data?.message || "Logged in successfully!");
     },
 
     onError: handleApiError,

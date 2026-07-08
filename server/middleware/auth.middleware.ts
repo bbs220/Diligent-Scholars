@@ -14,12 +14,14 @@ export const protectedRoute = async (
   next: NextFunction,
 ): Promise<any> => {
   try {
-    const token = req.cookies.jwt;
+    const token = req.cookies.accessToken;
 
     if (!token) {
-      return res
-        .status(401)
-        .json({ message: "Unauthorized: No token provided" });
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized: No token provided",
+        data: null,
+      });
     }
 
     const decoded = jwt.verify(
@@ -28,13 +30,23 @@ export const protectedRoute = async (
     ) as JwtPayload;
 
     if (!decoded || !decoded.userId) {
-      return res.status(401).json({ message: "Unauthorized: Invalid token" });
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized: Invalid token",
+        data: null,
+      });
     }
 
-    const user = await User.findById(decoded.userId).select("-password");
+    const user = await User.findById(decoded.userId).select(
+      "-password -refreshToken",
+    );
 
     if (!user) {
-      return res.status(401).json({ message: "Unauthorized: User not found" });
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized: User not found",
+        data: null,
+      });
     }
 
     req.user = user;
@@ -44,6 +56,8 @@ export const protectedRoute = async (
     const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error(`😭 Error in protectedRoute middleware: ${errorMessage}`);
 
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({ success: false, message: "Internal server error", data: null });
   }
 };

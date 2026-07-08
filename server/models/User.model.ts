@@ -19,6 +19,11 @@ const userSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+    // used to revalidate jwt token
+    refreshToken: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,

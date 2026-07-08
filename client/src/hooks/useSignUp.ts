@@ -13,9 +13,9 @@ const useSignUp = () => {
   } = useMutation({
     mutationFn: signUpMutationFn,
 
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
-      toast.success("Account created successfully!");
+      toast.success(data?.message || "Account created successfully!");
     },
 
     onError: handleApiError,
