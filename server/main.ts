@@ -3,6 +3,7 @@ import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import path from "path";
+import helmet from "helmet";
 import { fileURLToPath } from "url";
 import { connectDB } from "./lib/connectDB.js";
 import { envValidated } from "./lib/envValidated.js";
@@ -11,7 +12,6 @@ import { logger } from "./lib/logger.js";
 import authRoutes from "./routes/auth.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
 import userRoutes from "./routes/user.routes.js";
-import helmet from "helmet";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
