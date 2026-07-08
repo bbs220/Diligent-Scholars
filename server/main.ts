@@ -11,6 +11,7 @@ import { logger } from "./lib/logger.js";
 import authRoutes from "./routes/auth.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import helmet from "helmet";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,6 +23,8 @@ const app = express();
 // fuckin reverse proxies in prod
 // always forget this
 app.set("trust proxy", 1); // trust first proxy
+
+app.use(helmet());
 
 // NOTE: Since we serve the frontend via express.static in production, CORS isn't strictly
 // necessary there (Same-Origin). However, we configure it dynamically here so the API
