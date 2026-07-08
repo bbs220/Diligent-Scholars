@@ -1,4 +1,4 @@
-# ✨Test Friend Circle App for learning
+# ✨ Diligent Scholars for learning
 
 - uses stream.io for chat and video
 - jwt for auth
