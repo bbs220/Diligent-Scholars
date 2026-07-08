@@ -1,14 +1,8 @@
 import React, { useState } from "react";
-import toast, { LoaderIcon } from "react-hot-toast";
+import { LoaderIcon } from "react-hot-toast";
 import useAuthUser from "../hooks/useAuthUser";
 import type { typeOnBoardingData } from "../types/typesCollection";
-import {
-  CameraIcon,
-  CheckLine,
-  MapPinIcon,
-  ShuffleIcon,
-  LogOutIcon,
-} from "lucide-react";
+import { CameraIcon, CheckLine, MapPinIcon, LogOutIcon } from "lucide-react";
 import { SKILLS } from "../constants/constantsCollection";
 import { useThemeStore } from "../stores/useThemeStore";
 import useOnBoarding from "../hooks/useOnBoarding";
@@ -34,14 +28,6 @@ const OnBoardingPage = () => {
   const handleOnBoarding: React.ComponentProps<"form">["onSubmit"] = (e) => {
     e.preventDefault();
     onBoardingMutation(onBoardingData);
-  };
-
-  const handleRandomAvatar = () => {
-    const idx = Math.floor(Math.random() * 100) + 1; // 1-100 included
-    const randomAvatar = `https://api.dicebear.com/10.x/thumbs/svg?borderRadius=6&backgroundColorFill=linear&seed=${idx}`;
-
-    setOnBoardingData({ ...onBoardingData, profileAvatar: randomAvatar });
-    toast.success("Random profile picture generated!");
   };
 
   return (
@@ -74,18 +60,6 @@ const OnBoardingPage = () => {
                     <CameraIcon className="size-10 sm:size-12 lg:size-14 text-base-content opacity-40" />
                   </div>
                 )}
-              </div>
-
-              {/* random avatar button */}
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={handleRandomAvatar}
-                  className="btn btn-accent btn-sm sm:btn-md"
-                >
-                  <ShuffleIcon className="size-4 mr-1 sm:mr-2" />
-                  Random Avatar
-                </button>
               </div>
             </div>
 
