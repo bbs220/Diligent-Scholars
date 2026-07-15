@@ -2,15 +2,29 @@ import React, { useState } from "react";
 import { LoaderIcon } from "react-hot-toast";
 import useAuthUser from "../hooks/useAuthUser";
 import type { typeOnBoardingData } from "../types/typesCollection";
-import { CameraIcon, CheckLine, MapPinIcon, LogOutIcon } from "lucide-react";
+import { CheckLine, MapPinIcon, LogOutIcon } from "lucide-react";
 import { SKILLS } from "../constants/constantsCollection";
 import { useThemeStore } from "../stores/useThemeStore";
 import useOnBoarding from "../hooks/useOnBoarding";
 import useLogOut from "../hooks/useLogOut";
 
+// helper function to generate initials
+const getInitials = (name: string) => {
+  if (!name) return "??";
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .substring(0, 2);
+};
+
 const OnBoardingPage = () => {
   const { authUser } = useAuthUser();
   const { logOutMutation } = useLogOut();
+
+  // State for tracking image load errors
+  const [imageError, setImageError] = useState(false);
 
   const [onBoardingData, setOnBoardingData] = useState<typeOnBoardingData>({
     fullName: authUser?.fullName || "",
@@ -24,6 +38,8 @@ const OnBoardingPage = () => {
   const { onBoardingMutation, isPending } = useOnBoarding();
 
   const { theme } = useThemeStore();
+
+  const initials = getInitials(onBoardingData.fullName);
 
   const handleOnBoarding: React.ComponentProps<"form">["onSubmit"] = (e) => {
     e.preventDefault();
@@ -45,25 +61,25 @@ const OnBoardingPage = () => {
             onSubmit={handleOnBoarding}
             className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-x-6 lg:gap-y-4"
           >
-            {/* profile avatar: Spans 4 columns and 2 rows on desktop (left side) */}
+            {/* profile avatar: Spans 4 columns and 2 rows on desktop */}
             <div className="lg:col-span-4 lg:row-span-2 flex flex-col items-center justify-start space-y-3 sm:space-y-4">
-              {/* img preview */}
-              <div className="size-24 sm:size-28 lg:size-36 rounded-2xl bg-base-300 overflow-hidden shrink-0 shadow-sm">
-                {onBoardingData.profileAvatar ? (
+              <div className="size-24 sm:size-28 lg:size-36 rounded-2xl bg-base-300 overflow-hidden shrink-0 shadow-sm flex items-center justify-center">
+                {onBoardingData.profileAvatar && !imageError ? (
                   <img
                     src={onBoardingData.profileAvatar}
-                    alt="Profile Preview"
+                    alt={onBoardingData.fullName || "Profile"}
                     className="w-full h-full object-cover"
+                    onError={() => setImageError(true)}
                   />
                 ) : (
-                  <div className="flex items-center justify-center h-full">
-                    <CameraIcon className="size-10 sm:size-12 lg:size-14 text-base-content opacity-40" />
+                  <div className="flex items-center justify-center h-full w-full bg-base-300 text-base-content text-4xl font-bold opacity-70">
+                    {initials}
                   </div>
                 )}
               </div>
             </div>
 
-            {/* fullname: Takes up remaining 8 columns on the right */}
+            {/* fullname */}
             <div className="lg:col-span-8 form-control space-y-1">
               <label className="label py-1">
                 <span className="label-text text-sm sm:text-base">
@@ -85,7 +101,7 @@ const OnBoardingPage = () => {
               />
             </div>
 
-            {/* bio: Takes up remaining 8 columns on the right, under Full Name */}
+            {/* bio */}
             <div className="lg:col-span-8 form-control space-y-1">
               <label className="label py-1">
                 <span className="label-text text-sm sm:text-base">Bio</span>
@@ -101,9 +117,8 @@ const OnBoardingPage = () => {
               />
             </div>
 
-            {/* skills: Full width on bottom, split into 2 columns on medium+ screens */}
+            {/* skills */}
             <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
-              {/* learned skill */}
               <div className="form-control space-y-1">
                 <label className="label py-1">
                   <span className="label-text text-sm sm:text-base">
@@ -132,7 +147,6 @@ const OnBoardingPage = () => {
                 </select>
               </div>
 
-              {/* learn skill */}
               <div className="form-control space-y-1">
                 <label className="label py-1">
                   <span className="label-text text-sm sm:text-base">
@@ -162,7 +176,7 @@ const OnBoardingPage = () => {
               </div>
             </div>
 
-            {/* location: Full width at the bottom */}
+            {/* location */}
             <div className="lg:col-span-12 form-control space-y-1">
               <label className="label py-1">
                 <span className="label-text text-sm sm:text-base">
@@ -187,7 +201,7 @@ const OnBoardingPage = () => {
               </div>
             </div>
 
-            {/* submit button */}
+            {/* submit */}
             <button
               className="lg:col-span-12 btn btn-primary w-full mt-2"
               disabled={isPending}
@@ -206,7 +220,7 @@ const OnBoardingPage = () => {
               )}
             </button>
 
-            {/* logout button */}
+            {/* logout */}
             <button
               className="lg:col-span-12 btn btn-ghost text-error w-full mt-1"
               type="button"

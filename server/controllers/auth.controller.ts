@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User.model.js";
+import crypto from "crypto";
 import { envValidated } from "../lib/envValidated.js";
 import { upsertStreamUser } from "../lib/streamStuff.js";
 import { AuthRequest } from "../middleware/auth.middleware.js";
@@ -25,8 +26,12 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
     });
   }
 
-  const idx = Math.floor(Math.random() * 100) + 1;
-  const randomAvatar = `https://api.dicebear.com/10.x/thumbs/svg?borderRadius=6&backgroundColorFill=linear&seed=${idx}`;
+  const emailHash = crypto
+    .createHash("md5")
+    .update(email.toLowerCase().trim())
+    .digest("hex");
+
+  const randomAvatar = `https://www.gravatar.com/avatar/${emailHash}?d=identicon`;
 
   const newUser = await User.create({
     fullName,
