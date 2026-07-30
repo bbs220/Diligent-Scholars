@@ -8,6 +8,7 @@ import NotificationsPage from "./pages/NotificationsPage";
 import CallPage from "./pages/CallPage";
 import ChatPage from "./pages/ChatPage";
 import Layout from "./components/Layout";
+import NotFoundPage from "./pages/NotFoundPage";
 
 export const coreRouter = createBrowserRouter([
   {
@@ -74,6 +75,10 @@ export const coreRouter = createBrowserRouter([
             </Layout>
           </RequireAuth>
         ),
+      },
+      {
+        path: "*",
+        element: <NotFoundPage />,
       },
     ],
   },
