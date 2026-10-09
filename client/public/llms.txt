@@ -1,0 +1,7 @@
+# Diligent Scholars
+
+A production-grade, full-stack real-time social application architecture built with Express 5, React 19, and Tailwind CSS 4.
+
+## Useful Links
+- [GitHub](https://github.com/example/diligentscholars)
+
