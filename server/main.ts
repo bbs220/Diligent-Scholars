@@ -143,32 +143,40 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-const server = app.listen(PORT, () => {
-  if (envValidated.NODE_ENV === "production") {
-    logger.info(`🚀 Server and Client started successfully`);
-  } else {
-    logger.info(`🚀 Server started on: http://localhost:${PORT}`);
-  }
-  connectDB();
-});
+export { app };
+
+let server: any = null;
+
+if (process.env.NODE_ENV !== "test") {
+  server = app.listen(PORT, () => {
+    if (envValidated.NODE_ENV === "production") {
+      logger.info(`🚀 Server and Client started successfully`);
+    } else {
+      logger.info(`🚀 Server started on: http://localhost:${PORT}`);
+    }
+    connectDB();
+  });
+}
 
 const gracefulShutdown = async (signal: string) => {
   logger.info(`\n${signal} signal received: closing HTTP server...`);
 
-  server.close(async () => {
-    logger.info("HTTP server closed. Finishing active requests...");
+  if (server) {
+    server.close(async () => {
+      logger.info("HTTP server closed. Finishing active requests...");
 
-    try {
-      await mongoose.connection.close(false);
-      logger.info("MongoDB connection closed.");
+      try {
+        await mongoose.connection.close(false);
+        logger.info("MongoDB connection closed.");
 
-      logger.info("Graceful shutdown complete. Exiting process.");
-      process.exit(0);
-    } catch (error) {
-      logger.error(`Error during MongoDB disconnect: ${error}`);
-      process.exit(1);
-    }
-  });
+        logger.info("Graceful shutdown complete. Exiting process.");
+        process.exit(0);
+      } catch (error) {
+        logger.error(`Error during MongoDB disconnect: ${error}`);
+        process.exit(1);
+      }
+    });
+  }
 
   // if active requests take longer than 10 seconds, force shutdown
   setTimeout(() => {
