@@ -1,6 +1,7 @@
 import { Response } from "express";
 import FriendReq from "../models/FriendReq.model.js";
 import User from "../models/User.model.js";
+import Report from "../models/Report.model.js";
 import { AuthRequest } from "../middleware/auth.middleware.js";
 import { logger } from "../lib/logger.js";
 import { upsertStreamUser } from "../lib/streamStuff.js";
@@ -19,12 +20,24 @@ export const populateRecommendedUsers = async (
     const currentUserId = req.user._id;
     const currentUser = req.user;
 
+    const blockedUsers = currentUser.blockedUsers || [];
+    const usersWhoBlockedMe = await User.find({ blockedUsers: currentUserId }).select("_id");
+    const blockedByOthersIds = usersWhoBlockedMe.map((u) => u._id);
+
+    const excludedIds = [
+      currentUserId,
+      ...currentUser.friends,
+      ...blockedUsers,
+      ...blockedByOthersIds,
+    ];
+
     const recommendedUsers = await User.find({
       $and: [
         // exclude the current user
         { _id: { $ne: currentUserId } },
         // exclude users who are already friends with the current user
         { _id: { $nin: currentUser.friends } },
+        { _id: { $nin: excludedIds } },
         // only include users who are onboarded
         { isOnboarded: true },
       ],
@@ -453,6 +466,152 @@ export const removeFriend = async (
   }
 };
 
+// block another user
+export const blockUser = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<any> => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+        data: null,
+      });
+    }
+
+    const { id: targetUserId } = req.params;
+    const currentUserId = req.user.id.toString();
+
+    if (currentUserId === targetUserId) {
+      return res.status(400).json({
+        success: false,
+        message: "You cannot block yourself",
+        data: null,
+      });
+    }
+
+    // add to blocked users
+    await User.findByIdAndUpdate(currentUserId, {
+      $addToSet: { blockedUsers: targetUserId },
+      $pull: { friends: targetUserId },
+    });
+
+    // remove current user from target friends
+    await User.findByIdAndUpdate(targetUserId, {
+      $pull: { friends: currentUserId },
+    });
+
+    // delete any friend requests between them
+    await FriendReq.deleteMany({
+      $or: [
+        { sender: currentUserId, receiver: targetUserId },
+        { sender: targetUserId, receiver: currentUserId },
+      ],
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "User blocked successfully",
+      data: null,
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error(`😭 Error blocking user: ${errorMessage}`);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      data: null,
+    });
+  }
+};
+
+// unblock a user
+export const unblockUser = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<any> => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+        data: null,
+      });
+    }
+
+    const { id: targetUserId } = req.params;
+    const currentUserId = req.user.id.toString();
+
+    await User.findByIdAndUpdate(currentUserId, {
+      $pull: { blockedUsers: targetUserId },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "User unblocked successfully",
+      data: null,
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error(`😭 Error unblocking user: ${errorMessage}`);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      data: null,
+    });
+  }
+};
+
+// report a user for safety violations
+export const reportUser = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<any> => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+        data: null,
+      });
+    }
+
+    const { id: reportedUserId } = req.params;
+    const { reason, details } = req.body;
+    const reporterId = req.user.id.toString();
+
+    if (!reason) {
+      return res.status(400).json({
+        success: false,
+        message: "Reason is required to submit a report",
+        data: null,
+      });
+    }
+
+    const report = await Report.create({
+      reporter: reporterId,
+      reportedUser: reportedUserId,
+      reason,
+      details: details || "",
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Report submitted successfully. Our team will review it.",
+      data: { report },
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error(`😭 Error reporting user: ${errorMessage}`);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      data: null,
+    });
+  }
+};
+
 // get single scholar profile with relationship status
 export const getUserProfile = async (
   req: AuthRequest,
@@ -513,6 +672,7 @@ export const getUserProfile = async (
             isSelf,
             isFriend,
             requestStatus,
+            isBlocked: Boolean(req.user.blockedUsers?.some((b: any) => b.toString() === targetUserId)),
           },
         },
       },

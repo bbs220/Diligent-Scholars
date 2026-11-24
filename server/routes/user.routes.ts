@@ -11,6 +11,9 @@ import {
   getUserProfile,
   cancelFriendReq,
   removeFriend,
+  blockUser,
+  unblockUser,
+  reportUser,
 } from "../controllers/user.controller.js";
 
 const router = express.Router();
@@ -26,6 +29,10 @@ router.get("/profile/:id", getUserProfile);
 router.post("/friend-request/:id", sendFriendReq);
 router.delete("/friend-request/:id", cancelFriendReq);
 router.put("/friend-request/:id/accept", acceptFriendReq);
+
+router.post("/block/:id", blockUser);
+router.post("/unblock/:id", unblockUser);
+router.post("/report/:id", reportUser);
 
 router.get("/incoming-friend-requests", incomingFriendReqs);
 router.get("/outgoing-friend-requests", outgoingFriendReqs);

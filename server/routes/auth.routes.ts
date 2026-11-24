@@ -7,6 +7,7 @@ import {
   getMe,
   refresh,
   changePassword,
+  deleteAccount,
 } from "../controllers/auth.controller.js";
 import { protectedRoute } from "../middleware/auth.middleware.js";
 import { authLimiter } from "../middleware/rateLimiter.middleware.js";
@@ -47,5 +48,8 @@ router.get("/refresh", refresh);
 
 // change password for authenticated user
 router.put("/change-password", protectedRoute, changePassword);
+
+// delete account for authenticated user
+router.delete("/delete-account", protectedRoute, deleteAccount);
 
 export default router;

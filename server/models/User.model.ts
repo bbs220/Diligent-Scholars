@@ -19,6 +19,12 @@ const userSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+    blockedUsers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     // used to revalidate jwt token
     refreshToken: {
       type: String,

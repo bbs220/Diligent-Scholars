@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User.model.js";
+import FriendReq from "../models/FriendReq.model.js";
 import crypto from "crypto";
 import { envValidated } from "../lib/envValidated.js";
 import { upsertStreamUser } from "../lib/streamStuff.js";
@@ -382,6 +383,88 @@ export const changePassword = async (
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error(`😭 Error changing password: ${errorMessage}`);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      data: null,
+    });
+  }
+};
+
+// delete current user account
+export const deleteAccount = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<any> => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+        data: null,
+      });
+    }
+
+    const { password } = req.body;
+    if (!password) {
+      return res.status(400).json({
+        success: false,
+        message: "Password is required to delete your account",
+        data: null,
+      });
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+        data: null,
+      });
+    }
+
+    const isMatch = await user.matchPassword(password);
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: "Incorrect password",
+        data: null,
+      });
+    }
+
+    const userId = req.user._id;
+
+    // clean up friend requests
+    await FriendReq.deleteMany({
+      $or: [{ sender: userId }, { receiver: userId }],
+    });
+
+    // remove from other users friends lists
+    await User.updateMany(
+      { friends: userId },
+      { $pull: { friends: userId } },
+    );
+
+    // remove from other users blocked lists
+    await User.updateMany(
+      { blockedUsers: userId },
+      { $pull: { blockedUsers: userId } },
+    );
+
+    // delete user record
+    await User.findByIdAndDelete(userId);
+
+    res.clearCookie("accessToken", cookieOptions);
+    res.clearCookie("refreshToken", cookieOptions);
+
+    res.status(200).json({
+      success: true,
+      message: "Account deleted successfully",
+      data: null,
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error(`😭 Error deleting account: ${errorMessage}`);
     res.status(500).json({
       success: false,
       message: "Internal server error",
