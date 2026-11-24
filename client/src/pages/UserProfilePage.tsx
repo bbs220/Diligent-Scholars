@@ -15,6 +15,7 @@ import { useState } from "react";
 import { Link, useParams } from "react-router";
 import toast from "react-hot-toast";
 import PageLoader from "../components/PageLoader";
+import ScheduleSessionModal from "../components/ScheduleSessionModal";
 import {
   blockUserFn,
   cancelFriendReqFn,
@@ -33,6 +34,7 @@ const UserProfilePage = () => {
 
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const [reportReason, setReportReason] = useState("Harassment or bullying");
   const [reportDetails, setReportDetails] = useState("");
 
@@ -177,6 +179,14 @@ const UserProfilePage = () => {
                   </Link>
                   <button
                     type="button"
+                    onClick={() => setIsScheduleModalOpen(true)}
+                    className="btn btn-outline btn-primary btn-sm sm:btn-md gap-2"
+                  >
+                    <CalendarIcon className="size-4" />
+                    Schedule
+                  </button>
+                  <button
+                    type="button"
                     className="btn btn-outline btn-error btn-sm sm:btn-md"
                     onClick={() => removeFriendMutation(scholar._id)}
                     disabled={isRemoving}
@@ -314,6 +324,13 @@ const UserProfilePage = () => {
           </div>
         </div>
       </div>
+
+      {/* schedule study session modal */}
+      <ScheduleSessionModal
+        isOpen={isScheduleModalOpen}
+        onClose={() => setIsScheduleModalOpen(false)}
+        initialPartner={scholar}
+      />
 
       {/* report modal */}
       {isReportModalOpen && (

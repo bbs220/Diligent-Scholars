@@ -73,11 +73,19 @@ const LogInPage = () => {
                   </div>
                   {/* password section updated */}
                   <div className="form-control w-full space-y-1 sm:space-y-2">
-                    <label className="label" htmlFor="login-password">
-                      <span className="label-text text-sm sm:text-base">
-                        Password
-                      </span>
-                    </label>
+                    <div className="flex items-center justify-between">
+                      <label className="label py-0" htmlFor="login-password">
+                        <span className="label-text text-sm sm:text-base">
+                          Password
+                        </span>
+                      </label>
+                      <Link
+                        to="/forgot-password"
+                        className="text-xs text-primary hover:underline font-medium"
+                      >
+                        Forgot password?
+                      </Link>
+                    </div>
                     <div className="relative">
                       <input
                         id="login-password"

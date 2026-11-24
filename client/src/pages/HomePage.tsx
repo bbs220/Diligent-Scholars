@@ -14,6 +14,7 @@ import { Link } from "react-router";
 import FriendCard from "../components/FriendCard";
 import NoFriends from "../components/NoFriends";
 import NoRecommendedUsers from "../components/NoRecommendedUsers";
+import UpcomingSessionsWidget from "../components/UpcomingSessionsWidget";
 import { COUNTRIES, SKILLS } from "../constants/constantsCollection";
 import useAuthUser from "../hooks/useAuthUser";
 import {
@@ -135,6 +136,9 @@ const HomePage = () => {
     <div className="p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto">
       <h1 className="sr-only">Diligent Scholars Dashboard</h1>
       <div className="space-y-10 sm:space-y-12">
+        {/* upcoming scheduled sessions */}
+        <UpcomingSessionsWidget />
+
         {/* total friends */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight">

@@ -8,6 +8,8 @@ import {
   refresh,
   changePassword,
   deleteAccount,
+  forgotPassword,
+  resetPassword,
 } from "../controllers/auth.controller.js";
 import { protectedRoute } from "../middleware/auth.middleware.js";
 import { authLimiter } from "../middleware/rateLimiter.middleware.js";
@@ -51,5 +53,11 @@ router.put("/change-password", protectedRoute, changePassword);
 
 // delete account for authenticated user
 router.delete("/delete-account", protectedRoute, deleteAccount);
+
+// forgot password request token
+router.post("/forgot-password", authLimiter, forgotPassword);
+
+// reset password with valid token
+router.post("/reset-password", authLimiter, resetPassword);
 
 export default router;
