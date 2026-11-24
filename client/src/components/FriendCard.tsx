@@ -1,12 +1,19 @@
 import { Link, useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { MessageSquareIcon, Trash2Icon, VideoIcon } from "lucide-react";
+import {
+  CalendarIcon,
+  MessageSquareIcon,
+  Trash2Icon,
+  VideoIcon,
+} from "lucide-react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import useAuthUser from "../hooks/useAuthUser";
 import { removeFriendFn } from "../libs/apiCalls";
 import { capitalize, formatLastActive, handleApiError } from "../libs/helper";
 import { usePresenceStore } from "../stores/usePresenceStore";
 import type { typeUser } from "../types/typesCollection";
+import ScheduleSessionModal from "./ScheduleSessionModal";
 
 type typeFriendCard = {
   friend: typeUser;
@@ -16,6 +23,7 @@ const FriendCard = ({ friend }: typeFriendCard) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { authUser } = useAuthUser();
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const isOnline = usePresenceStore((state) => state.isUserOnline(friend._id));
   const lastActive = usePresenceStore((state) =>
     state.getUserLastActive(friend._id),
@@ -111,6 +119,14 @@ const FriendCard = ({ friend }: typeFriendCard) => {
           </div>
           <button
             type="button"
+            onClick={() => setIsScheduleModalOpen(true)}
+            className="btn btn-outline btn-primary btn-xs w-full gap-1"
+          >
+            <CalendarIcon className="size-3" />
+            Schedule Study Session
+          </button>
+          <button
+            type="button"
             onClick={() => removeFriendMutation(friend._id)}
             disabled={isRemoving}
             className="btn btn-ghost btn-xs w-full text-error opacity-70 hover:opacity-100"
@@ -120,6 +136,12 @@ const FriendCard = ({ friend }: typeFriendCard) => {
           </button>
         </div>
       </div>
+
+      <ScheduleSessionModal
+        isOpen={isScheduleModalOpen}
+        onClose={() => setIsScheduleModalOpen(false)}
+        initialPartner={friend}
+      />
     </div>
   );
 };

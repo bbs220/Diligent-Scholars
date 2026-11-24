@@ -13,6 +13,8 @@ import PrivacyPage from "./pages/PrivacyPage";
 import ProfilePage from "./pages/ProfilePage";
 import UserProfilePage from "./pages/UserProfilePage";
 import FriendsPage from "./pages/FriendsPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 export const coreRouter = createBrowserRouter([
   {
@@ -51,6 +53,22 @@ export const coreRouter = createBrowserRouter([
         element: (
           <RequireGuest>
             <LogInPage />
+          </RequireGuest>
+        ),
+      },
+      {
+        path: "/forgot-password",
+        element: (
+          <RequireGuest>
+            <ForgotPasswordPage />
+          </RequireGuest>
+        ),
+      },
+      {
+        path: "/reset-password/:token",
+        element: (
+          <RequireGuest>
+            <ResetPasswordPage />
           </RequireGuest>
         ),
       },

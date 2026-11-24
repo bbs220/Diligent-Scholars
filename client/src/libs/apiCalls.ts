@@ -1,8 +1,11 @@
 import type {
   typeChangePasswordData,
+  typeCreateSessionData,
+  typeForgotPasswordData,
   typeLogInData,
   typeOnBoardingData,
   typeReportData,
+  typeResetPasswordData,
   typeSignUpData,
 } from "../types/typesCollection";
 import { axiosInstance } from "./axiosInstance";
@@ -135,5 +138,41 @@ export const reportUserFn = async ({
   reportData: typeReportData;
 }) => {
   const res = await axiosInstance.post(`/users/report/${userId}`, reportData);
+  return res.data;
+};
+
+export const createSessionFn = async (sessionData: typeCreateSessionData) => {
+  const res = await axiosInstance.post("/sessions", sessionData);
+  return res.data;
+};
+
+export const getUserSessionsFn = async () => {
+  const res = await axiosInstance.get("/sessions");
+  return res.data.data.sessions || [];
+};
+
+export const updateSessionStatusFn = async ({
+  sessionId,
+  status,
+}: {
+  sessionId: string;
+  status: "scheduled" | "completed" | "cancelled";
+}) => {
+  const res = await axiosInstance.put(`/sessions/${sessionId}/status`, { status });
+  return res.data;
+};
+
+export const deleteSessionFn = async (sessionId: string) => {
+  const res = await axiosInstance.delete(`/sessions/${sessionId}`);
+  return res.data;
+};
+
+export const forgotPasswordFn = async (data: typeForgotPasswordData) => {
+  const res = await axiosInstance.post("/auth/forgot-password", data);
+  return res.data;
+};
+
+export const resetPasswordFn = async (data: typeResetPasswordData) => {
+  const res = await axiosInstance.post("/auth/reset-password", data);
   return res.data;
 };

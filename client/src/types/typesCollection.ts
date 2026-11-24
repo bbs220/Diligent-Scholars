@@ -59,3 +59,36 @@ export type typeChangePasswordData = {
   currentPassword: string;
   newPassword: string;
 };
+
+export type typeStudySession = {
+  _id: string;
+  host: typeUser;
+  participant: typeUser;
+  title: string;
+  subject: string;
+  scheduledDate: string;
+  durationMinutes: number;
+  notes?: string;
+  callId: string;
+  status: "scheduled" | "completed" | "cancelled";
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type typeCreateSessionData = {
+  participantId: string;
+  title: string;
+  subject: string;
+  scheduledDate: string;
+  durationMinutes?: number;
+  notes?: string;
+};
+
+export type typeForgotPasswordData = {
+  email: string;
+};
+
+export type typeResetPasswordData = {
+  token: string;
+  newPassword: string;
+};
