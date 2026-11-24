@@ -58,7 +58,7 @@ export const populateFriends = async (
 
     const user = await User.findById(req.user._id)
       .select("friends")
-      .populate("friends", "fullName profileAvatar skillToLearn skillToShare");
+      .populate("friends", "fullName profileAvatar skillToLearn skillToShare location bio");
 
     if (!user) {
       return res
@@ -357,6 +357,99 @@ export const updateProfile = async (
       message: "Internal server error",
       data: null,
     });
+  }
+};
+
+// cancel outgoing friend request
+export const cancelFriendReq = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<any> => {
+  try {
+    if (!req.user) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Unauthorized", data: null });
+    }
+
+    const { id } = req.params;
+    const currentUserId = req.user.id.toString();
+
+    // allow cancelling either by receiver id or by friend request id
+    const deletedReq = await FriendReq.findOneAndDelete({
+      $and: [
+        { sender: currentUserId },
+        { reqStatus: "pending" },
+        {
+          $or: [{ _id: id }, { receiver: id }],
+        },
+      ],
+    });
+
+    if (!deletedReq) {
+      return res.status(404).json({
+        success: false,
+        message: "Pending friend request not found",
+        data: null,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Friend request cancelled successfully",
+      data: null,
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error(`😭 Error cancelling friend request: ${errorMessage}`);
+    res
+      .status(500)
+      .json({ success: false, message: "Internal server error", data: null });
+  }
+};
+
+// remove existing friend
+export const removeFriend = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<any> => {
+  try {
+    if (!req.user) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Unauthorized", data: null });
+    }
+
+    const { id: friendId } = req.params;
+    const currentUserId = req.user.id.toString();
+
+    await User.findByIdAndUpdate(currentUserId, {
+      $pull: { friends: friendId },
+    });
+
+    await User.findByIdAndUpdate(friendId, {
+      $pull: { friends: currentUserId },
+    });
+
+    // remove any friend request records between both users
+    await FriendReq.deleteMany({
+      $or: [
+        { sender: currentUserId, receiver: friendId },
+        { sender: friendId, receiver: currentUserId },
+      ],
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Friend removed successfully",
+      data: null,
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error(`😭 Error removing friend: ${errorMessage}`);
+    res
+      .status(500)
+      .json({ success: false, message: "Internal server error", data: null });
   }
 };
 
