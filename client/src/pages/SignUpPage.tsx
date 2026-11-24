@@ -160,18 +160,20 @@ const SignUpPage = () => {
                           to="/terms"
                           target="_blank"
                           rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
                           className="text-primary hover:underline"
                         >
-                          terms of service
+                          Terms of Service
                         </Link>{" "}
                         and{" "}
                         <Link
                           to="/privacy"
                           target="_blank"
                           rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
                           className="text-primary hover:underline"
                         >
-                          privacy policy
+                          Privacy Policy
                         </Link>
                       </label>
                     </div>

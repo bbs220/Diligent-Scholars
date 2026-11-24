@@ -35,15 +35,17 @@ axiosInstance.interceptors.response.use(
 
     // check if the error is a 401 Unauthorized AND we haven't already retried this request
     if (error.response?.status === 401 && !originalRequest._retry) {
-      const isAuthPage =
+      const isPublicPage =
         window.location.pathname === "/login" ||
-        window.location.pathname === "/signup";
+        window.location.pathname === "/signup" ||
+        window.location.pathname === "/terms" ||
+        window.location.pathname === "/privacy";
 
       // prevent infinite loops on auth routes
       if (
         originalRequest.url.includes("/auth/login") ||
         originalRequest.url.includes("/auth/refresh") ||
-        isAuthPage
+        isPublicPage
       ) {
         return Promise.reject(error);
       }
