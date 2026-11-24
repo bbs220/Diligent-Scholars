@@ -3,6 +3,7 @@ import FriendReq from "../models/FriendReq.model.js";
 import User from "../models/User.model.js";
 import { AuthRequest } from "../middleware/auth.middleware.js";
 import { logger } from "../lib/logger.js";
+import { upsertStreamUser } from "../lib/streamStuff.js";
 
 export const populateRecommendedUsers = async (
   req: AuthRequest,
@@ -291,5 +292,145 @@ export const outgoingFriendReqs = async (
     res
       .status(500)
       .json({ success: false, message: "Internal server error", data: null });
+  }
+};
+
+// update user profile
+export const updateProfile = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<any> => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+        data: null,
+      });
+    }
+
+    const { fullName, bio, skillToShare, skillToLearn, location, profileAvatar } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        fullName,
+        bio,
+        skillToShare,
+        skillToLearn,
+        location,
+        profileAvatar,
+      },
+      { new: true },
+    ).select("-password -refreshToken");
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+        data: null,
+      });
+    }
+
+    try {
+      await upsertStreamUser({
+        id: updatedUser._id.toString(),
+        name: updatedUser.fullName,
+        image: updatedUser.profileAvatar || "",
+      });
+      logger.info(`🤗 Successfully synced Stream user profile: ${updatedUser.fullName}`);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      logger.error(`😭 Error syncing Stream user profile: ${errorMessage}`);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      data: { user: updatedUser },
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error(`😭 Error updating profile: ${errorMessage}`);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      data: null,
+    });
+  }
+};
+
+// get single scholar profile with relationship status
+export const getUserProfile = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<any> => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+        data: null,
+      });
+    }
+
+    const { id: targetUserId } = req.params;
+    const currentUserId = req.user.id.toString();
+
+    const targetUser = await User.findById(targetUserId).select(
+      "-password -refreshToken -email",
+    );
+
+    if (!targetUser) {
+      return res.status(404).json({
+        success: false,
+        message: "Scholar not found",
+        data: null,
+      });
+    }
+
+    const isSelf = currentUserId === targetUserId;
+    const isFriend = req.user.friends?.some(
+      (f: any) => f.toString() === targetUserId,
+    );
+
+    let requestStatus = "none";
+    if (!isSelf && !isFriend) {
+      const pendingReq = await FriendReq.findOne({
+        $or: [
+          { sender: currentUserId, receiver: targetUserId, reqStatus: "pending" },
+          { sender: targetUserId, receiver: currentUserId, reqStatus: "pending" },
+        ],
+      });
+
+      if (pendingReq) {
+        requestStatus =
+          pendingReq.sender.toString() === currentUserId ? "sent" : "received";
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Scholar profile fetched successfully",
+      data: {
+        user: {
+          ...targetUser.toObject(),
+          friendsCount: targetUser.friends?.length || 0,
+          relationship: {
+            isSelf,
+            isFriend,
+            requestStatus,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error(`😭 Error fetching scholar profile: ${errorMessage}`);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      data: null,
+    });
   }
 };

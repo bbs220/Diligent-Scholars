@@ -6,6 +6,7 @@ import {
   signup,
   getMe,
   refresh,
+  changePassword,
 } from "../controllers/auth.controller.js";
 import { protectedRoute } from "../middleware/auth.middleware.js";
 import { authLimiter } from "../middleware/rateLimiter.middleware.js";
@@ -43,5 +44,8 @@ router.get("/me", protectedRoute, getMe);
 
 // refresh the 15min token
 router.get("/refresh", refresh);
+
+// change password for authenticated user
+router.put("/change-password", protectedRoute, changePassword);
 
 export default router;

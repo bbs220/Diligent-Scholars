@@ -7,6 +7,8 @@ import {
   populateFriends,
   populateRecommendedUsers,
   sendFriendReq,
+  updateProfile,
+  getUserProfile,
 } from "../controllers/user.controller.js";
 
 const router = express.Router();
@@ -15,6 +17,8 @@ router.use(protectedRoute);
 
 router.get("/", populateRecommendedUsers);
 router.get("/friends", populateFriends);
+router.put("/profile", updateProfile);
+router.get("/profile/:id", getUserProfile);
 
 router.post("/friend-request/:id", sendFriendReq);
 router.put("/friend-request/:id/accept", acceptFriendReq);
