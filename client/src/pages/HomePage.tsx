@@ -65,6 +65,7 @@ const HomePage = () => {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto">
+      <h1 className="sr-only">Diligent Scholars Dashboard</h1>
       <div className="space-y-10 sm:space-y-12">
         {/* total friends */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">

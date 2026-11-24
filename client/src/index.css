@@ -8,6 +8,10 @@
   --font-inter: "Inter", sans-serif;
 }
 
+:root {
+  scrollbar-gutter: stable;
+}
+
 .str-chat {
   --str-chat__text-color: var(--fallback-bc, oklch(var(--bc)/1));
   --str-chat__surface-color: var(--fallback-b2, oklch(var(--b2)/1));

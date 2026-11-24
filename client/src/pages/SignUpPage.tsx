@@ -63,13 +63,15 @@ const SignUpPage = () => {
                 <div className="flex flex-col gap-3 sm:gap-2">
                   {/* fullname */}
                   <div className="form-control w-full space-y-1 sm:space-y-2">
-                    <label className="label">
+                    <label className="label" htmlFor="fullName">
                       <span className="label-text text-sm sm:text-base">
                         Full Name
                       </span>
                     </label>
                     <input
+                      id="fullName"
                       type="text"
+                      autoComplete="name"
                       placeholder="Your Name"
                       className="input input-bordered w-full"
                       value={signUpData.fullName}
@@ -84,13 +86,15 @@ const SignUpPage = () => {
                   </div>
                   {/* email */}
                   <div className="form-control w-full space-y-1 sm:space-y-2">
-                    <label className="label">
+                    <label className="label" htmlFor="email">
                       <span className="label-text text-sm sm:text-base">
                         Email
                       </span>
                     </label>
                     <input
+                      id="email"
                       type="email"
+                      autoComplete="email"
                       placeholder="Your Email"
                       className="input input-bordered w-full"
                       value={signUpData.email}
@@ -102,14 +106,16 @@ const SignUpPage = () => {
                   </div>
                   {/* password */}
                   <div className="form-control w-full space-y-1 sm:space-y-2">
-                    <label className="label">
+                    <label className="label" htmlFor="password">
                       <span className="label-text text-sm sm:text-base">
                         Password
                       </span>
                     </label>
                     <div className="relative">
                       <input
+                        id="password"
                         type={showPassword ? "text" : "password"}
+                        autoComplete="new-password"
                         placeholder="Your Password"
                         className="input input-bordered w-full pr-10"
                         value={signUpData.password}
@@ -123,6 +129,7 @@ const SignUpPage = () => {
                       />
                       <button
                         type="button"
+                        aria-label={showPassword ? "Hide password" : "Show password"}
                         className="absolute inset-y-0 right-0 pr-3 flex items-center text-base-content/50 hover:text-primary transition-colors hover:cursor-pointer"
                         onClick={() => setShowPassword(!showPassword)}
                       >
@@ -141,12 +148,13 @@ const SignUpPage = () => {
                   <div className="form-control mt-3 sm:mt-2">
                     <div className="flex items-start sm:items-center justify-start gap-2 sm:gap-3">
                       <input
+                        id="terms"
                         type="checkbox"
                         className="checkbox checkbox-sm cursor-pointer mt-0.5 sm:mt-0 shrink-0"
                         checked={isAgreed}
                         onChange={(e) => setIsAgreed(e.target.checked)}
                       />
-                      <span className="text-xs sm:text-sm leading-tight">
+                      <label htmlFor="terms" className="text-xs sm:text-sm leading-tight cursor-pointer">
                         I agree to the{" "}
                         <span className="text-primary hover:underline cursor-pointer">
                           terms of service
@@ -155,7 +163,7 @@ const SignUpPage = () => {
                         <span className="text-primary hover:underline cursor-pointer">
                           privacy policy
                         </span>
-                      </span>
+                      </label>
                     </div>
                   </div>
                 </div>

@@ -53,13 +53,15 @@ const LogInPage = () => {
                 {/* email */}
                 <div className="flex flex-col gap-3 sm:gap-2">
                   <div className="form-control w-full space-y-1 sm:space-y-2">
-                    <label className="label">
+                    <label className="label" htmlFor="login-email">
                       <span className="label-text text-sm sm:text-base">
                         Email
                       </span>
                     </label>
                     <input
+                      id="login-email"
                       type="email"
+                      autoComplete="email"
                       placeholder="Your Email"
                       className="input input-bordered w-full"
                       value={logInData.email}
@@ -71,14 +73,16 @@ const LogInPage = () => {
                   </div>
                   {/* password section updated */}
                   <div className="form-control w-full space-y-1 sm:space-y-2">
-                    <label className="label">
+                    <label className="label" htmlFor="login-password">
                       <span className="label-text text-sm sm:text-base">
                         Password
                       </span>
                     </label>
                     <div className="relative">
                       <input
+                        id="login-password"
                         type={showPassword ? "text" : "password"}
+                        autoComplete="current-password"
                         placeholder="Your Password"
                         className="input input-bordered w-full pr-10"
                         value={logInData.password}
@@ -92,6 +96,7 @@ const LogInPage = () => {
                       />
                       <button
                         type="button"
+                        aria-label={showPassword ? "Hide password" : "Show password"}
                         className="absolute inset-y-0 right-0 pr-3 flex items-center text-base-content/50 hover:text-primary transition-colors hover:cursor-pointer"
                         onClick={() => setShowPassword(!showPassword)}
                       >

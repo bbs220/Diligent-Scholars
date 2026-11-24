@@ -81,14 +81,16 @@ const OnBoardingPage = () => {
 
             {/* fullname */}
             <div className="lg:col-span-8 form-control space-y-1">
-              <label className="label py-1">
+              <label className="label py-1" htmlFor="onboarding-fullname">
                 <span className="label-text text-sm sm:text-base">
                   Full Name
                 </span>
               </label>
               <input
+                id="onboarding-fullname"
                 type="text"
                 name="fullName"
+                autoComplete="name"
                 value={onBoardingData.fullName}
                 onChange={(e) =>
                   setOnBoardingData({
@@ -103,10 +105,11 @@ const OnBoardingPage = () => {
 
             {/* bio */}
             <div className="lg:col-span-8 form-control space-y-1">
-              <label className="label py-1">
+              <label className="label py-1" htmlFor="onboarding-bio">
                 <span className="label-text text-sm sm:text-base">Bio</span>
               </label>
               <textarea
+                id="onboarding-bio"
                 name="bio"
                 value={onBoardingData.bio}
                 onChange={(e) =>
@@ -120,12 +123,13 @@ const OnBoardingPage = () => {
             {/* skills */}
             <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
               <div className="form-control space-y-1">
-                <label className="label py-1">
+                <label className="label py-1" htmlFor="onboarding-skillToShare">
                   <span className="label-text text-sm sm:text-base">
                     Subject you are good at
                   </span>
                 </label>
                 <select
+                  id="onboarding-skillToShare"
                   name="skillToShare"
                   value={onBoardingData.skillToShare}
                   onChange={(e) =>
@@ -148,12 +152,13 @@ const OnBoardingPage = () => {
               </div>
 
               <div className="form-control space-y-1">
-                <label className="label py-1">
+                <label className="label py-1" htmlFor="onboarding-skillToLearn">
                   <span className="label-text text-sm sm:text-base">
                     Subject you wish to learn
                   </span>
                 </label>
                 <select
+                  id="onboarding-skillToLearn"
                   name="skillToLearn"
                   value={onBoardingData.skillToLearn}
                   onChange={(e) =>
@@ -178,7 +183,7 @@ const OnBoardingPage = () => {
 
             {/* location */}
             <div className="lg:col-span-12 form-control space-y-1">
-              <label className="label py-1">
+              <label className="label py-1" htmlFor="onboarding-location">
                 <span className="label-text text-sm sm:text-base">
                   Location
                 </span>
@@ -186,8 +191,10 @@ const OnBoardingPage = () => {
               <div className="relative">
                 <MapPinIcon className="absolute top-1/2 transform -translate-y-1/2 left-3 size-5 text-base-content opacity-70 z-10 pointer-events-none" />
                 <input
+                  id="onboarding-location"
                   type="text"
                   name="location"
+                  autoComplete="address-level2"
                   value={onBoardingData.location}
                   onChange={(e) =>
                     setOnBoardingData({
