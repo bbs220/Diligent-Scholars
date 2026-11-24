@@ -8,20 +8,27 @@ import {
   UsersIcon,
   VideoIcon,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router";
 import NoFriends from "../components/NoFriends";
 import { SKILLS } from "../constants/constantsCollection";
 import useAuthUser from "../hooks/useAuthUser";
 import { populateUserFriendsFn, removeFriendFn } from "../libs/apiCalls";
-import { capitalize, handleApiError } from "../libs/helper";
+import { capitalize, formatLastActive, handleApiError } from "../libs/helper";
+import { usePresenceStore } from "../stores/usePresenceStore";
+import useStreamPresence from "../hooks/useStreamPresence";
 import type { typeUser } from "../types/typesCollection";
 
 const FriendsPage = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { authUser } = useAuthUser();
+  const { queryFriendsPresence } = useStreamPresence();
+  const isUserOnline = usePresenceStore((state) => state.isUserOnline);
+  const getUserLastActive = usePresenceStore(
+    (state) => state.getUserLastActive,
+  );
 
   const [searchQuery, setSearchQuery] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("");
@@ -31,6 +38,13 @@ const FriendsPage = () => {
     queryKey: ["friends"],
     queryFn: populateUserFriendsFn,
   });
+
+  useEffect(() => {
+    if (friends.length > 0) {
+      const friendIds = friends.map((f) => f._id);
+      queryFriendsPresence(friendIds);
+    }
+  }, [friends, queryFriendsPresence]);
 
   const { mutate: removeFriendMutation, isPending: isRemoving } = useMutation({
     mutationFn: removeFriendFn,
@@ -143,7 +157,10 @@ const FriendsPage = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-            {filteredFriends.map((friend) => (
+            {filteredFriends.map((friend) => {
+              const isOnline = isUserOnline(friend._id);
+              const lastActive = getUserLastActive(friend._id);
+              return (
               <div
                 key={friend._id}
                 className="card bg-base-200 hover:shadow-lg transition-all duration-300 h-full flex flex-col"
@@ -152,12 +169,20 @@ const FriendsPage = () => {
                   <div className="flex items-center gap-3">
                     <Link
                       to={`/user/${friend._id}`}
-                      className="avatar size-14 rounded-xl shrink-0 hover:opacity-85 transition-opacity"
+                      className="avatar size-14 rounded-xl shrink-0 hover:opacity-85 transition-opacity relative"
                     >
                       <img
                         src={friend.profileAvatar}
                         alt={friend.fullName}
                         className="object-cover rounded-xl"
+                      />
+                      <span
+                        className={`absolute -bottom-0.5 -right-0.5 size-3.5 rounded-full border-2 border-base-200 ${
+                          isOnline ? "bg-success" : "bg-base-content/30"
+                        }`}
+                        title={
+                          isOnline ? "Online" : formatLastActive(lastActive)
+                        }
                       />
                     </Link>
                     <div className="min-w-0 flex-1">
@@ -167,6 +192,18 @@ const FriendsPage = () => {
                       >
                         {friend.fullName}
                       </Link>
+                      <p
+                        className={`text-xs flex items-center gap-1 mt-0.5 ${
+                          isOnline ? "text-success font-medium" : "opacity-60"
+                        }`}
+                      >
+                        <span
+                          className={`size-1.5 rounded-full ${
+                            isOnline ? "bg-success" : "bg-base-content/40"
+                          }`}
+                        />
+                        {isOnline ? "Online" : formatLastActive(lastActive)}
+                      </p>
                       {friend.location && (
                         <div className="flex items-center text-xs opacity-70 mt-0.5">
                           <MapPinIcon className="size-3 mr-1 shrink-0" />
@@ -217,7 +254,8 @@ const FriendsPage = () => {
                   </div>
                 </div>
               </div>
-            ))}
+            );
+          })}
           </div>
         )}
       </div>

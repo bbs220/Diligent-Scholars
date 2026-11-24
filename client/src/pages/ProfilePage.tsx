@@ -7,19 +7,25 @@ import {
   LoaderIcon,
   MapPinIcon,
   SaveIcon,
+  SparklesIcon,
   Trash2Icon,
+  UploadIcon,
   UserIcon,
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { COUNTRIES, SKILLS } from "../constants/constantsCollection";
+import {
+  AVATAR_PRESETS,
+  COUNTRIES,
+  SKILLS,
+} from "../constants/constantsCollection";
 import useAuthUser from "../hooks/useAuthUser";
 import {
   changePasswordFn,
   deleteAccountFn,
   updateProfileFn,
 } from "../libs/apiCalls";
-import { handleApiError } from "../libs/helper";
+import { compressImageFile, handleApiError } from "../libs/helper";
 import type { typeOnBoardingData } from "../types/typesCollection";
 
 // helper to format initials
@@ -40,6 +46,15 @@ const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState<"profile" | "security">("profile");
   const [imageError, setImageError] = useState(false);
 
+  // state for avatar preset modal visibility
+  const [isPresetModalOpen, setIsPresetModalOpen] = useState(false);
+
+  // state for photo upload processing
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+
+  // file input reference for photo picker
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [profileData, setProfileData] = useState<typeOnBoardingData>({
     fullName: authUser?.fullName || "",
     bio: authUser?.bio || "",
@@ -48,6 +63,32 @@ const ProfilePage = () => {
     location: authUser?.location || "",
     profileAvatar: authUser?.profileAvatar || "",
   });
+
+  // handle photo upload and client compression
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsUploadingPhoto(true);
+      const compressedDataUrl = await compressImageFile(file);
+      setImageError(false);
+      setProfileData((prev) => ({
+        ...prev,
+        profileAvatar: compressedDataUrl,
+      }));
+      toast.success("Photo processed successfully");
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "Failed to process image",
+      );
+    } finally {
+      setIsUploadingPhoto(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
 
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
@@ -178,12 +219,46 @@ const ProfilePage = () => {
                       </div>
                     )}
                   </div>
-                  <div className="flex-1 w-full space-y-2">
+                  <div className="flex-1 w-full space-y-3">
                     <label className="label py-0" htmlFor="profile-avatar">
                       <span className="label-text font-medium">
-                        Avatar Image URL
+                        Profile Avatar
                       </span>
                     </label>
+
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handlePhotoUpload}
+                    />
+
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={isUploadingPhoto || isUpdatingProfile}
+                        className="btn btn-outline btn-sm gap-1.5"
+                      >
+                        {isUploadingPhoto ? (
+                          <LoaderIcon className="size-4 animate-spin" />
+                        ) : (
+                          <UploadIcon className="size-4" />
+                        )}
+                        {isUploadingPhoto ? "Processing..." : "Upload Photo"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setIsPresetModalOpen(true)}
+                        disabled={isUploadingPhoto || isUpdatingProfile}
+                        className="btn btn-ghost btn-sm gap-1.5 border border-base-300"
+                      >
+                        <SparklesIcon className="size-4 text-primary" />
+                        Choose Preset
+                      </button>
+                    </div>
+
                     <input
                       id="profile-avatar"
                       type="url"
@@ -195,11 +270,11 @@ const ProfilePage = () => {
                           profileAvatar: e.target.value,
                         });
                       }}
-                      className="input input-bordered w-full"
-                      placeholder="https://example.com/avatar.jpg"
+                      className="input input-bordered w-full text-xs sm:text-sm"
+                      placeholder="Or enter direct image URL (https://...)"
                     />
                     <p className="text-xs opacity-60">
-                      Direct link to your avatar image (Gravatar, Unsplash, etc.)
+                      Upload an image file, choose a scholar preset, or enter an image URL
                     </p>
                   </div>
                 </div>
@@ -583,6 +658,65 @@ const ProfilePage = () => {
                 {isDeletingAccount ? "Deleting..." : "Permanently Delete"}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {/* avatar preset selection modal */}
+      {isPresetModalOpen && (
+        <div className="modal modal-open">
+          <div className="modal-box max-w-lg">
+            <h3 className="font-bold text-lg mb-1 flex items-center gap-2">
+              <SparklesIcon className="size-5 text-primary" />
+              Choose a Scholar Avatar
+            </h3>
+            <p className="text-xs opacity-70 mb-4">
+              Pick one of our illustrated scholar avatar presets
+            </p>
+            <div className="grid grid-cols-4 gap-3 sm:gap-4 max-h-72 overflow-y-auto p-1">
+              {AVATAR_PRESETS.map((preset) => (
+                <button
+                  key={preset.id}
+                  type="button"
+                  onClick={() => {
+                    setImageError(false);
+                    setProfileData((prev) => ({
+                      ...prev,
+                      profileAvatar: preset.url,
+                    }));
+                    setIsPresetModalOpen(false);
+                  }}
+                  className={`flex flex-col items-center p-2 rounded-xl border transition-all hover:border-primary hover:scale-105 ${
+                    profileData.profileAvatar === preset.url
+                      ? "border-primary bg-primary/10 ring-2 ring-primary"
+                      : "border-base-300 bg-base-100"
+                  }`}
+                >
+                  <img
+                    src={preset.url}
+                    alt={preset.name}
+                    className="size-12 rounded-lg object-cover"
+                  />
+                  <span className="text-[10px] font-medium mt-1 truncate w-full text-center">
+                    {preset.name}
+                  </span>
+                </button>
+              ))}
+            </div>
+            <div className="modal-action">
+              <button
+                type="button"
+                className="btn btn-sm btn-ghost"
+                onClick={() => setIsPresetModalOpen(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+          <div
+            className="modal-backdrop"
+            onClick={() => setIsPresetModalOpen(false)}
+          >
+            <button type="button">close</button>
           </div>
         </div>
       )}

@@ -154,3 +154,75 @@ export const COUNTRIES = [
   "Zambia",
   "Zimbabwe",
 ];
+
+// svg data url builder helper
+const buildSvgUrl = (svgContent: string): string => {
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svgContent)}`;
+};
+
+// avatar preset representation
+export type typeAvatarPreset = {
+  id: string;
+  name: string;
+  url: string;
+};
+
+// avatar preset collection for scholar profiles
+export const AVATAR_PRESETS: typeAvatarPreset[] = [
+  {
+    id: "preset-scholar-cap",
+    name: "Classic Scholar",
+    url: buildSvgUrl(
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4f46e5"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#g1)"/><polygon points="50,22 82,36 50,50 18,36" fill="#ffffff"/><polygon points="32,44 32,64 50,74 68,64 68,44 50,52" fill="#e0e7ff"/><circle cx="78" cy="42" r="3" fill="#facc15"/><line x1="78" y1="42" x2="82" y2="58" stroke="#facc15" stroke-width="2.5"/></svg>`,
+    ),
+  },
+  {
+    id: "preset-bookworm",
+    name: "Book Scholar",
+    url: buildSvgUrl(
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10b981"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#g2)"/><path d="M50 32 C38 24 24 26 22 28 L22 70 C24 68 38 66 50 74 C62 66 76 68 78 70 L78 28 C76 26 62 24 50 32 Z" fill="#ffffff"/><line x1="50" y1="32" x2="50" y2="74" stroke="#059669" stroke-width="2"/><line x1="28" y1="40" x2="44" y2="38" stroke="#d1fae5" stroke-width="2"/><line x1="28" y1="48" x2="44" y2="46" stroke="#d1fae5" stroke-width="2"/><line x1="56" y1="38" x2="72" y2="40" stroke="#d1fae5" stroke-width="2"/><line x1="56" y1="46" x2="72" y2="48" stroke="#d1fae5" stroke-width="2"/></svg>`,
+    ),
+  },
+  {
+    id: "preset-science",
+    name: "Science Researcher",
+    url: buildSvgUrl(
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#g3)"/><ellipse cx="50" cy="50" rx="34" ry="12" fill="none" stroke="#ffffff" stroke-width="3" transform="rotate(30 50 50)"/><ellipse cx="50" cy="50" rx="34" ry="12" fill="none" stroke="#ffffff" stroke-width="3" transform="rotate(-30 50 50)"/><ellipse cx="50" cy="50" rx="34" ry="12" fill="none" stroke="#ffffff" stroke-width="3" transform="rotate(90 50 50)"/><circle cx="50" cy="50" r="7" fill="#facc15"/></svg>`,
+    ),
+  },
+  {
+    id: "preset-math",
+    name: "Math Wizard",
+    url: buildSvgUrl(
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="g4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#d97706"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#g4)"/><circle cx="50" cy="50" r="28" fill="none" stroke="#fef3c7" stroke-width="3" stroke-dasharray="4 4"/><polygon points="50,26 76,70 24,70" fill="none" stroke="#ffffff" stroke-width="4" stroke-linejoin="round"/><line x1="50" y1="26" x2="50" y2="70" stroke="#fef3c7" stroke-width="2"/><circle cx="50" cy="50" r="4" fill="#ffffff"/></svg>`,
+    ),
+  },
+  {
+    id: "preset-astronomy",
+    name: "Cosmic Explorer",
+    url: buildSvgUrl(
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="g5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0f172a"/><stop offset="100%" stop-color="#312e81"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#g5)"/><path d="M52 24 C40 24 30 34 30 46 C30 58 40 68 52 68 C58 68 64 66 68 62 C58 60 50 52 50 42 C50 34 54 28 60 25 C58 24 55 24 52 24 Z" fill="#facc15"/><circle cx="72" cy="30" r="2.5" fill="#ffffff"/><circle cx="34" cy="28" r="1.5" fill="#ffffff"/><circle cx="68" cy="74" r="2" fill="#ffffff"/><circle cx="26" cy="62" r="2" fill="#ffffff"/><circle cx="78" cy="50" r="1.5" fill="#ffffff"/></svg>`,
+    ),
+  },
+  {
+    id: "preset-literature",
+    name: "Literature Sage",
+    url: buildSvgUrl(
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="g6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e11d48"/><stop offset="100%" stop-color="#f43f5e"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#g6)"/><path d="M68 20 C62 32 44 46 36 68 L32 76 L40 72 C52 58 66 38 72 24 Z" fill="#ffffff"/><path d="M32 76 L36 68 L40 72 Z" fill="#ffe4e6"/><line x1="42" y1="56" x2="58" y2="44" stroke="#e11d48" stroke-width="2"/></svg>`,
+    ),
+  },
+  {
+    id: "preset-tech",
+    name: "Tech Innovator",
+    url: buildSvgUrl(
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="g7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0284c7"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#g7)"/><polyline points="38,36 24,50 38,64" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="62,36 76,50 62,64" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><line x1="54" y1="32" x2="46" y2="68" stroke="#e0f2fe" stroke-width="4" stroke-linecap="round"/></svg>`,
+    ),
+  },
+  {
+    id: "preset-philosophy",
+    name: "Insight Thinker",
+    url: buildSvgUrl(
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="g8" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c026d3"/><stop offset="100%" stop-color="#ec4899"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="url(#g8)"/><path d="M50 22 C37 22 28 31 28 42 C28 50 33 56 38 60 L38 68 L62 68 L62 60 C67 56 72 50 72 42 C72 31 63 22 50 22 Z" fill="#ffffff"/><rect x="42" y="70" width="16" height="5" rx="2" fill="#fdf2f8"/><line x1="50" y1="14" x2="50" y2="18" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/><line x1="22" y1="30" x2="26" y2="33" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/><line x1="78" y1="30" x2="74" y2="33" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/></svg>`,
+    ),
+  },
+];

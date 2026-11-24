@@ -4,10 +4,12 @@ import React from "react";
 import PageLoader from "./components/PageLoader";
 import useAuthUser from "./hooks/useAuthUser";
 import { useThemeStore } from "./stores/useThemeStore";
+import useStreamPresence from "./hooks/useStreamPresence";
 
 export const RootComponent = () => {
   const { isLoading, authUser } = useAuthUser();
   const { theme } = useThemeStore();
+  useStreamPresence();
 
   if (isLoading) return <PageLoader />;
 

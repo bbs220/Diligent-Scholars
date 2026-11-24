@@ -44,14 +44,16 @@ const ChatPage = () => {
       try {
         const client = StreamChat.getInstance(STREAM_API_KEY);
 
-        await client.connectUser(
-          {
-            id: authUser._id,
-            name: authUser.fullName,
-            image: authUser.profileAvatar,
-          },
-          streamToken,
-        );
+        if (!client.userID || client.userID !== authUser._id) {
+          await client.connectUser(
+            {
+              id: authUser._id,
+              name: authUser.fullName,
+              image: authUser.profileAvatar,
+            },
+            streamToken,
+          );
+        }
 
         const channelId = [authUser._id, targetUserId].sort().join("-");
 

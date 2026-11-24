@@ -4,7 +4,8 @@ import { MessageSquareIcon, Trash2Icon, VideoIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import useAuthUser from "../hooks/useAuthUser";
 import { removeFriendFn } from "../libs/apiCalls";
-import { capitalize, handleApiError } from "../libs/helper";
+import { capitalize, formatLastActive, handleApiError } from "../libs/helper";
+import { usePresenceStore } from "../stores/usePresenceStore";
 import type { typeUser } from "../types/typesCollection";
 
 type typeFriendCard = {
@@ -15,6 +16,10 @@ const FriendCard = ({ friend }: typeFriendCard) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { authUser } = useAuthUser();
+  const isOnline = usePresenceStore((state) => state.isUserOnline(friend._id));
+  const lastActive = usePresenceStore((state) =>
+    state.getUserLastActive(friend._id),
+  );
 
   const { mutate: removeFriendMutation, isPending: isRemoving } = useMutation({
     mutationFn: removeFriendFn,
@@ -39,7 +44,7 @@ const FriendCard = ({ friend }: typeFriendCard) => {
         <div className="flex items-center gap-3 sm:gap-4 mb-2 sm:mb-3 min-w-0">
           <Link
             to={`/user/${friend._id}`}
-            className="avatar shrink-0 hover:opacity-85 transition-opacity"
+            className="avatar shrink-0 hover:opacity-85 transition-opacity relative"
           >
             <div className="size-12 sm:size-14 rounded-xl">
               <img
@@ -48,13 +53,33 @@ const FriendCard = ({ friend }: typeFriendCard) => {
                 className="object-cover rounded-xl"
               />
             </div>
+            <span
+              className={`absolute -bottom-0.5 -right-0.5 size-3.5 rounded-full border-2 border-base-200 ${
+                isOnline ? "bg-success" : "bg-base-content/30"
+              }`}
+              title={isOnline ? "Online" : formatLastActive(lastActive)}
+            />
           </Link>
-          <Link
-            to={`/user/${friend._id}`}
-            className="font-semibold text-base sm:text-lg truncate flex-1 min-w-0 hover:underline"
-          >
-            {friend.fullName}
-          </Link>
+          <div className="min-w-0 flex-1">
+            <Link
+              to={`/user/${friend._id}`}
+              className="font-semibold text-base sm:text-lg truncate block hover:underline"
+            >
+              {friend.fullName}
+            </Link>
+            <p
+              className={`text-xs flex items-center gap-1 mt-0.5 ${
+                isOnline ? "text-success font-medium" : "opacity-60"
+              }`}
+            >
+              <span
+                className={`size-1.5 rounded-full ${
+                  isOnline ? "bg-success" : "bg-base-content/40"
+                }`}
+              />
+              {isOnline ? "Online" : formatLastActive(lastActive)}
+            </p>
+          </div>
         </div>
         {/* badges */}
         <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-5">

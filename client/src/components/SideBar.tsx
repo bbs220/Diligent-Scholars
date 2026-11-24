@@ -9,9 +9,13 @@ import {
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { populateFriendReqsFn } from "../libs/apiCalls";
+import { usePresenceStore } from "../stores/usePresenceStore";
 
 const SideBar = () => {
   const { authUser } = useAuthUser();
+  const isClientConnected = usePresenceStore(
+    (state) => state.isClientConnected,
+  );
 
   const location = useLocation();
   const currentPath = location.pathname;
@@ -106,10 +110,17 @@ const SideBar = () => {
             <p className="font-semibold text-sm truncate">
               {authUser?.fullName}
             </p>
-            <p className="text-xs text-success flex items-center gap-1">
-              <span className="size-2 rounded-full bg-success inline-block shrink-0" />
-              Online
-            </p>
+            {isClientConnected ? (
+              <p className="text-xs text-success flex items-center gap-1">
+                <span className="size-2 rounded-full bg-success inline-block shrink-0" />
+                Online
+              </p>
+            ) : (
+              <p className="text-xs opacity-60 flex items-center gap-1">
+                <span className="size-2 rounded-full bg-base-content/40 inline-block shrink-0" />
+                Connecting...
+              </p>
+            )}
           </div>
         </div>
       </Link>
