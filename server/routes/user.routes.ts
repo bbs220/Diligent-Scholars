@@ -13,6 +13,7 @@ import {
   removeFriend,
   blockUser,
   unblockUser,
+  getBlockedUsers,
   reportUser,
 } from "../controllers/user.controller.js";
 
@@ -22,6 +23,7 @@ router.use(protectedRoute);
 
 router.get("/", populateRecommendedUsers);
 router.get("/friends", populateFriends);
+router.get("/blocked", getBlockedUsers);
 router.delete("/friends/:id", removeFriend);
 router.put("/profile", updateProfile);
 router.get("/profile/:id", getUserProfile);

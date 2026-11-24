@@ -122,6 +122,11 @@ export const unblockUserFn = async (userId: string) => {
   return res.data;
 };
 
+export const getBlockedUsersFn = async () => {
+  const res = await axiosInstance.get("/users/blocked");
+  return res.data.data.blockedUsers || [];
+};
+
 export const reportUserFn = async ({
   userId,
   reportData,

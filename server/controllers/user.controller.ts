@@ -563,6 +563,46 @@ export const unblockUser = async (
   }
 };
 
+// get all users blocked by current user
+export const getBlockedUsers = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<any> => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+        data: null,
+      });
+    }
+
+    const currentUserId = req.user.id.toString();
+    const user = await User.findById(currentUserId)
+      .populate(
+        "blockedUsers",
+        "fullName profileAvatar skillToShare skillToLearn location",
+      )
+      .select("blockedUsers");
+
+    res.status(200).json({
+      success: true,
+      message: "Blocked users fetched successfully",
+      data: {
+        blockedUsers: user?.blockedUsers || [],
+      },
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error(`😭 Error fetching blocked users: ${errorMessage}`);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      data: null,
+    });
+  }
+};
+
 // report a user for safety violations
 export const reportUser = async (
   req: AuthRequest,

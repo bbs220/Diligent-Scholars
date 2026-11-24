@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   AlertTriangleIcon,
   Eye,
@@ -7,12 +7,15 @@ import {
   LoaderIcon,
   MapPinIcon,
   SaveIcon,
+  ShieldOffIcon,
   SparklesIcon,
   Trash2Icon,
   UploadIcon,
+  UserCheckIcon,
   UserIcon,
 } from "lucide-react";
 import React, { useRef, useState } from "react";
+import { Link } from "react-router";
 import toast from "react-hot-toast";
 import {
   AVATAR_PRESETS,
@@ -23,10 +26,12 @@ import useAuthUser from "../hooks/useAuthUser";
 import {
   changePasswordFn,
   deleteAccountFn,
+  getBlockedUsersFn,
+  unblockUserFn,
   updateProfileFn,
 } from "../libs/apiCalls";
-import { compressImageFile, handleApiError } from "../libs/helper";
-import type { typeOnBoardingData } from "../types/typesCollection";
+import { capitalize, compressImageFile, handleApiError } from "../libs/helper";
+import type { typeOnBoardingData, typeUser } from "../types/typesCollection";
 
 // helper to format initials
 const getInitials = (name: string) => {
@@ -43,7 +48,9 @@ const ProfilePage = () => {
   const queryClient = useQueryClient();
   const { authUser } = useAuthUser();
 
-  const [activeTab, setActiveTab] = useState<"profile" | "security">("profile");
+  const [activeTab, setActiveTab] = useState<
+    "profile" | "security" | "blocked"
+  >("profile");
   const [imageError, setImageError] = useState(false);
 
   // state for avatar preset modal visibility
@@ -62,6 +69,26 @@ const ProfilePage = () => {
     skillToLearn: authUser?.skillToLearn || "",
     location: authUser?.location || "",
     profileAvatar: authUser?.profileAvatar || "",
+  });
+
+  // fetch users blocked by current user
+  const { data: blockedUsers = [], isLoading: isLoadingBlocked } = useQuery<
+    typeUser[]
+  >({
+    queryKey: ["blockedUsers"],
+    queryFn: getBlockedUsersFn,
+  });
+
+  // unblock a user mutation
+  const { mutate: unblockMutation, isPending: isUnblocking } = useMutation({
+    mutationFn: unblockUserFn,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["blockedUsers"] });
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      queryClient.invalidateQueries({ queryKey: ["recommendedUsers"] });
+      toast.success(data?.message || "User unblocked successfully");
+    },
+    onError: handleApiError,
   });
 
   // handle photo upload and client compression
@@ -176,10 +203,10 @@ const ProfilePage = () => {
         </div>
 
         {/* tabs */}
-        <div className="flex border-b border-base-300 gap-2">
+        <div className="flex border-b border-base-300 gap-2 overflow-x-auto">
           <button
             type="button"
-            className={`btn btn-sm sm:btn-md rounded-b-none gap-2 ${
+            className={`btn btn-sm sm:btn-md rounded-b-none gap-2 shrink-0 ${
               activeTab === "profile" ? "btn-primary" : "btn-ghost"
             }`}
             onClick={() => setActiveTab("profile")}
@@ -189,7 +216,7 @@ const ProfilePage = () => {
           </button>
           <button
             type="button"
-            className={`btn btn-sm sm:btn-md rounded-b-none gap-2 ${
+            className={`btn btn-sm sm:btn-md rounded-b-none gap-2 shrink-0 ${
               activeTab === "security" ? "btn-primary" : "btn-ghost"
             }`}
             onClick={() => setActiveTab("security")}
@@ -197,9 +224,24 @@ const ProfilePage = () => {
             <KeyIcon className="size-4" />
             Security & Password
           </button>
+          <button
+            type="button"
+            className={`btn btn-sm sm:btn-md rounded-b-none gap-2 shrink-0 ${
+              activeTab === "blocked" ? "btn-primary" : "btn-ghost"
+            }`}
+            onClick={() => setActiveTab("blocked")}
+          >
+            <ShieldOffIcon className="size-4" />
+            Blocked Users
+            {blockedUsers.length > 0 && (
+              <span className="badge badge-sm badge-neutral">
+                {blockedUsers.length}
+              </span>
+            )}
+          </button>
         </div>
 
-        {activeTab === "profile" ? (
+        {activeTab === "profile" && (
           <div className="card bg-base-200 shadow-md">
             <div className="card-body p-5 sm:p-8">
               <form onSubmit={handleProfileSubmit} className="space-y-6">
@@ -447,7 +489,9 @@ const ProfilePage = () => {
               </form>
             </div>
           </div>
-        ) : (
+        )}
+
+        {activeTab === "security" && (
           <div className="card bg-base-200 shadow-md max-w-xl">
             <div className="card-body p-5 sm:p-8">
               <form onSubmit={handlePasswordSubmit} className="space-y-4">
@@ -605,6 +649,95 @@ const ProfilePage = () => {
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* blocked users list tab */}
+        {activeTab === "blocked" && (
+          <div className="card bg-base-200 shadow-md">
+            <div className="card-body p-5 sm:p-8 space-y-6">
+              <div>
+                <h2 className="text-xl font-bold flex items-center gap-2">
+                  <ShieldOffIcon className="size-5 text-warning" />
+                  Blocked Users History
+                </h2>
+                <p className="text-xs sm:text-sm opacity-70 mt-1">
+                  Scholars you have blocked cannot message you, call you, or see your profile in recommendations
+                </p>
+              </div>
+
+              {isLoadingBlocked ? (
+                <div className="flex justify-center p-8">
+                  <LoaderIcon className="size-8 animate-spin text-primary" />
+                </div>
+              ) : blockedUsers.length === 0 ? (
+                <div className="card bg-base-100 p-8 text-center space-y-3 border border-base-300">
+                  <UserCheckIcon className="size-10 text-success mx-auto opacity-70" />
+                  <p className="font-semibold text-base sm:text-lg">No Blocked Scholars</p>
+                  <p className="text-xs sm:text-sm opacity-70 max-w-sm mx-auto">
+                    You have not blocked any users. If you block someone, they will appear here so you can unblock them at any time
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {blockedUsers.map((user) => (
+                    <div
+                      key={user._id}
+                      className="card bg-base-100 border border-base-300 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <Link
+                          to={`/user/${user._id}`}
+                          className="avatar size-12 rounded-xl shrink-0 hover:opacity-80 transition-opacity"
+                        >
+                          <img
+                            src={user.profileAvatar}
+                            alt={user.fullName}
+                            className="object-cover rounded-xl"
+                          />
+                        </Link>
+                        <div className="min-w-0">
+                          <Link
+                            to={`/user/${user._id}`}
+                            className="font-semibold text-base truncate block hover:underline"
+                          >
+                            {user.fullName}
+                          </Link>
+                          <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                            {user.skillToShare && (
+                              <span className="badge badge-success badge-xs">
+                                📘 {capitalize(user.skillToShare)}
+                              </span>
+                            )}
+                            {user.skillToLearn && (
+                              <span className="badge badge-warning badge-xs">
+                                📖 {capitalize(user.skillToLearn)}
+                              </span>
+                            )}
+                            {user.location && (
+                              <span className="text-xs opacity-60 flex items-center ml-1">
+                                <MapPinIcon className="size-3 mr-0.5 inline" />
+                                {user.location}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => unblockMutation(user._id)}
+                        disabled={isUnblocking}
+                        className="btn btn-outline btn-warning btn-sm gap-1 self-end sm:self-auto shrink-0"
+                      >
+                        <UserCheckIcon className="size-4" />
+                        {isUnblocking ? "Unblocking..." : "Unblock Scholar"}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
