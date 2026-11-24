@@ -42,7 +42,7 @@ const NavBar = () => {
           <div className="lg:hidden">
             <button
               type="button"
-              className="btn btn-ghost btn-square"
+              className="btn btn-ghost btn-square min-h-11 min-w-11"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-nav-menu"
@@ -107,7 +107,10 @@ const NavBar = () => {
         <div className="flex items-center gap-2 sm:gap-3 ml-auto">
           {/* Notifications Button */}
           <Link to={"/notifications"} className="hidden sm:inline-flex">
-            <button className="btn btn-info btn-square" title={`Notifications`}>
+            <button
+              className="btn btn-info btn-square min-h-11 min-w-11"
+              title={`Notifications`}
+            >
               <BellIcon className="size-5 sm:size-6 text-base-content opacity-70" />
             </button>
           </Link>
@@ -125,7 +128,7 @@ const NavBar = () => {
           </div>
 
           <button
-            className="btn btn-error btn-square btn-sm sm:btn-md ml-1"
+            className="btn btn-error btn-square btn-sm sm:btn-md min-h-11 min-w-11 ml-1"
             onClick={() => logOutMutation()}
             title={`Logout`}
           >

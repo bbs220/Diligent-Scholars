@@ -12,6 +12,12 @@
   scrollbar-gutter: stable;
 }
 
+input:user-invalid,
+textarea:user-invalid,
+select:user-invalid {
+  border-color: var(--color-error, #f87272) !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,

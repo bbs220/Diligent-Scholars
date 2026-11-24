@@ -1,16 +1,19 @@
+import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router";
 import { RootComponent, RequireAuth, RequireGuest } from "./App";
+import PageLoader from "./components/PageLoader";
 import HomePage from "./pages/HomePage";
 import SignUpPage from "./pages/SignUpPage";
 import LogInPage from "./pages/LogInPage";
 import OnBoardingPage from "./pages/OnBoardingPage";
 import NotificationsPage from "./pages/NotificationsPage";
-import CallPage from "./pages/CallPage";
-import ChatPage from "./pages/ChatPage";
 import Layout from "./components/Layout";
 import NotFoundPage from "./pages/NotFoundPage";
 import TermsPage from "./pages/TermsPage";
 import PrivacyPage from "./pages/PrivacyPage";
+
+const CallPage = lazy(() => import("./pages/CallPage"));
+const ChatPage = lazy(() => import("./pages/ChatPage"));
 
 export const coreRouter = createBrowserRouter([
   {
@@ -64,7 +67,9 @@ export const coreRouter = createBrowserRouter([
         path: "/call/:id",
         element: (
           <RequireAuth>
-            <CallPage />
+            <Suspense fallback={<PageLoader />}>
+              <CallPage />
+            </Suspense>
           </RequireAuth>
         ),
       },
@@ -73,7 +78,9 @@ export const coreRouter = createBrowserRouter([
         element: (
           <RequireAuth>
             <Layout showSideBar={false}>
-              <ChatPage />
+              <Suspense fallback={<PageLoader />}>
+                <ChatPage />
+              </Suspense>
             </Layout>
           </RequireAuth>
         ),
