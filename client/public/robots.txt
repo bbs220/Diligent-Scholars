@@ -1,3 +1,27 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /chat/
+Disallow: /call/
+Disallow: /notifications
+Disallow: /onboarding
 
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+Disallow: /chat/
+Disallow: /call/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
+Disallow: /chat/
+Disallow: /call/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+Disallow: /chat/
+Disallow: /call/
+
+Sitemap: https://diligent-scholars.onrender.com/sitemap.xml

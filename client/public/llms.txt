@@ -1,6 +1,21 @@
-Diligent Scholars
+# Diligent Scholars
 
-A production-grade, full-stack real-time social application architecture built with Express 5, React 19, and Tailwind CSS 4.
+> A production-grade, full-stack real-time social application architecture built with Express 5, React 19, and Tailwind CSS 4.
 
-Useful Links
-• GitHub: https://github.com/example/diligentscholars
+## Core Pages & Endpoints
+
+- [Home](https://diligent-scholars.onrender.com/): User dashboard displaying friends and recommended scholars.
+- [Log In](https://diligent-scholars.onrender.com/login): User authentication and session retrieval.
+- [Sign Up](https://diligent-scholars.onrender.com/signup): Account registration with input validation.
+- [Onboarding](https://diligent-scholars.onrender.com/onboarding): User profile setup, subject selection, and avatar configuration.
+- [Notifications](https://diligent-scholars.onrender.com/notifications): Incoming friend requests and friendship status updates.
+
+## Architecture
+
+- **Backend**: Express 5.2.1, MongoDB with Mongoose, Pino logging, Zod validation, Helmet security.
+- **Frontend**: React 19, Tailwind CSS 4, DaisyUI, TanStack Query v5, Zustand state management.
+- **Real-Time Communication**: Stream Chat and Stream Video SDK for messaging and WebRTC calls.
+
+## Optional
+
+- [Full Specification](/llms-full.txt): Detailed architectural deep dive, dependency strategy, and deployment scripts.

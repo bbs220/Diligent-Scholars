@@ -1,3 +1,4 @@
+import compression from "compression";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
@@ -24,7 +25,50 @@ const app = express();
 // always forget this
 app.set("trust proxy", 1); // trust first proxy
 
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        connectSrc: [
+          "'self'",
+          "https://*.stream-io-api.com",
+          "wss://*.stream-io-api.com",
+          envValidated.CLIENT_URL || "'self'",
+        ],
+        imgSrc: [
+          "'self'",
+          "data:",
+          "blob:",
+          "https://www.gravatar.com",
+          "https://*.stream-io-api.com",
+          "https://getstream.io",
+        ],
+        mediaSrc: ["'self'", "blob:"],
+        workerSrc: ["'self'", "blob:"],
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://fonts.googleapis.com",
+        ],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        scriptSrc: ["'self'"],
+      },
+    },
+  }),
+);
+
+// permissions policy header
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.setHeader(
+    "Permissions-Policy",
+    "camera=(self), microphone=(self), display-capture=(self), geolocation=(), payment=()",
+  );
+  next();
+});
+
+// compression middleware
+app.use(compression());
 
 // NOTE: Since we serve the frontend via express.static in production, CORS isn't strictly
 // necessary there (Same-Origin). However, we configure it dynamically here so the API
@@ -45,11 +89,33 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/chat", chatRoutes);
 
+// strict api error handler
+app.use("/api", (req: Request, res: Response) => {
+  res.status(404).json({
+    success: false,
+    message: "API endpoint not found",
+    data: null,
+  });
+});
+
 if (envValidated.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../client/dist")));
+  const clientDist = path.join(__dirname, "../client/dist");
+
+  app.use(
+    express.static(clientDist, {
+      setHeaders: (res, filePath) => {
+        if (filePath.includes(`${path.sep}assets${path.sep}`)) {
+          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+        } else if (filePath.endsWith("index.html")) {
+          res.setHeader("Cache-Control", "no-cache");
+        }
+      },
+    }),
+  );
 
   app.get(/(.*)/, (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, "../client", "dist", "index.html"));
+    res.setHeader("Cache-Control", "no-cache");
+    res.sendFile(path.join(clientDist, "index.html"));
   });
 } else {
   app.get("/", (req: Request, res: Response) => {
