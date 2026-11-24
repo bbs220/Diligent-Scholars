@@ -117,6 +117,18 @@ const NavBar = () => {
                       Profile
                     </Link>
                   </li>
+                  <li className="border-t border-base-300 pt-2 mt-2">
+                    <div className="flex gap-3 text-xs opacity-70 px-4 py-2">
+                      <Link to="/terms" className="hover:underline" onClick={handleLinkClick}>
+                        Terms
+                      </Link>
+                      <span>•</span>
+                      <Link to="/privacy" className="hover:underline" onClick={handleLinkClick}>
+                        Privacy
+                      </Link>
+                      <span className="ml-auto">© 2026</span>
+                    </div>
+                  </li>
                 </ul>
               </>
             )}
@@ -153,18 +165,6 @@ const NavBar = () => {
           </Link>
 
           <ThemeSelector />
-
-          <Link to="/profile" title="My profile" className="flex items-center">
-            <div className="avatar">
-              <div className="w-8 sm:w-10 rounded-lg">
-                <img
-                  src={authUser?.profileAvatar}
-                  alt="User Avatar"
-                  rel="noreferrer"
-                />
-              </div>
-            </div>
-          </Link>
 
           <button
             className="btn btn-error btn-square btn-sm sm:btn-md min-h-11 min-w-11 ml-1"

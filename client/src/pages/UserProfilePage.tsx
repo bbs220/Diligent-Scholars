@@ -3,19 +3,26 @@ import {
   CalendarIcon,
   CheckCircleIcon,
   ClockIcon,
+  FlagIcon,
   MapPinIcon,
   MessageSquareIcon,
+  ShieldAlertIcon,
+  ShieldBanIcon,
   UserPlusIcon,
   UsersIcon,
 } from "lucide-react";
+import { useState } from "react";
 import { Link, useParams } from "react-router";
 import toast from "react-hot-toast";
 import PageLoader from "../components/PageLoader";
 import {
+  blockUserFn,
   cancelFriendReqFn,
   getUserProfileFn,
   removeFriendFn,
+  reportUserFn,
   sendFriendReqFn,
+  unblockUserFn,
 } from "../libs/apiCalls";
 import { capitalize, handleApiError } from "../libs/helper";
 import type { typeScholarProfile } from "../types/typesCollection";
@@ -23,6 +30,11 @@ import type { typeScholarProfile } from "../types/typesCollection";
 const UserProfilePage = () => {
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
+
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
+  const [reportReason, setReportReason] = useState("Harassment or bullying");
+  const [reportDetails, setReportDetails] = useState("");
 
   const { data: scholar, isLoading } = useQuery<typeScholarProfile>({
     queryKey: ["scholarProfile", id],
@@ -61,6 +73,37 @@ const UserProfilePage = () => {
     onError: handleApiError,
   });
 
+  const { mutate: blockMutation, isPending: isBlocking } = useMutation({
+    mutationFn: blockUserFn,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["scholarProfile", id] });
+      queryClient.invalidateQueries({ queryKey: ["friends"] });
+      queryClient.invalidateQueries({ queryKey: ["recommendedUsers"] });
+      toast.success(data?.message || "User blocked successfully");
+      setIsBlockModalOpen(false);
+    },
+    onError: handleApiError,
+  });
+
+  const { mutate: unblockMutation, isPending: isUnblocking } = useMutation({
+    mutationFn: unblockUserFn,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["scholarProfile", id] });
+      toast.success(data?.message || "User unblocked successfully");
+    },
+    onError: handleApiError,
+  });
+
+  const { mutate: reportMutation, isPending: isReporting } = useMutation({
+    mutationFn: reportUserFn,
+    onSuccess: (data) => {
+      toast.success(data?.message || "Report submitted successfully");
+      setIsReportModalOpen(false);
+      setReportDetails("");
+    },
+    onError: handleApiError,
+  });
+
   if (isLoading) return <PageLoader />;
 
   if (!scholar) {
@@ -78,6 +121,7 @@ const UserProfilePage = () => {
   }
 
   const { isSelf, isFriend, requestStatus } = scholar.relationship || {};
+  const isBlocked = Boolean(scholar.relationship?.isBlocked);
   const formattedDate = scholar.createdAt
     ? new Date(scholar.createdAt).toLocaleDateString("en-US", {
         month: "short",
@@ -107,6 +151,21 @@ const UserProfilePage = () => {
                 <Link to="/profile" className="btn btn-outline btn-sm sm:btn-md w-full sm:w-auto">
                   Edit My Profile
                 </Link>
+              ) : isBlocked ? (
+                <div className="flex items-center gap-2">
+                  <span className="badge badge-error gap-1">
+                    <ShieldBanIcon className="size-3.5" />
+                    Blocked
+                  </span>
+                  <button
+                    type="button"
+                    className="btn btn-outline btn-sm sm:btn-md"
+                    onClick={() => unblockMutation(scholar._id)}
+                    disabled={isUnblocking}
+                  >
+                    Unblock
+                  </button>
+                </div>
               ) : isFriend ? (
                 <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                   <Link
@@ -163,6 +222,45 @@ const UserProfilePage = () => {
                   {isSendingReq ? "Sending..." : "Add Friend"}
                 </button>
               )}
+
+              {!isSelf && !isBlocked && (
+                <div className="dropdown dropdown-end">
+                  <button
+                    tabIndex={0}
+                    role="button"
+                    className="btn btn-ghost btn-square btn-sm sm:btn-md"
+                    title="Safety Options"
+                    aria-label="Safety options"
+                  >
+                    <ShieldAlertIcon className="size-5 opacity-70" />
+                  </button>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content menu bg-base-200 rounded-box z-20 w-44 p-2 shadow-lg border border-base-300"
+                  >
+                    <li>
+                      <button
+                        type="button"
+                        className="text-warning flex items-center gap-2 text-xs"
+                        onClick={() => setIsReportModalOpen(true)}
+                      >
+                        <FlagIcon className="size-4" />
+                        Report Scholar
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        className="text-error flex items-center gap-2 text-xs"
+                        onClick={() => setIsBlockModalOpen(true)}
+                      >
+                        <ShieldBanIcon className="size-4" />
+                        Block Scholar
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
 
@@ -216,6 +314,108 @@ const UserProfilePage = () => {
           </div>
         </div>
       </div>
+
+      {/* report modal */}
+      {isReportModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+          <div className="card bg-base-100 shadow-2xl max-w-md w-full p-6 space-y-4">
+            <h3 className="font-bold text-lg text-warning flex items-center gap-2">
+              <FlagIcon className="size-5" />
+              Report Scholar
+            </h3>
+            <p className="text-sm opacity-80">
+              Help us keep Diligent Scholars safe. Reports are confidential and reviewed by our moderation team.
+            </p>
+            <div className="form-control space-y-1">
+              <label className="label py-1" htmlFor="report-reason">
+                <span className="label-text font-medium text-xs">Reason</span>
+              </label>
+              <select
+                id="report-reason"
+                value={reportReason}
+                onChange={(e) => setReportReason(e.target.value)}
+                className="select select-bordered w-full select-sm sm:select-md"
+              >
+                <option value="Harassment or bullying">Harassment or bullying</option>
+                <option value="Spam or advertising">Spam or advertising</option>
+                <option value="Inappropriate content">Inappropriate content</option>
+                <option value="Impersonation">Impersonation</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div className="form-control space-y-1">
+              <label className="label py-1" htmlFor="report-details">
+                <span className="label-text font-medium text-xs">
+                  Additional Details (Optional)
+                </span>
+              </label>
+              <textarea
+                id="report-details"
+                value={reportDetails}
+                onChange={(e) => setReportDetails(e.target.value)}
+                placeholder="Describe what occurred..."
+                className="textarea textarea-bordered w-full h-20 text-sm"
+              />
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm"
+                onClick={() => setIsReportModalOpen(false)}
+                disabled={isReporting}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn btn-warning btn-sm"
+                onClick={() =>
+                  reportMutation({
+                    userId: scholar._id,
+                    reportData: { reason: reportReason, details: reportDetails },
+                  })
+                }
+                disabled={isReporting}
+              >
+                {isReporting ? "Submitting..." : "Submit Report"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* block modal */}
+      {isBlockModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+          <div className="card bg-base-100 shadow-2xl max-w-sm w-full p-6 space-y-4">
+            <h3 className="font-bold text-lg text-error flex items-center gap-2">
+              <ShieldBanIcon className="size-5" />
+              Block Scholar
+            </h3>
+            <p className="text-sm opacity-80">
+              Are you sure you want to block <span className="font-semibold">{scholar.fullName}</span>? You will no longer receive messages or see each other across the platform.
+            </p>
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm"
+                onClick={() => setIsBlockModalOpen(false)}
+                disabled={isBlocking}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn btn-error btn-sm"
+                onClick={() => blockMutation(scholar._id)}
+                disabled={isBlocking}
+              >
+                {isBlocking ? "Blocking..." : "Confirm Block"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
