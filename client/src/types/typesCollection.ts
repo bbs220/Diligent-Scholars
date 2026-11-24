@@ -46,7 +46,13 @@ export type typeScholarProfile = typeUser & {
     isSelf: boolean;
     isFriend: boolean;
     requestStatus: "none" | "sent" | "received";
+    isBlocked?: boolean;
   };
+};
+
+export type typeReportData = {
+  reason: string;
+  details?: string;
 };
 
 export type typeChangePasswordData = {

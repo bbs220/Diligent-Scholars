@@ -1,18 +1,24 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
+  AlertTriangleIcon,
   Eye,
   EyeOff,
   KeyIcon,
   LoaderIcon,
   MapPinIcon,
   SaveIcon,
+  Trash2Icon,
   UserIcon,
 } from "lucide-react";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { COUNTRIES, SKILLS } from "../constants/constantsCollection";
 import useAuthUser from "../hooks/useAuthUser";
-import { changePasswordFn, updateProfileFn } from "../libs/apiCalls";
+import {
+  changePasswordFn,
+  deleteAccountFn,
+  updateProfileFn,
+} from "../libs/apiCalls";
 import { handleApiError } from "../libs/helper";
 import type { typeOnBoardingData } from "../types/typesCollection";
 
@@ -53,6 +59,9 @@ const ProfilePage = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+
   const { mutate: updateProfileMutation, isPending: isUpdatingProfile } =
     useMutation({
       mutationFn: updateProfileFn,
@@ -73,6 +82,17 @@ const ProfilePage = () => {
           newPassword: "",
           confirmPassword: "",
         });
+      },
+      onError: handleApiError,
+    });
+
+  const { mutate: deleteAccountMutation, isPending: isDeletingAccount } =
+    useMutation({
+      mutationFn: deleteAccountFn,
+      onSuccess: () => {
+        toast.success("Account deleted successfully");
+        queryClient.clear();
+        window.location.href = "/login";
       },
       onError: handleApiError,
     });
@@ -488,9 +508,84 @@ const ProfilePage = () => {
                 </div>
               </form>
             </div>
+
+            {/* danger zone */}
+            <div className="card bg-base-200 border border-error/30 shadow-md max-w-xl mt-6">
+              <div className="card-body p-5 sm:p-8 space-y-3">
+                <h3 className="font-bold text-lg text-error flex items-center gap-2">
+                  <AlertTriangleIcon className="size-5" />
+                  Danger Zone
+                </h3>
+                <p className="text-sm opacity-70">
+                  Permanently delete your account, learning history, friend connections, and profile data. This action cannot be undone.
+                </p>
+                <div className="pt-2 flex justify-start">
+                  <button
+                    type="button"
+                    onClick={() => setIsDeleteModalOpen(true)}
+                    className="btn btn-outline btn-error btn-sm sm:btn-md gap-2"
+                  >
+                    <Trash2Icon className="size-4" />
+                    Delete Account
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
+
+      {/* delete account modal */}
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+          <div className="card bg-base-100 shadow-2xl max-w-md w-full p-6 space-y-4">
+            <h3 className="font-bold text-lg text-error flex items-center gap-2">
+              <AlertTriangleIcon className="size-5" />
+              Confirm Account Deletion
+            </h3>
+            <p className="text-sm opacity-80">
+              Please enter your password to confirm account deletion. All your data and connections will be permanently wiped.
+            </p>
+            <div className="form-control space-y-1">
+              <label className="label py-1" htmlFor="delete-confirm-password">
+                <span className="label-text font-medium text-xs">
+                  Your Password
+                </span>
+              </label>
+              <input
+                id="delete-confirm-password"
+                type="password"
+                value={deletePassword}
+                onChange={(e) => setDeletePassword(e.target.value)}
+                className="input input-bordered w-full"
+                placeholder="Enter password to verify"
+                autoComplete="current-password"
+              />
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm"
+                onClick={() => {
+                  setIsDeleteModalOpen(false);
+                  setDeletePassword("");
+                }}
+                disabled={isDeletingAccount}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn btn-error btn-sm"
+                onClick={() => deleteAccountMutation(deletePassword)}
+                disabled={isDeletingAccount || !deletePassword}
+              >
+                {isDeletingAccount ? "Deleting..." : "Permanently Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

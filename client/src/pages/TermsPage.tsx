@@ -1,9 +1,18 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { BookOpenText, ArrowLeft } from "lucide-react";
 import { useThemeStore } from "../stores/useThemeStore";
 
 const TermsPage = () => {
   const { theme } = useThemeStore();
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/");
+    }
+  };
 
   return (
     <div
@@ -18,10 +27,14 @@ const TermsPage = () => {
               Diligent Scholars
             </span>
           </Link>
-          <Link to="/signup" className="btn btn-ghost btn-sm sm:btn-md gap-2">
+          <button
+            type="button"
+            onClick={handleBack}
+            className="btn btn-ghost btn-sm sm:btn-md gap-2"
+          >
             <ArrowLeft className="size-4" />
-            Back to Sign Up
-          </Link>
+            Back
+          </button>
         </div>
 
         <div className="space-y-6">

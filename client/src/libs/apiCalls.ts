@@ -2,6 +2,7 @@ import type {
   typeChangePasswordData,
   typeLogInData,
   typeOnBoardingData,
+  typeReportData,
   typeSignUpData,
 } from "../types/typesCollection";
 import { axiosInstance } from "./axiosInstance";
@@ -102,4 +103,32 @@ export const getStreamToken = async () => {
 export const getUserProfileFn = async (userId: string) => {
   const res = await axiosInstance.get(`/users/profile/${userId}`);
   return res.data.data.user;
+};
+
+export const deleteAccountFn = async (password: string) => {
+  const res = await axiosInstance.delete("/auth/delete-account", {
+    data: { password },
+  });
+  return res.data;
+};
+
+export const blockUserFn = async (userId: string) => {
+  const res = await axiosInstance.post(`/users/block/${userId}`);
+  return res.data;
+};
+
+export const unblockUserFn = async (userId: string) => {
+  const res = await axiosInstance.post(`/users/unblock/${userId}`);
+  return res.data;
+};
+
+export const reportUserFn = async ({
+  userId,
+  reportData,
+}: {
+  userId: string;
+  reportData: typeReportData;
+}) => {
+  const res = await axiosInstance.post(`/users/report/${userId}`, reportData);
+  return res.data;
 };

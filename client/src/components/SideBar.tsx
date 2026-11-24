@@ -113,6 +113,20 @@ const SideBar = () => {
           </div>
         </div>
       </Link>
+
+      {/* legal links */}
+      <div className="px-4 py-2 text-xs opacity-60 flex items-center justify-between border-t border-base-300 shrink-0">
+        <div className="flex gap-2">
+          <Link to="/terms" className="hover:underline">
+            Terms
+          </Link>
+          <span>•</span>
+          <Link to="/privacy" className="hover:underline">
+            Privacy
+          </Link>
+        </div>
+        <span>© 2026</span>
+      </div>
     </aside>
   );
 };

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import useAuthUser from "../hooks/useAuthUser";
 import { useQuery } from "@tanstack/react-query";
 import { getStreamToken } from "../libs/apiCalls";
 import { StreamChat, Channel as StreamChannel } from "stream-chat";
+import { ShieldAlertIcon } from "lucide-react";
 import {
   Channel,
   ChannelHeader,
@@ -96,6 +97,16 @@ const ChatPage = () => {
         <Channel channel={chatChannel}>
           <div className="w-full h-full relative">
             <CallButton handleVideoCall={handleVideoCall} />
+            <div className="absolute top-4 right-4 z-10">
+              <Link
+                to={`/user/${targetUserId}`}
+                className="btn btn-ghost btn-sm bg-base-200/80 backdrop-blur-xs text-xs gap-1 border border-base-300"
+                title="Scholar Profile & Safety Options"
+              >
+                <ShieldAlertIcon className="size-4" />
+                <span className="hidden sm:inline">Profile & Safety</span>
+              </Link>
+            </div>
             <Window>
               <ChannelHeader />
               <MessageList />
