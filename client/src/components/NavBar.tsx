@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
 import useAuthUser from "../hooks/useAuthUser";
 import { BellIcon, BookOpenText, LogOutIcon, Menu, X } from "lucide-react";
@@ -17,6 +17,22 @@ const NavBar = () => {
     setIsMobileMenuOpen(false);
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isMobileMenuOpen]);
+
   return (
     <nav className="bg-base-200 border-b border-base-300 sticky top-0 z-30 h-16 shrink-0 flex items-center">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between">
@@ -28,6 +44,9 @@ const NavBar = () => {
               type="button"
               className="btn btn-ghost btn-square"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-nav-menu"
+              aria-label="Toggle navigation menu"
             >
               {isMobileMenuOpen ? (
                 <X className="size-6 text-base-content" />
@@ -38,26 +57,36 @@ const NavBar = () => {
 
             {/* Controlled Dropdown Menu */}
             {isMobileMenuOpen && (
-              <ul className="menu bg-base-200 z-100 fixed top-16 left-0 w-full h-[75dvh] p-4 shadow-xl border-b border-base-300 rounded-none overflow-y-auto block">
-                <li>
-                  <Link
-                    to="/"
-                    className="text-lg py-3 font-medium"
-                    onClick={handleLinkClick}
-                  >
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/notifications"
-                    className="text-lg py-3 font-medium"
-                    onClick={handleLinkClick}
-                  >
-                    Notifications
-                  </Link>
-                </li>
-              </ul>
+              <>
+                <div
+                  className="fixed inset-0 z-40 bg-black/40 backdrop-blur-xs top-16"
+                  onClick={handleLinkClick}
+                  aria-hidden="true"
+                />
+                <ul
+                  id="mobile-nav-menu"
+                  className="menu bg-base-200 z-50 fixed top-16 left-0 w-full p-4 shadow-xl border-b border-base-300 rounded-none overflow-y-auto block"
+                >
+                  <li>
+                    <Link
+                      to="/"
+                      className="text-lg py-3 font-medium"
+                      onClick={handleLinkClick}
+                    >
+                      Home
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/notifications"
+                      className="text-lg py-3 font-medium"
+                      onClick={handleLinkClick}
+                    >
+                      Notifications
+                    </Link>
+                  </li>
+                </ul>
+              </>
             )}
           </div>
 

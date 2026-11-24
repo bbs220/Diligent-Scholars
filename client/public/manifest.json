@@ -1,0 +1,21 @@
+{
+  "name": "Diligent Scholars",
+  "short_name": "DiligentScholars",
+  "description": "A production-grade, full-stack real-time social application architecture built with Express 5, React 19, and Tailwind CSS 4.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/read.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/thumbnail_1200x630.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

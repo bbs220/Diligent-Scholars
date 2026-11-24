@@ -156,13 +156,23 @@ const SignUpPage = () => {
                       />
                       <label htmlFor="terms" className="text-xs sm:text-sm leading-tight cursor-pointer">
                         I agree to the{" "}
-                        <span className="text-primary hover:underline cursor-pointer">
+                        <Link
+                          to="/terms"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline"
+                        >
                           terms of service
-                        </span>{" "}
+                        </Link>{" "}
                         and{" "}
-                        <span className="text-primary hover:underline cursor-pointer">
+                        <Link
+                          to="/privacy"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline"
+                        >
                           privacy policy
-                        </span>
+                        </Link>
                       </label>
                     </div>
                   </div>
