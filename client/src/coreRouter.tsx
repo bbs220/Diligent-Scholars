@@ -12,6 +12,7 @@ import TermsPage from "./pages/TermsPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import ProfilePage from "./pages/ProfilePage";
 import UserProfilePage from "./pages/UserProfilePage";
+import FriendsPage from "./pages/FriendsPage";
 
 export const coreRouter = createBrowserRouter([
   {
@@ -23,6 +24,16 @@ export const coreRouter = createBrowserRouter([
           <RequireAuth>
             <Layout showSideBar>
               <HomePage />
+            </Layout>
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "/friends",
+        element: (
+          <RequireAuth>
+            <Layout showSideBar>
+              <FriendsPage />
             </Layout>
           </RequireAuth>
         ),

@@ -11,7 +11,12 @@ import {
 import { Link, useParams } from "react-router";
 import toast from "react-hot-toast";
 import PageLoader from "../components/PageLoader";
-import { getUserProfileFn, sendFriendReqFn } from "../libs/apiCalls";
+import {
+  cancelFriendReqFn,
+  getUserProfileFn,
+  removeFriendFn,
+  sendFriendReqFn,
+} from "../libs/apiCalls";
 import { capitalize, handleApiError } from "../libs/helper";
 import type { typeScholarProfile } from "../types/typesCollection";
 
@@ -31,6 +36,27 @@ const UserProfilePage = () => {
       queryClient.invalidateQueries({ queryKey: ["scholarProfile", id] });
       queryClient.invalidateQueries({ queryKey: ["outgoingFriendReqs"] });
       toast.success(data?.message || "Friend request sent!");
+    },
+    onError: handleApiError,
+  });
+
+  const { mutate: cancelReqMutation, isPending: isCancelling } = useMutation({
+    mutationFn: cancelFriendReqFn,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["scholarProfile", id] });
+      queryClient.invalidateQueries({ queryKey: ["outgoingFriendReqs"] });
+      toast.success(data?.message || "Friend request cancelled");
+    },
+    onError: handleApiError,
+  });
+
+  const { mutate: removeFriendMutation, isPending: isRemoving } = useMutation({
+    mutationFn: removeFriendFn,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["scholarProfile", id] });
+      queryClient.invalidateQueries({ queryKey: ["friends"] });
+      queryClient.invalidateQueries({ queryKey: ["recommendedUsers"] });
+      toast.success(data?.message || "Friend removed successfully");
     },
     onError: handleApiError,
   });
@@ -82,22 +108,42 @@ const UserProfilePage = () => {
                   Edit My Profile
                 </Link>
               ) : isFriend ? (
-                <Link
-                  to={`/chat/${scholar._id}`}
-                  className="btn btn-primary btn-sm sm:btn-md w-full sm:w-auto gap-2"
-                >
-                  <MessageSquareIcon className="size-4" />
-                  Send Message
-                </Link>
+                <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                  <Link
+                    to={`/chat/${scholar._id}`}
+                    className="btn btn-primary btn-sm sm:btn-md gap-2"
+                  >
+                    <MessageSquareIcon className="size-4" />
+                    Send Message
+                  </Link>
+                  <button
+                    type="button"
+                    className="btn btn-outline btn-error btn-sm sm:btn-md"
+                    onClick={() => removeFriendMutation(scholar._id)}
+                    disabled={isRemoving}
+                  >
+                    {isRemoving ? "Removing..." : "Remove Friend"}
+                  </button>
+                </div>
               ) : requestStatus === "sent" ? (
-                <button
-                  type="button"
-                  className="btn btn-disabled btn-sm sm:btn-md w-full sm:w-auto gap-2"
-                  disabled
-                >
-                  <CheckCircleIcon className="size-4" />
-                  Request Sent
-                </button>
+                <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                  <button
+                    type="button"
+                    className="btn btn-disabled btn-sm sm:btn-md gap-2"
+                    disabled
+                  >
+                    <CheckCircleIcon className="size-4" />
+                    Request Sent
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-outline btn-error btn-sm sm:btn-md"
+                    onClick={() => cancelReqMutation(scholar._id)}
+                    disabled={isCancelling}
+                  >
+                    Cancel Request
+                  </button>
+                </div>
               ) : requestStatus === "received" ? (
                 <Link
                   to="/notifications"

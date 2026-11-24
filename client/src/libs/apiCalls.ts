@@ -52,6 +52,16 @@ export const acceptFriendReqFn = async (userId: string) => {
   return res.data;
 };
 
+export const cancelFriendReqFn = async (userIdOrReqId: string) => {
+  const res = await axiosInstance.delete(`/users/friend-request/${userIdOrReqId}`);
+  return res.data;
+};
+
+export const removeFriendFn = async (friendId: string) => {
+  const res = await axiosInstance.delete(`/users/friends/${friendId}`);
+  return res.data;
+};
+
 // --- QUERIES ---
 // Unpacking the standardized object to return only the raw data payload for React Query
 export const getAuthUserFn = async () => {

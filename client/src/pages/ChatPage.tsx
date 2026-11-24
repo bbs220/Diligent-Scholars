@@ -81,7 +81,8 @@ const ChatPage = () => {
         text: `Started a video call at ${callURL}`,
       });
 
-      toast.success("Video call started! Share the link with your friend");
+      toast.success("Video call started! Navigating to call...");
+      window.open(callURL, "_blank");
     }
   };
 

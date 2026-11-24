@@ -1,10 +1,10 @@
 import { VideoIcon } from "lucide-react";
 
-interface CallButtonProps {
+type typeCallButtonProps = {
   handleVideoCall: () => void;
-}
+};
 
-const CallButton = ({ handleVideoCall }: CallButtonProps) => {
+const CallButton = ({ handleVideoCall }: typeCallButtonProps) => {
   return (
     <div className="absolute top-4 left-4 z-10 flex items-center">
       <button

@@ -4,6 +4,8 @@ import useAuthUser from "../hooks/useAuthUser";
 import { BellIcon, BookOpenText, LogOutIcon, Menu, X } from "lucide-react";
 import ThemeSelector from "./ThemeSelector";
 import useLogOut from "../hooks/useLogOut";
+import { useQuery } from "@tanstack/react-query";
+import { populateFriendReqsFn } from "../libs/apiCalls";
 
 const NavBar = () => {
   const { authUser } = useAuthUser();
@@ -12,6 +14,13 @@ const NavBar = () => {
   const { logOutMutation } = useLogOut();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const { data: friendReqsData } = useQuery({
+    queryKey: ["friendReqs"],
+    queryFn: populateFriendReqsFn,
+    enabled: Boolean(authUser),
+  });
+  const pendingCount = friendReqsData?.incomingReqs?.length || 0;
 
   const handleLinkClick = () => {
     setIsMobileMenuOpen(false);
@@ -78,11 +87,25 @@ const NavBar = () => {
                   </li>
                   <li>
                     <Link
-                      to="/notifications"
+                      to="/friends"
                       className="text-lg py-3 font-medium"
                       onClick={handleLinkClick}
                     >
-                      Notifications
+                      Friends
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/notifications"
+                      className="text-lg py-3 font-medium flex items-center justify-between"
+                      onClick={handleLinkClick}
+                    >
+                      <span>Notifications</span>
+                      {pendingCount > 0 && (
+                        <span className="badge badge-primary badge-sm">
+                          {pendingCount}
+                        </span>
+                      )}
                     </Link>
                   </li>
                   <li>
@@ -115,12 +138,17 @@ const NavBar = () => {
         {/* RIGHT SIDE: Action Buttons */}
         <div className="flex items-center gap-2 sm:gap-3 ml-auto">
           {/* Notifications Button */}
-          <Link to={"/notifications"} className="hidden sm:inline-flex">
+          <Link to={"/notifications"} className="hidden sm:inline-flex relative">
             <button
-              className="btn btn-info btn-square min-h-11 min-w-11"
+              className="btn btn-info btn-square min-h-11 min-w-11 relative"
               title={`Notifications`}
             >
               <BellIcon className="size-5 sm:size-6 text-base-content opacity-70" />
+              {pendingCount > 0 && (
+                <span className="badge badge-primary badge-xs absolute -top-1 -right-1 font-bold">
+                  {pendingCount}
+                </span>
+              )}
             </button>
           </Link>
 
