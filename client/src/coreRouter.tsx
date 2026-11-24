@@ -1,4 +1,3 @@
-import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router";
 import { RootComponent, RequireAuth, RequireGuest } from "./App";
 import PageLoader from "./components/PageLoader";
@@ -13,9 +12,6 @@ import TermsPage from "./pages/TermsPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import ProfilePage from "./pages/ProfilePage";
 import UserProfilePage from "./pages/UserProfilePage";
-
-const CallPage = lazy(() => import("./pages/CallPage"));
-const ChatPage = lazy(() => import("./pages/ChatPage"));
 
 export const coreRouter = createBrowserRouter([
   {
@@ -67,25 +63,33 @@ export const coreRouter = createBrowserRouter([
       },
       {
         path: "/call/:id",
-        element: (
-          <RequireAuth>
-            <Suspense fallback={<PageLoader />}>
-              <CallPage />
-            </Suspense>
-          </RequireAuth>
-        ),
+        HydrateFallback: PageLoader,
+        lazy: async () => {
+          const { default: CallPage } = await import("./pages/CallPage");
+          return {
+            element: (
+              <RequireAuth>
+                <CallPage />
+              </RequireAuth>
+            ),
+          };
+        },
       },
       {
         path: "/chat/:id",
-        element: (
-          <RequireAuth>
-            <Layout showSideBar={false}>
-              <Suspense fallback={<PageLoader />}>
-                <ChatPage />
-              </Suspense>
-            </Layout>
-          </RequireAuth>
-        ),
+        HydrateFallback: PageLoader,
+        lazy: async () => {
+          const { default: ChatPage } = await import("./pages/ChatPage");
+          return {
+            element: (
+              <RequireAuth>
+                <Layout showSideBar={false}>
+                  <ChatPage />
+                </Layout>
+              </RequireAuth>
+            ),
+          };
+        },
       },
       {
         path: "/profile",
