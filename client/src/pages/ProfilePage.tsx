@@ -261,12 +261,13 @@ const ProfilePage = () => {
                       </div>
                     )}
                   </div>
-                  <div className="flex-1 w-full space-y-3">
-                    <label className="label py-0" htmlFor="profile-avatar">
-                      <span className="label-text font-medium">
-                        Profile Avatar
-                      </span>
-                    </label>
+                  <div className="flex-1 w-full space-y-2">
+                    <div>
+                      <p className="font-medium text-sm sm:text-base">Profile Photo</p>
+                      <p className="text-xs opacity-60 mt-0.5">
+                        Upload a photo from your device or choose an illustrated scholar preset
+                      </p>
+                    </div>
 
                     <input
                       ref={fileInputRef}
@@ -276,12 +277,12 @@ const ProfilePage = () => {
                       onChange={handlePhotoUpload}
                     />
 
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap items-center gap-2 pt-1">
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={isUploadingPhoto || isUpdatingProfile}
-                        className="btn btn-outline btn-sm gap-1.5"
+                        className="btn btn-primary btn-sm gap-1.5"
                       >
                         {isUploadingPhoto ? (
                           <LoaderIcon className="size-4 animate-spin" />
@@ -294,30 +295,12 @@ const ProfilePage = () => {
                         type="button"
                         onClick={() => setIsPresetModalOpen(true)}
                         disabled={isUploadingPhoto || isUpdatingProfile}
-                        className="btn btn-ghost btn-sm gap-1.5 border border-base-300"
+                        className="btn btn-outline btn-sm gap-1.5"
                       >
                         <SparklesIcon className="size-4 text-primary" />
                         Choose Preset
                       </button>
                     </div>
-
-                    <input
-                      id="profile-avatar"
-                      type="url"
-                      value={profileData.profileAvatar}
-                      onChange={(e) => {
-                        setImageError(false);
-                        setProfileData({
-                          ...profileData,
-                          profileAvatar: e.target.value,
-                        });
-                      }}
-                      className="input input-bordered w-full text-xs sm:text-sm"
-                      placeholder="Or enter direct image URL (https://...)"
-                    />
-                    <p className="text-xs opacity-60">
-                      Upload an image file, choose a scholar preset, or enter an image URL
-                    </p>
                   </div>
                 </div>
 
