@@ -87,9 +87,6 @@ const ForgotPasswordPage = () => {
                 </span>
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-base-content/50">
-                  <MailIcon className="size-4" />
-                </div>
                 <input
                   id="forgot-email"
                   type="email"
@@ -100,6 +97,9 @@ const ForgotPasswordPage = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   className="input input-bordered w-full pl-9"
                 />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-base-content/50 z-10">
+                  <MailIcon className="size-4" />
+                </div>
               </div>
             </div>
 
