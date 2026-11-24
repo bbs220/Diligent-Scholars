@@ -3,7 +3,7 @@ import { LoaderIcon } from "react-hot-toast";
 import useAuthUser from "../hooks/useAuthUser";
 import type { typeOnBoardingData } from "../types/typesCollection";
 import { CheckLine, MapPinIcon, LogOutIcon } from "lucide-react";
-import { SKILLS } from "../constants/constantsCollection";
+import { COUNTRIES, SKILLS } from "../constants/constantsCollection";
 import { useThemeStore } from "../stores/useThemeStore";
 import useOnBoarding from "../hooks/useOnBoarding";
 import useLogOut from "../hooks/useLogOut";
@@ -189,12 +189,12 @@ const OnBoardingPage = () => {
                 </span>
               </label>
               <div className="relative">
-                <MapPinIcon className="absolute top-1/2 transform -translate-y-1/2 left-3 size-5 text-base-content opacity-70 z-10 pointer-events-none" />
-                <input
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
+                  <MapPinIcon className="size-5 text-base-content opacity-70" />
+                </div>
+                <select
                   id="onboarding-location"
-                  type="text"
                   name="location"
-                  autoComplete="address-level2"
                   value={onBoardingData.location}
                   onChange={(e) =>
                     setOnBoardingData({
@@ -202,9 +202,23 @@ const OnBoardingPage = () => {
                       location: e.target.value,
                     })
                   }
-                  className="input input-bordered w-full pl-10"
-                  placeholder="Where do you live?"
-                />
+                  className="select select-bordered w-full pl-10"
+                >
+                  <option value="" disabled>
+                    -- Select Country --
+                  </option>
+                  {onBoardingData.location &&
+                    !COUNTRIES.includes(onBoardingData.location) && (
+                      <option value={onBoardingData.location}>
+                        {onBoardingData.location}
+                      </option>
+                    )}
+                  {COUNTRIES.map((country) => (
+                    <option key={country} value={country}>
+                      {country}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 

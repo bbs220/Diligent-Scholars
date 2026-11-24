@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { SKILLS } from "../constants/constantsCollection";
+import { COUNTRIES, SKILLS } from "../constants/constantsCollection";
 import useAuthUser from "../hooks/useAuthUser";
 import { changePasswordFn, updateProfileFn } from "../libs/apiCalls";
 import { handleApiError } from "../libs/helper";
@@ -301,20 +301,32 @@ const ProfilePage = () => {
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
                       <MapPinIcon className="size-5 text-base-content opacity-70" />
                     </div>
-                    <input
+                    <select
                       id="profile-location"
-                      type="text"
                       value={profileData.location}
-                      autoComplete="address-level2"
                       onChange={(e) =>
                         setProfileData({
                           ...profileData,
                           location: e.target.value,
                         })
                       }
-                      className="input input-bordered w-full pl-10"
-                      placeholder="e.g. San Francisco, CA or London, UK"
-                    />
+                      className="select select-bordered w-full pl-10"
+                    >
+                      <option value="" disabled>
+                        -- Select Country --
+                      </option>
+                      {profileData.location &&
+                        !COUNTRIES.includes(profileData.location) && (
+                          <option value={profileData.location}>
+                            {profileData.location}
+                          </option>
+                        )}
+                      {COUNTRIES.map((country) => (
+                        <option key={country} value={country}>
+                          {country}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
 
