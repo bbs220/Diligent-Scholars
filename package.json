@@ -8,6 +8,8 @@
     "server": "nodemon --watch server --ext js,ts --exec tsx server/main.ts",
     "dev": "concurrently -k --names \"server,client\" -c \"green,blue\" \"npm run server\" \"npm run client\"",
     "build": "npm install --include=dev && tsc && npm install --prefix client --include=dev && npm run build --prefix client",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "start": "node dist/main.js"
   },
   "keywords": [],
@@ -38,9 +40,12 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.1.0",
+    "@types/supertest": "^7.2.1",
     "concurrently": "^10.0.3",
     "nodemon": "^3.1.14",
+    "supertest": "^7.3.2",
     "tsx": "^4.23.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^5.1.1"
   }
 }
