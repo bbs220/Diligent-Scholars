@@ -190,7 +190,7 @@ const UpcomingSessionsWidget = () => {
                     </p>
                   )}
 
-                  <div className="flex items-center justify-between text-xs pt-1 border-t border-base-200">
+                  <div className="flex flex-wrap items-center justify-between text-xs pt-1 border-t border-base-200 gap-2">
                     <div className="flex items-center gap-2 opacity-80">
                       <span className="font-medium text-primary">
                         {formatSessionTime(session.scheduledDate)}

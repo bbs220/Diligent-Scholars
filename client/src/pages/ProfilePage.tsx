@@ -788,7 +788,7 @@ const ProfilePage = () => {
             <p className="text-xs opacity-70 mb-4">
               Pick one of our illustrated scholar avatar presets
             </p>
-            <div className="grid grid-cols-4 gap-3 sm:gap-4 max-h-72 overflow-y-auto p-1">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 max-h-72 overflow-y-auto p-1">
               {AVATAR_PRESETS.map((preset) => (
                 <button
                   key={preset.id}

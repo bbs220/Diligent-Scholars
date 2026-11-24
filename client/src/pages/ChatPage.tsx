@@ -98,14 +98,14 @@ const ChatPage = () => {
       <Chat client={chatClient}>
         <Channel channel={chatChannel}>
           <div className="w-full h-full relative">
-            <CallButton handleVideoCall={handleVideoCall} />
-            <div className="absolute top-4 right-4 z-10">
+            <div className="absolute top-3 sm:top-4 right-3 sm:right-4 z-10 flex items-center gap-1.5 sm:gap-2">
+              <CallButton handleVideoCall={handleVideoCall} />
               <Link
                 to={`/user/${targetUserId}`}
-                className="btn btn-ghost btn-sm bg-base-200/80 backdrop-blur-xs text-xs gap-1 border border-base-300"
+                className="btn btn-ghost btn-sm bg-base-200/80 backdrop-blur-xs text-xs gap-1 border border-base-300 min-h-9"
                 title="Scholar Profile & Safety Options"
               >
-                <ShieldAlertIcon className="size-4" />
+                <ShieldAlertIcon className="size-4 shrink-0" />
                 <span className="hidden sm:inline">Profile & Safety</span>
               </Link>
             </div>
