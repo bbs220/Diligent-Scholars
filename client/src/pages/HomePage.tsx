@@ -135,18 +135,24 @@ const HomePage = () => {
                     <div className="card-body p-5 flex flex-col h-full space-y-4">
                       <div className="flex items-center gap-3 sm:gap-4">
                         {/* friend avatar */}
-                        <div className="avatar size-14 sm:size-16 rounded-xl shrink-0">
+                        <Link
+                          to={`/user/${user._id}`}
+                          className="avatar size-14 sm:size-16 rounded-xl shrink-0 hover:opacity-85 transition-opacity"
+                        >
                           <img
                             src={user.profileAvatar}
                             alt={user.fullName}
-                            className="object-cover"
+                            className="object-cover rounded-xl"
                           />
-                        </div>
+                        </Link>
                         {/* friend name and location */}
                         <div className="min-w-0 flex-1">
-                          <h3 className="font-semibold text-base sm:text-lg truncate">
+                          <Link
+                            to={`/user/${user._id}`}
+                            className="font-semibold text-base sm:text-lg truncate block hover:underline"
+                          >
                             {user.fullName}
-                          </h3>
+                          </Link>
                           {user.location && (
                             <div className="flex items-center text-xs opacity-70 mt-1">
                               <MapPinIcon className="size-3 mr-1 shrink-0" />

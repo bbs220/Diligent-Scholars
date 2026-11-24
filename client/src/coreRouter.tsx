@@ -11,6 +11,8 @@ import Layout from "./components/Layout";
 import NotFoundPage from "./pages/NotFoundPage";
 import TermsPage from "./pages/TermsPage";
 import PrivacyPage from "./pages/PrivacyPage";
+import ProfilePage from "./pages/ProfilePage";
+import UserProfilePage from "./pages/UserProfilePage";
 
 const CallPage = lazy(() => import("./pages/CallPage"));
 const ChatPage = lazy(() => import("./pages/ChatPage"));
@@ -81,6 +83,26 @@ export const coreRouter = createBrowserRouter([
               <Suspense fallback={<PageLoader />}>
                 <ChatPage />
               </Suspense>
+            </Layout>
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "/profile",
+        element: (
+          <RequireAuth>
+            <Layout showSideBar>
+              <ProfilePage />
+            </Layout>
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "/user/:id",
+        element: (
+          <RequireAuth>
+            <Layout showSideBar>
+              <UserProfilePage />
             </Layout>
           </RequireAuth>
         ),

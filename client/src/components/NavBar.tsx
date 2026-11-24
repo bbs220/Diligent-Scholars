@@ -85,6 +85,15 @@ const NavBar = () => {
                       Notifications
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      to="/profile"
+                      className="text-lg py-3 font-medium"
+                      onClick={handleLinkClick}
+                    >
+                      Profile
+                    </Link>
+                  </li>
                 </ul>
               </>
             )}
@@ -117,15 +126,17 @@ const NavBar = () => {
 
           <ThemeSelector />
 
-          <div className="avatar">
-            <div className="w-8 sm:w-10 rounded-lg">
-              <img
-                src={authUser?.profileAvatar}
-                alt="User Avatar"
-                rel="noreferrer"
-              />
+          <Link to="/profile" title="My profile" className="flex items-center">
+            <div className="avatar">
+              <div className="w-8 sm:w-10 rounded-lg">
+                <img
+                  src={authUser?.profileAvatar}
+                  alt="User Avatar"
+                  rel="noreferrer"
+                />
+              </div>
             </div>
-          </div>
+          </Link>
 
           <button
             className="btn btn-error btn-square btn-sm sm:btn-md min-h-11 min-w-11 ml-1"

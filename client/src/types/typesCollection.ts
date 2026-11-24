@@ -39,3 +39,17 @@ export type typeUser = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type typeScholarProfile = typeUser & {
+  friendsCount: number;
+  relationship: {
+    isSelf: boolean;
+    isFriend: boolean;
+    requestStatus: "none" | "sent" | "received";
+  };
+};
+
+export type typeChangePasswordData = {
+  currentPassword: string;
+  newPassword: string;
+};

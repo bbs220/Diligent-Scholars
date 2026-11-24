@@ -1,4 +1,5 @@
 import type {
+  typeChangePasswordData,
   typeLogInData,
   typeOnBoardingData,
   typeSignUpData,
@@ -26,6 +27,18 @@ export const onBoardingMutationFn = async (
   onBoardingData: typeOnBoardingData,
 ) => {
   const res = await axiosInstance.post("/auth/onboarding", onBoardingData);
+  return res.data;
+};
+
+export const updateProfileFn = async (profileData: typeOnBoardingData) => {
+  const res = await axiosInstance.put("/users/profile", profileData);
+  return res.data;
+};
+
+export const changePasswordFn = async (
+  passwordData: typeChangePasswordData,
+) => {
+  const res = await axiosInstance.put("/auth/change-password", passwordData);
   return res.data;
 };
 
@@ -74,4 +87,9 @@ export const populateFriendReqsFn = async () => {
 export const getStreamToken = async () => {
   const res = await axiosInstance.get("/chat/streamToken");
   return res.data.data.streamToken;
+};
+
+export const getUserProfileFn = async (userId: string) => {
+  const res = await axiosInstance.get(`/users/profile/${userId}`);
+  return res.data.data.user;
 };
