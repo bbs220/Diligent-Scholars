@@ -13,6 +13,7 @@ import { logger } from "./lib/logger.js";
 import authRoutes from "./routes/auth.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import sessionRoutes from "./routes/session.routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -89,6 +90,7 @@ app.use(express.urlencoded({ extended: true, limit: "5mb" }));
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/chat", chatRoutes);
+app.use("/api/v1/sessions", sessionRoutes);
 
 // strict api error handler
 app.use("/api", (req: Request, res: Response) => {
